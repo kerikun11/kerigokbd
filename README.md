@@ -3,7 +3,7 @@
 けりの自作キーボードのファームウェア
 
 ```
-keryboard
+kerigokbd
 ├── .git
 ├── keyboards                   # My Custom Firmware
 │   ├── keymaps
@@ -11,7 +11,7 @@ keryboard
 │   │       └── keymap.c
 │   ├── config.h
 │   ├── info.json
-│   ├── keryboard.c
+│   ├── kerigokbd.c
 │   ├── readme.md
 │   ├── rgb_matrix_user.inc
 │   └── rules.mk
@@ -32,12 +32,12 @@ keryboard
 
 ```sh
 # clone this repository with submodules
-git clone --recursive https://github.com/kerikun11/keryboard.git
-cd keryboard
+git clone --recursive https://github.com/kerikun11/kerigokbd.git
+cd kerigokbd
 # make a symbolik link
-ln -rsf keyboards/keryboard qmk_firmware/keyboards
+ln -rsf keyboards/kerigokbd qmk_firmware/keyboards
 # locally ignore the link in git
-echo "keyboards/keryboard" >> .git/modules/qmk_firmware/info/exclude
+echo "keyboards/kerigokbd" >> .git/modules/qmk_firmware/info/exclude
 ```
 
 ## ビルドと書き込み
@@ -50,7 +50,7 @@ cd qmk_firmware
 qmk setup
 # config
 qmk config user.keymap=default
-qmk config user.keyboard=keryboard
+qmk config user.keyboard=kerigokbd
 # compile
 qmk compile
 # flash

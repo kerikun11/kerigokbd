@@ -1,8 +1,8 @@
 {
     "manufacturer": "Ryotaro Onuki",
-    "keyboard_name": "keryboard",
+    "keyboard_name": "kerigokbd",
     "maintainer": "kerikun11",
-    "url": "https://github.com/kerikun11/keryboard",
+    "url": "https://github.com/kerikun11/kerigokbd",
     "processor": "RP2040",
     "bootloader": "rp2040",
     "usb": {
