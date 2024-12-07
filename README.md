@@ -28,6 +28,8 @@ keryboard
 
 ## ソースコードの取得と初回セットアップ
 
+カスタムファームウェアのディレクトリをQMKリポジトリの中にシンボリックで追加して、不要な差分が表示されないように無視設定を行う。
+
 ```sh
 # clone this repository with submodules
 git clone --recursive https://github.com/kerikun11/keryboard.git
@@ -38,7 +40,9 @@ ln -rsf keyboards/keryboard qmk_firmware/keyboards
 echo "keyboards/keryboard" >> .git/modules/qmk_firmware/info/exclude
 ```
 
-# ビルドと書き込み
+## ビルドと書き込み
+
+QMKコマンドでビルドと書き込みを行う。
 
 ```sh
 # prepare
