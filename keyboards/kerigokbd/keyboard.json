@@ -3,6 +3,7 @@
     "keyboard_name": "KERIgoKBD",
     "maintainer": "kerikun11",
     "url": "https://github.com/kerikun11/kerigokbd",
+    "bootloader_instructions": "Turn the power on with pressing Q or P.",
     "processor": "RP2040",
     "bootloader": "rp2040",
     "usb": {
@@ -66,12 +67,16 @@
             }
         },
         "transport": {
-            "protocol": "serial_usart",
+            "protocol": "serial",
             "sync": {
                 "matrix_state": true,
                 "layer_state": true
             },
             "watchdog": true
+        },
+        "serial": {
+            "driver": "vendor",
+            "pin": "GP12"
         }
     },
     "layouts": {
