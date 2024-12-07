@@ -20,8 +20,8 @@
         "extrakey": true,
         "mousekey": true,
         "nkro": true,
-        "rgblight": false,
-        "rgb_matrix": true
+        "rgb_matrix": true,
+        "encoder": true
     },
     "diode_direction": "COL2ROW",
     "matrix_pins": {
@@ -30,6 +30,12 @@
             ["GP19", "GP18", "GP24", "GP27",  "GP1",  "GP2",  "GP8"],
             ["GP17", "GP16", "GP25", "GP28",  "GP3",  "GP9",   null],
             [  null,   null,   null, "GP14", "GP15", "GP11",   null]
+        ]
+    },
+    "encoder": {
+        "rotary": [
+            {"pin_a": "GP5", "pin_b": "GP7"},
+            {"pin_a": "GP6", "pin_b": "GP7"}
         ]
     },
     "bootmagic": {
@@ -48,6 +54,14 @@
                     ["GP11", "GP14",  "GP4",  "GP0", "GP28", "GP26", "GP23"],
                     ["GP15", "GP18",  "GP5", "GP29", "GP20", "GP22",   null],
                     [  null,   null,   null, "GP16", "GP17", "GP19",   null]
+                ]
+            }
+        },
+        "encoder": {
+            "right": {
+                "rotary": [
+                    {"pin_a": "GP24", "pin_b":  "GP7"},
+                    {"pin_a":  "GP6", "pin_b":  "GP7"}
                 ]
             }
         },

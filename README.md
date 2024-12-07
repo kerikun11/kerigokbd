@@ -21,6 +21,10 @@ kerigokbd
 └── README.md
 ```
 
+## ハードウェア
+
+- [Corne V4.1](https://github.com/foostan/crkbd)ベースのキーボード。
+
 ## 前提
 
 - シンボリックリンクが作成できる環境であること
@@ -53,6 +57,6 @@ qmk config user.keymap=default
 qmk config user.keyboard=kerigokbd
 # compile
 qmk compile
-# flash
+# flash (after compile)
 qmk flash
 ```
