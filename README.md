@@ -5,16 +5,17 @@
 ## 前提
 
 - シンボリックリンクが作成できる環境であること
-- QMKコマンドがインストールされていること
+- [QMKコマンド](https://docs.qmk.fm/newbs_getting_started)がインストールされていること
 
-## 取得
+## ソースコードの取得と初回セットアップ
 
 ```sh
-# clone
-git clone {this-repository}
-# make a link
+# clone this repository with submodules
+git clone --recursive https://github.com/kerikun11/keryboard.git
+cd keryboard
+# make a symbolik link
 ln -rsf keyboards/keryboard qmk_firmware/keyboards
-# gitignore the link
+# locally ignore the link in git
 echo "keyboards/keryboard" >> .git/modules/qmk_firmware/info/exclude
 ```
 
@@ -26,7 +27,7 @@ cd qmk_firmware
 qmk setup
 # config
 qmk config user.keymap=default
-qmk config user.keyboard=keryboard/v1
+qmk config user.keyboard=keryboard
 # compile
 qmk compile
 # flash
