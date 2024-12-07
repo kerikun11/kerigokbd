@@ -17,7 +17,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [2] = LAYOUT_split_3x6_3_ex2(
       _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,  KC_F11,     KC_F12,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, _______,
-      _______, JP_PLUS, JP_ASTR, JP_SCLN, JP_COLN, JP_UNDS, XXXXXXX,    XXXXXXX, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,  JP_EQL, _______,
+      _______, JP_PLUS, JP_ASTR, JP_SCLN, JP_COLN, JP_UNDS, JP_ZKHK,    JP_EISU, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,  JP_EQL, _______,
       _______, JP_TILD,   JP_AT, JP_DQUO, JP_QUOT,  JP_GRV,                      JP_LBRC, JP_RBRC, JP_LCBR, JP_RCBR, JP_BSLS, _______,
                                           _______, _______, _______,    _______, _______, _______
   ),
