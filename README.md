@@ -2,6 +2,25 @@
 
 けりの自作キーボードのファームウェア
 
+```
+keryboard
+├── .git
+├── keyboards                   # My Custom Firmware
+│   ├── keymaps
+│   │   └── default
+│   │       └── keymap.c
+│   ├── config.h
+│   ├── info.json
+│   ├── keryboard.c
+│   ├── readme.md
+│   ├── rgb_matrix_user.inc
+│   └── rules.mk
+├── qmk_firmware                # QMK Firmware Submodule
+├── .clang-format
+├── .gitmodules
+└── README.md
+```
+
 ## 前提
 
 - シンボリックリンクが作成できる環境であること
