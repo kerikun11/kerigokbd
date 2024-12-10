@@ -1,8 +1,7 @@
 #pragma once
 
-/* Split */
+/* USB */
 #define USB_VBUS_PIN GP13
-#define SPLIT_HAND_PIN GP21
 
 /* Layer */
 #define DYNAMIC_KEYMAP_LAYER_COUNT 6

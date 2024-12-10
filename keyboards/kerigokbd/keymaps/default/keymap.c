@@ -1,18 +1,18 @@
 #include QMK_KEYBOARD_H
-#include <keymap_japanese.h>
+#include <kerigokbd.h>
 
 #ifdef LAYOUT_split_3x6_3_ex2
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_split_3x6_3_ex2(
-       KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,     MO(5), MO(5),      KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,
-      KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G, LSG(KC_S), A(KC_PSCR), KC_H,    KC_J,    KC_K,    KC_L, JP_MINS,  KC_ENT,
-      KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                        KC_N,    KC_M, JP_COMM,  JP_DOT, JP_SLSH,  KC_DEL,
-                                    LALT_T(JP_MHEN), MO(1), KC_ESC, KC_SPC, MO(2), RWIN_T(JP_HENK)
+      KC_TAB,     KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,     MO(5), MO(5),       KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,
+      KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G, LSG(KC_S), A(KC_PSCR),  KC_H,    KC_J,    KC_K,    KC_L, JP_MINS,  KC_ENT,
+      KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M, JP_COMM,  JP_DOT, JP_SLSH,  KC_DEL,
+                                          KEY_ALT, KEY_NUM,  KC_ESC,     KC_SPC, KEY_FUN, KEY_WIN
   ),
   [1] = LAYOUT_split_3x6_3_ex2(
       _______, JP_EXLM, JP_QUES, JP_HASH,  JP_DLR, JP_PERC, KC_VOLU,    KC_BRIU, JP_AMPR, JP_PIPE, JP_LPRN, JP_RPRN, JP_CIRC, _______,
       _______,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5, KC_VOLD,    KC_BRID,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0, _______,
-      _______,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,                      JP_PLUS, JP_ASTR, JP_COMM,  JP_DOT, JP_SLSH, _______,
+      _______, JP_TILD,   JP_AT, JP_DQUO, JP_QUOT,  JP_GRV,                      JP_PLUS, JP_ASTR, JP_COMM,  JP_DOT, JP_SLSH, _______,
                                           _______, _______, _______,    _______, _______, _______
   ),
   [2] = LAYOUT_split_3x6_3_ex2(

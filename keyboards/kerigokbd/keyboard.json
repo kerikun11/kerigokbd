@@ -48,6 +48,9 @@
         "bootmagic": {
             "matrix": [ 4, 1 ]
         },
+        "handedness": {
+            "pin": "GP21"
+        },
         "matrix_pins": {
             "right": {
                 "direct": [
@@ -79,6 +82,7 @@
             "pin": "GP12"
         }
     },
+    "host_language": "japanese",
     "layouts": {
         "LAYOUT_split_3x6_3_ex2": {
             "layout": [

@@ -1,5 +1,4 @@
-#include <quantum.h>
-#include <keymap_japanese.h>
+#include "kerigokbd.h"
 
 /* LED defintions */
 #define LED_VALUE 192
@@ -38,11 +37,11 @@ bool rgb_matrix_user_keyfunc(void) {
                 rgb_matrix_set_color(index, COLOR_ARROW);
             } else if (keycode == KC_LCTL || keycode == KC_RCTL || keycode == KC_LSFT || keycode == KC_RSFT || keycode == KC_LALT || keycode == KC_RALT || keycode == KC_LWIN || keycode == KC_RWIN || keycode == KC_ENT || keycode == KC_SPC || keycode == KC_TAB || keycode == KC_BSPC || keycode == KC_DEL || keycode == KC_ESC) {
                 rgb_matrix_set_color(index, COLOR_SPECIAL);
-            } else if (keycode == RCTL_T(JP_MHEN) || keycode == RSFT_T(JP_HENK) || keycode == RWIN_T(JP_HENK) || keycode == LALT_T(JP_MHEN)) {
+            } else if (keycode == KEY_ALT || keycode == KEY_WIN) {
                 rgb_matrix_set_color(index, COLOR_SPECIAL);
-            } else if (keycode == MO(1)) {
+            } else if (keycode == KEY_NUM) {
                 rgb_matrix_set_color(index, COLOR_NUMBER);
-            } else if (keycode == MO(2)) {
+            } else if (keycode == KEY_FUN) {
                 rgb_matrix_set_color(index, COLOR_FUNCTION);
             } else {
                 rgb_matrix_set_color(index, COLOR_OTHER);
