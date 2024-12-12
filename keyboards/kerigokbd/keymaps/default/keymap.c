@@ -10,27 +10,27 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                           KEY_ALT, KEY_NUM,  KC_ESC,     KC_SPC, KEY_FUN, KEY_WIN
   ),
   [1] = LAYOUT_split_3x6_3_ex2(
-      _______, JP_EXLM, JP_QUES, JP_HASH,  JP_DLR, JP_PERC, KC_VOLU,    KC_BRIU, JP_AMPR, JP_PIPE, JP_LPRN, JP_RPRN, JP_CIRC, _______,
+      _______, JP_EXLM, JP_DQUO, JP_HASH,  JP_DLR, JP_PERC, KC_VOLU,    KC_BRIU, JP_AMPR, JP_QUOT, JP_ASTR,   JP_AT,  JP_GRV, _______,
       _______,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5, KC_VOLD,    KC_BRID,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0, _______,
-      _______, JP_TILD,   JP_AT, JP_DQUO, JP_QUOT,  JP_GRV,                      JP_PLUS, JP_ASTR, JP_COMM,  JP_DOT, JP_SLSH, _______,
+      _______, JP_CIRC, JP_TILD, JP_SCLN, JP_COLN, JP_UNDS,                      JP_PIPE,  JP_EQL, JP_PLUS, JP_MINS, JP_BSLS, _______,
                                           _______, _______, _______,    _______, _______, _______
   ),
   [2] = LAYOUT_split_3x6_3_ex2(
       _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,  KC_F11,     KC_F12,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, _______,
-      _______, JP_PLUS, JP_ASTR, JP_SCLN, JP_COLN, JP_UNDS, JP_ZKHK,    JP_EISU, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,  JP_EQL, _______,
-      _______, JP_TILD,   JP_AT, JP_DQUO, JP_QUOT,  JP_GRV,                      JP_LBRC, JP_RBRC, JP_LCBR, JP_RCBR, JP_BSLS, _______,
+      _______, JP_LPRN, JP_LCBR, JP_RCBR, JP_LBRC, JP_RBRC, JP_ZKHK,    JP_EISU, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, JP_RPRN, _______,
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
                                           _______, _______, _______,    _______, _______, _______
   ),
   [3] = LAYOUT_split_3x6_3_ex2(
-      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+      _______, JP_EXLM,   JP_AT, JP_HASH,  JP_DLR, JP_PERC, KC_VOLU,    KC_BRIU, JP_CIRC, JP_AMPR, JP_ASTR, JP_PLUS, JP_PIPE, _______,
+      _______,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5, KC_VOLD,    KC_BRID,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0, _______,
+      _______, JP_TILD,  JP_GRV, JP_SCLN, JP_COLN, JP_UNDS,                      JP_QUOT, JP_DQUO, JP_COMM,  JP_DOT, JP_SLSH, _______,
                                           _______, _______, _______,    _______, _______, _______
   ),
   [4] = LAYOUT_split_3x6_3_ex2(
-      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+      _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,  KC_F11,     KC_F12,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, _______,
+      _______, XXXXXXX, XXXXXXX, JP_LPRN, JP_RPRN, XXXXXXX, JP_ZKHK,    JP_EISU, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,  JP_EQL, _______,
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      JP_LBRC, JP_RBRC, JP_LCBR, JP_RCBR, JP_BSLS, _______,
                                           _______, _______, _______,    _______, _______, _______
   ),
   [5] = LAYOUT_split_3x6_3_ex2(
