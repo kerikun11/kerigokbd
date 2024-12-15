@@ -18,9 +18,9 @@ bool rgb_matrix_user_keyfunc(void) {
             uint8_t index = g_led_config.matrix_co[row][col];
             if (index == NO_LED) continue;
             int8_t   layer   = get_highest_layer(layer_state);
-            uint16_t keycode = dynamic_keymap_get_keycode(layer, row, col);
+            uint16_t keycode = keymap_key_to_keycode(layer, (keypos_t){col, row});
             for (; layer >= 0 && keycode == KC_TRNS; layer--)
-                keycode = dynamic_keymap_get_keycode(layer, row, col);
+                keycode = keymap_key_to_keycode(layer, (keypos_t){col, row});
             if (keycode == KC_NO || keycode == KC_TRNS) {
                 rgb_matrix_set_color(index, RGB_OFF);
             } else if (keycode >= KC_A && keycode <= KC_Z) {

@@ -24,6 +24,10 @@
         "rgb_matrix": true,
         "encoder": true
     },
+    "host_language": "japanese",
+    "dynamic_keymap": {
+        "layer_count": 6
+    },
     "diode_direction": "COL2ROW",
     "matrix_pins": {
         "direct":[
@@ -82,7 +86,6 @@
             "pin": "GP12"
         }
     },
-    "host_language": "japanese",
     "layouts": {
         "LAYOUT_split_3x6_3_ex2": {
             "layout": [
