@@ -10,8 +10,6 @@
 #define COLOR_ARROW LED_VALUE, LED_VALUE / 4, 0
 #define COLOR_OTHER LED_VALUE * 2 / 3, LED_VALUE * 2 / 3, LED_VALUE * 2 / 3
 
-extern bool rgb_matrix_user_keyfunc(void);
-
 bool rgb_matrix_user_keyfunc(void) {
     for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
         for (uint8_t col = 0; col < MATRIX_COLS; col++) {
