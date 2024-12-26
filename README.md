@@ -2,7 +2,7 @@
 
 けりの自作キーボードのファームウェア
 
-```
+```tree
 kerigokbd
 ├── .git
 ├── keyboards                   # My Custom Firmware
@@ -38,13 +38,31 @@ kerigokbd
 # clone this repository with submodules
 git clone --recursive https://github.com/kerikun11/kerigokbd.git
 cd kerigokbd
+```
+
+## VIA初期設定
+
+QMKファームウェアのリポジトリのkeyboardsディレクトリ内にリンクを追加する。
+
+```sh
 # make a symbolik link
 ln -rsf keyboards/kerigokbd qmk_firmware/keyboards
 # locally ignore the link in git
 echo "keyboards/kerigokbd" >> .git/modules/qmk_firmware/info/exclude
 ```
 
-## ビルドと書き込み
+## VIAL初期設定
+
+QMKファームウェアのリポジトリのkeyboardsディレクトリ内にリンクを追加する。
+
+```sh
+# make a symbolik link
+ln -rsf keyboards/kerigokbd vial-qmk/keyboards
+# locally ignore the link in git
+echo "keyboards/kerigokbd" >> .git/modules/vial-qmk/info/exclude
+```
+
+## VIAビルド
 
 QMKコマンドでビルドと書き込みを行う。
 
@@ -53,8 +71,25 @@ QMKコマンドでビルドと書き込みを行う。
 cd qmk_firmware
 qmk setup
 # config
-qmk config user.keymap=default
 qmk config user.keyboard=kerigokbd
+qmk config user.keymap=default
+# compile
+qmk compile
+# flash (after compile)
+qmk flash
+```
+
+## VIALビルド
+
+QMKコマンドでビルドと書き込みを行う。
+
+```sh
+# prepare
+cd vial-qmk
+qmk setup
+# config
+qmk config user.keyboard=kerigokbd/vial
+qmk config user.keymap=default
 # compile
 qmk compile
 # flash (after compile)
