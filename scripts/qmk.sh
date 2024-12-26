@@ -21,12 +21,13 @@ while getopts "vcf" opt; do
     esac
 done
 
-## main process
+## vial override
 if $flag_v; then
     QMK_DIR=$(git rev-parse --show-toplevel)/external/vial-qmk
-    QMK_KEYBOARD=kerigokbd/vial
+    QMK_KEYBOARD=$QMK_KEYBOARD/vial
 fi
 
+## main process
 cd $QMK_DIR
 
 if $flag_c; then
