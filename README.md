@@ -4,6 +4,9 @@
 
 ```tree
 kerigokbd/
+├── external/
+│   ├── qmk_firmware/               # QMK Firmware for VIA (git-submodule)
+│   └── vial-qmk/                   # QMK Firmware for VIAL (git-submodule)
 ├── keyboards/
 │   └── kerigokbd/                  # KERIgoKBD Custom Firmware
 │       ├── keymaps/
@@ -16,8 +19,6 @@ kerigokbd/
 │       ├── kerigokbd.h
 │       ├── rgb_matrix_user.inc
 │       └── readme.md
-├── qmk_firmware/                   # QMK Firmware for VIA (git-submodule)
-├── vial-qmk/                       # QMK Firmware for VIAL (git-submodule)
 ├── .clang-format
 ├── .gitmodules
 └── README.md
@@ -49,38 +50,24 @@ git clone --recursive https://github.com/kerikun11/kerigokbd.git
 cd kerigokbd
 ```
 
-#### VIA初期設定
-
-QMKファームウェアのリポジトリのkeyboardsディレクトリ内にリンクを追加する。
+QMKファームウェアのリポジトリのkeyboardsディレクトリ内にカスタムキーボードのリンクを追加する。
 
 ```sh
-cd $(git rev-parse --show-toplevel)
-# make a symbolik link
-ln -rsf keyboards/kerigokbd qmk_firmware/keyboards
-# locally ignore the link in git
-echo "keyboards/kerigokbd" >> .git/modules/qmk_firmware/info/exclude
-```
-
-#### VIAL初期設定
-
-QMKファームウェアのリポジトリのkeyboardsディレクトリ内にリンクを追加する。
-
-```sh
-cd $(git rev-parse --show-toplevel)
-# make a symbolik link
-ln -rsf keyboards/kerigokbd vial-qmk/keyboards
-# locally ignore the link in git
-echo "keyboards/kerigokbd" >> .git/modules/vial-qmk/info/exclude
+./script/setup.sh
 ```
 
 ### VIAビルド
 
+```sh
+# go to qmk firmware directory
+cd external/qmk_firmware
+# setup
+qmk setup
+```
+
 QMKコマンドでビルドと書き込みを行う。
 
 ```sh
-cd qmk_firmware
-# setup
-qmk setup
 # compile
 qmk compile -kb kerigokbd -km default
 # flash
@@ -90,7 +77,6 @@ qmk flash -kb kerigokbd -km default
 qmk config を設定しておくと引数を省略できる。
 
 ```sh
-cd qmk_firmware
 # config
 qmk config user.keyboard=kerigokbd
 qmk config user.keymap=default
@@ -102,12 +88,25 @@ qmk flash
 
 ### VIALビルド
 
+```sh
+# go to qmk firmware directory
+cd external/vial-qmk
+# prepare
+qmk setup
+```
+
 QMKコマンドでビルドと書き込みを行う。
 
 ```sh
-cd vial-qmk
-# prepare
-qmk setup
+# compile
+qmk compile -kb kerigokbd/vial -km default
+# flash
+qmk flash -kb kerigokbd/vial -km default
+```
+
+qmk config を設定しておくと引数を省略できる。
+
+```sh
 # config
 qmk config user.keyboard=kerigokbd/vial
 qmk config user.keymap=default

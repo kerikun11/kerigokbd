@@ -1,6 +1,6 @@
-[submodule "qmk_firmware"]
-	path = qmk_firmware
+[submodule "external/qmk_firmware"]
+	path = external/qmk_firmware
 	url = https://github.com/qmk/qmk_firmware.git
-[submodule "vial-qmk"]
-	path = vial-qmk
+[submodule "external/vial-qmk"]
+	path = external/vial-qmk
 	url = https://github.com/vial-kb/vial-qmk.git
