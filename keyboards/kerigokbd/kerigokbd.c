@@ -8,6 +8,7 @@
 #define COLOR_SYMBOL LED_VALUE, LED_VALUE * 2 / 3, 0
 #define COLOR_FUNCTION 0, LED_VALUE * 2 / 3, LED_VALUE * 2 / 3
 #define COLOR_ARROW LED_VALUE, LED_VALUE / 4, 0
+#define COLOR_BOOTLOADER LED_VALUE * 2 / 3, 0, 0
 #define COLOR_OTHER LED_VALUE * 2 / 3, LED_VALUE * 2 / 3, LED_VALUE * 2 / 3
 
 bool rgb_matrix_user_keyfunc(void) {
@@ -41,6 +42,8 @@ bool rgb_matrix_user_keyfunc(void) {
                 rgb_matrix_set_color(index, COLOR_NUMBER);
             } else if (keycode == KEY_FUN) {
                 rgb_matrix_set_color(index, COLOR_FUNCTION);
+            } else if (keycode == QK_BOOTLOADER) {
+                rgb_matrix_set_color(index, COLOR_BOOTLOADER);
             } else {
                 rgb_matrix_set_color(index, COLOR_OTHER);
             }
