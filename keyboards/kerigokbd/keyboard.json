@@ -1,6 +1,6 @@
 {
-    "manufacturer": "kerikun11",
     "keyboard_name": "KERIgoKBD",
+    "manufacturer": "kerikun11",
     "maintainer": "kerikun11",
     "url": "https://github.com/kerikun11/kerigokbd",
     "bootloader_instructions": "Turn the power on with pressing Q or P.",
