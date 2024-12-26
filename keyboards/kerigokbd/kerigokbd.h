@@ -2,6 +2,7 @@
 
 #include <quantum.h>
 #include <keymap_japanese.h>
+#include <color.h>
 
 /* Special Keys */
 #define KEY_NUM MO(1)

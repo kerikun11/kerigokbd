@@ -2,50 +2,68 @@
 
 /* LED defintions */
 #define LED_VALUE 192
-#define COLOR_ALPHA 0, 0, LED_VALUE * 2 / 3
-#define COLOR_SPECIAL 0, LED_VALUE * 2 / 3, 0
-#define COLOR_NUMBER LED_VALUE * 2 / 3, 0, LED_VALUE * 2 / 3
-#define COLOR_SYMBOL LED_VALUE, LED_VALUE * 2 / 3, 0
-#define COLOR_FUNCTION 0, LED_VALUE * 2 / 3, LED_VALUE * 2 / 3
-#define COLOR_ARROW LED_VALUE, LED_VALUE / 4, 0
-#define COLOR_BOOTLOADER LED_VALUE * 2 / 3, 0, 0
-#define COLOR_OTHER LED_VALUE * 2 / 3, LED_VALUE * 2 / 3, LED_VALUE * 2 / 3
+#define COLOR_RED LED_VALUE * 2 / 3, 0, 0
+#define COLOR_GREEN 0, LED_VALUE * 2 / 3, 0
+#define COLOR_BLUE 0, 0, LED_VALUE * 2 / 3
+#define COLOR_MAGENTA LED_VALUE * 2 / 3, 0, LED_VALUE * 2 / 3
+#define COLOR_YELLOW LED_VALUE, LED_VALUE * 2 / 3, 0
+#define COLOR_CYAN 0, LED_VALUE * 2 / 3, LED_VALUE * 2 / 3
+#define COLOR_WHITE LED_VALUE * 2 / 3, LED_VALUE * 2 / 3, LED_VALUE * 2 / 3
+#define COLOR_ORANGE LED_VALUE, LED_VALUE / 4, 0
+#define COLOR_PURPLE RGB_PURPLE
 
+static bool is_keycode_special(uint16_t keycode) {
+    if (IS_MODIFIER_KEYCODE(keycode)) return true;               //< Ctrl, Alt, Shift, Win
+    if (KC_ENTER <= keycode && keycode <= KC_SPACE) return true; //< ENT, ESC, BSPC, TAB, SPC
+    if (keycode == KC_DEL || keycode == KEY_ALT || keycode == KEY_WIN) return true;
+    return false;
+}
+
+static bool is_keycode_symbol(uint16_t keycode) {
+    if (S(KC_1) <= keycode && keycode <= S(KC_0)) return true;
+    if (KC_MINS <= keycode && keycode <= KC_QUOT) return true; // exclude JP_ZKHK(KC_GRV)
+    if (KC_COMM <= keycode && keycode <= KC_SLSH) return true;
+    if (S(KC_MINS) <= keycode && keycode <= S(KC_SLSH)) return true;
+    if (keycode == JP_BSLS || keycode == JP_UNDS || keycode == JP_PIPE || keycode == JP_YEN) return true;
+    return false;
+}
+
+/* called by rgb_matrix_user.inc */
 bool rgb_matrix_user_keyfunc(void) {
     for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
         for (uint8_t col = 0; col < MATRIX_COLS; col++) {
+            /* get keycode */
             uint8_t index = g_led_config.matrix_co[row][col];
             if (index == NO_LED) continue;
             int8_t   layer   = get_highest_layer(layer_state);
             uint16_t keycode = keymap_key_to_keycode(layer, (keypos_t){col, row});
             for (; layer >= 0 && keycode == KC_TRNS; layer--)
                 keycode = keymap_key_to_keycode(layer, (keypos_t){col, row});
-            if (keycode == KC_NO || keycode == KC_TRNS) {
-                rgb_matrix_set_color(index, RGB_OFF);
+            /* set color */
+            if (keycode == KC_NO) {
+                /* Empty */ rgb_matrix_set_color(index, RGB_OFF);
             } else if (keycode >= KC_A && keycode <= KC_Z) {
-                rgb_matrix_set_color(index, COLOR_ALPHA);
-            } else if (keycode >= KC_1 && keycode <= KC_0) {
-                rgb_matrix_set_color(index, COLOR_NUMBER);
-            } else if ((keycode >= S(JP_1) && keycode <= S(JP_0)) || (keycode >= KC_MINS && keycode <= KC_QUOT) || (keycode >= KC_COMM && keycode <= KC_SLSH) || (keycode >= S(KC_MINS) && keycode <= S(KC_SLSH))) {
-                rgb_matrix_set_color(index, COLOR_SYMBOL);
-            } else if (keycode == JP_BSLS || keycode == JP_UNDS || keycode == JP_PIPE || keycode == JP_YEN) {
-                rgb_matrix_set_color(index, COLOR_SYMBOL);
-            } else if (keycode >= KC_F1 && keycode <= KC_F12) {
-                rgb_matrix_set_color(index, COLOR_FUNCTION);
+                /* Alphabet */ rgb_matrix_set_color(index, COLOR_BLUE);
+            } else if (is_keycode_special(keycode)) {
+                /* Special */ rgb_matrix_set_color(index, COLOR_GREEN);
+            } else if (is_keycode_symbol(keycode)) {
+                /* Symbol */ rgb_matrix_set_color(index, COLOR_YELLOW);
+            } else if ((keycode >= KC_1 && keycode <= KC_0) || keycode == KEY_NUM) {
+                /* Number */ rgb_matrix_set_color(index, COLOR_MAGENTA);
+            } else if ((keycode >= KC_F1 && keycode <= KC_F12) || keycode == KEY_FUN) {
+                /* Function */ rgb_matrix_set_color(index, COLOR_CYAN);
             } else if (keycode >= KC_RIGHT && keycode <= KC_UP) {
-                rgb_matrix_set_color(index, COLOR_ARROW);
-            } else if (keycode == KC_LCTL || keycode == KC_RCTL || keycode == KC_LSFT || keycode == KC_RSFT || keycode == KC_LALT || keycode == KC_RALT || keycode == KC_LWIN || keycode == KC_RWIN || keycode == KC_ENT || keycode == KC_SPC || keycode == KC_TAB || keycode == KC_BSPC || keycode == KC_DEL || keycode == KC_ESC) {
-                rgb_matrix_set_color(index, COLOR_SPECIAL);
-            } else if (keycode == KEY_ALT || keycode == KEY_WIN) {
-                rgb_matrix_set_color(index, COLOR_SPECIAL);
-            } else if (keycode == KEY_NUM) {
-                rgb_matrix_set_color(index, COLOR_NUMBER);
-            } else if (keycode == KEY_FUN) {
-                rgb_matrix_set_color(index, COLOR_FUNCTION);
+                /* Arrow */ rgb_matrix_set_color(index, COLOR_ORANGE);
             } else if (keycode == QK_BOOTLOADER) {
-                rgb_matrix_set_color(index, COLOR_BOOTLOADER);
+                /* Bootloader */ rgb_matrix_set_color(index, COLOR_RED);
+            } else if (IS_MOUSEKEY_MOVE(keycode) || IS_MOUSEKEY_WHEEL(keycode)) {
+                /* Mouse (Move) */ rgb_matrix_set_color(index, COLOR_PURPLE);
+            } else if (IS_MOUSEKEY_BUTTON(keycode)) {
+                /* Mouse (Button) */ rgb_matrix_set_color(index, COLOR_BLUE);
+            } else if (IS_UNDERGLOW_KEYCODE(keycode)) {
+                /* LED */ rgb_matrix_set_color(index, COLOR_MAGENTA);
             } else {
-                rgb_matrix_set_color(index, COLOR_OTHER);
+                /* Other */ rgb_matrix_set_color(index, COLOR_WHITE);
             }
         }
     }

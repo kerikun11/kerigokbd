@@ -17,8 +17,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [2] = LAYOUT_split_3x6_3_ex2(
       _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,  KC_F11,     KC_F12,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, _______,
-      _______, JP_LPRN, JP_LCBR, JP_RCBR, JP_LBRC, JP_RBRC, JP_ZKHK,    JP_EISU, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, JP_RPRN, _______,
-      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+      _______, JP_LPRN, JP_LCBR, JP_RCBR, JP_LBRC, JP_RBRC, MS_BTN3,    MS_BTN3, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, JP_RPRN, _______,
+      _______, MS_BTN2, MS_WHLL, MS_WHLD, MS_WHLU, MS_WHLR,                      MS_LEFT, MS_DOWN,   MS_UP, MS_RGHT, MS_BTN1, _______,
                                           KC_LGUI, _______, _______,    _______, _______, _______
   ),
   [3] = LAYOUT_split_3x6_3_ex2(
@@ -37,7 +37,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
       XXXXXXX, RGB_SPI, RGB_VAI, RGB_SAI, RGB_HUI, RGB_MOD, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
       XXXXXXX, RGB_SPD, RGB_VAD, RGB_SAD, RGB_HUD,RGB_RMOD, RGB_M_R,    RGB_TOG, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                                          QK_BOOT, QK_BOOT, QK_BOOT,    QK_BOOT, QK_BOOT, QK_BOOT
+                                          XXXXXXX, XXXXXXX, QK_BOOT,    QK_BOOT, XXXXXXX, XXXXXXX
   ),
 };
 #endif
