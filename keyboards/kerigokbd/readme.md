@@ -1,12 +1,13 @@
-# kerigokbd
+# KERIgoKBD v1
 
-![kerigokbd](imgur.com image replace me!)
+![KERIgoKBD v1](images/kerigokbd_v1.jpg)
+![KERIgoKBD v1](images/kerigokbd_v1_shining.jpg)
 
-*A short description of the keyboard/project*
+*KERI's Ergonomic Keyboard based on Corne V4 Chocolate*
 
-* Keyboard Maintainer: [Ryotaro Onuki](https://github.com/kerikun11)
-* Hardware Supported: *The PCBs, controllers supported*
-* Hardware Availability: *Links to where you can find this hardware*
+* Keyboard Maintainer: [kerikun11](https://github.com/kerikun11)
+* Hardware Supported: [Corne V4](https://github.com/foostan/crkbd), RP2040 Controller
+* Hardware Availability: [Corne V4](https://github.com/foostan/crkbd)
 
 Make example for this keyboard (after setting up your build environment):
 
@@ -22,6 +23,6 @@ See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_to
 
 Enter the bootloader in 3 ways:
 
-* **Bootmagic reset**: Hold down the key at (0,0) in the matrix (usually the top left key or Escape) and plug in the keyboard
-* **Physical reset button**: Briefly press the button on the back of the PCB - some may have pads you must short instead
+* **Bootmagic reset**: Hold down the key at Q or P and plug in the keyboard
+* **Physical reset button**: Briefly press the button on the back of the PCB
 * **Keycode in layout**: Press the key mapped to `QK_BOOT` if it is available

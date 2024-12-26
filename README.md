@@ -3,21 +3,21 @@
 けりの自作キーボードのファームウェア
 
 ```tree
-kerigokbd
-├── .git
-├── keyboards                   # My Custom Firmware
-│   ├── keymaps
-│   │   └── default
-│   │       └── keymap.c
-│   ├── config.h
-│   ├── kerigokbd.c
-│   ├── kerigokbd.h
-│   ├── keyboard.json
-│   ├── readme.md
-│   ├── rgb_matrix_user.inc
-│   └── rules.mk
-├── qmk_firmware                # QMK Firmware for VIA (git-submodule)
-├── vial-qmk                    # QMK Firmware for VIAL (git-submodule)
+kerigokbd/
+├── keyboards/
+│   └── kerigokbd/                  # KERIgoKBD Custom Firmware
+│       ├── keymaps/
+│       │   └── default/
+│       │       └── keymap.c
+│       ├── keyboard.json
+│       ├── config.h
+│       ├── rules.mk
+│       ├── kerigokbd.c
+│       ├── kerigokbd.h
+│       ├── rgb_matrix_user.inc
+│       └── readme.md
+├── qmk_firmware/                   # QMK Firmware for VIA (git-submodule)
+├── vial-qmk/                       # QMK Firmware for VIAL (git-submodule)
 ├── .clang-format
 ├── .gitmodules
 └── README.md
@@ -25,7 +25,10 @@ kerigokbd
 
 ## ハードウェア
 
-- [Corne V4.1](https://github.com/foostan/crkbd)ベースのキーボード。
+[Corne V4](https://github.com/foostan/crkbd)ベースのキーボード。
+
+![KERIgoKBD v1](keyboards/kerigokbd/images/kerigokbd_v1.jpg)
+![KERIgoKBD v1](keyboards/kerigokbd/images/kerigokbd_v1_shining.jpg)
 
 ## ソフトウェア
 
