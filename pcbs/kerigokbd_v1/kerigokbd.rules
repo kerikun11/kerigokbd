@@ -1,0 +1,122 @@
+
+(rules PCB kerigokbd.dsn
+  (snap_angle 
+    fortyfive_degree
+  )
+  (autoroute_settings
+    (fanout on)
+    (autoroute on)
+    (postroute on)
+    (vias on)
+    (via_costs 50)
+    (plane_via_costs 5)
+    (start_ripup_costs 100)
+    (start_pass_no 1)
+    (layer_rule F.Cu
+      (active on)
+      (preferred_direction horizontal)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 4.0)
+    )
+    (layer_rule B.Cu
+      (active on)
+      (preferred_direction vertical)
+      (preferred_direction_trace_costs 1.0)
+      (against_preferred_direction_trace_costs 3.2)
+    )
+  )
+  (rule
+    (width 160.0)
+    (clearance 100.0)
+    (clearance 80.0 (type smd_to_turn_gap))
+    (clearance 25.0 (type smd))
+    (clearance 100.0 (type "kicad_default"))
+    (clearance 100.0 (type Power))
+  )
+  (padstack "Via[0-1]_500:300_um"
+    (shape
+      (circle F.Cu 500.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 500.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (padstack "Via[0-1]_800:500_um"
+    (shape
+      (circle F.Cu 800.0 0.0 0.0)
+    )
+    (shape
+      (circle B.Cu 800.0 0.0 0.0)
+    )
+    (attach off)
+  )
+  (via 
+    "Via[0-1]_500:300_um" "Via[0-1]_500:300_um" default
+  )
+  (via 
+    "Via[0-1]_800:500_um" "Via[0-1]_800:500_um" default
+  )
+  (via 
+    "Via[0-1]_500:300_um-kicad_default" "Via[0-1]_500:300_um" "kicad_default"
+  )
+  (via 
+    "Via[0-1]_800:500_um-kicad_default" "Via[0-1]_800:500_um" "kicad_default"
+  )
+  (via 
+    "Via[0-1]_500:300_um-Power" "Via[0-1]_500:300_um" Power
+  )
+  (via 
+    "Via[0-1]_800:500_um-Power" "Via[0-1]_800:500_um" Power
+  )
+  (via_rule
+    default "Via[0-1]_500:300_um"
+  )
+  (via_rule
+    "kicad_default" "Via[0-1]_500:300_um-kicad_default"
+  )
+  (via_rule
+    Power "Via[0-1]_800:500_um-Power"
+  )
+  (class default
+    (clearance_class default)
+    (via_rule default)
+    (rule
+      (width 160.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class "kicad_default"
+    +1V1 +3V3 GND "Net-(LED1-DOUT)" "Net-(LED2-DOUT)" "Net-(LED7-DOUT)" "Net-(LED8-DOUT)" "Net-(LED10-DIN)"
+    "Net-(LED10-DOUT)" "Net-(LED15-DOUT)" "Net-(LED16-DOUT)" "Net-(LED17-DOUT)" "Net-(LED11-DOUT)" "/D-" /D+ /TX
+    /SCL /SDA /SWD /SWCLK "/SPLIT_HAND" /LED "/USB_VBUS_PIN" "/QSPI_SS"
+    /KEY1 /KEY8 /KEY15 /KEY2 /KEY9 /KEY16 /KEY3 /KEY10
+    /KEY17 /KEY21 /KEY4 /KEY11 /KEY18 /KEY22 /KEY5 /KEY12
+    /KEY19 /KEY23 /KEY6 /KEY13 /KEY20 /KEY24 /KEY7 /KEY14
+    "/QSPI_SD1" "/QSPI_SD3" "/QSPI_SCLK" "/QSPI_SD2" "/QSPI_SD0" "Net-(LED23-DOUT)" "Net-(C16-Pad1)" "Net-(LED3-DOUT)"
+    "Net-(LED4-DOUT)" "Net-(LED5-DOUT)" "Net-(LED6-DOUT)" "Net-(LED12-DOUT)" "Net-(LED13-DOUT)" "Net-(LED14-DOUT)" "Net-(LED18-DOUT)" "Net-(LED19-DOUT)"
+    "Net-(LED20-DOUT)" "Net-(LED21-DOUT)" "Net-(LED22-DOUT)" "unconnected-(LED24-DOUT-Pad2)_1" "unconnected-(U1-NC-Pad4)" "Net-(U2-XIN)" "Net-(J1-CC2)" "unconnected-(J1-SBU1-PadA8)"
+    "Net-(J1-CC1)" "unconnected-(J1-SBU2-PadB8)_1" "Net-(U2-USB_DP)" "Net-(U2-USB_DM)" "Net-(U2-XOUT)" "Net-(R9-Pad1)" "Net-(U2-RUN)"
+    (clearance_class "kicad_default")
+    (via_rule "kicad_default")
+    (rule
+      (width 160.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+  (class Power
+    +5V VBUS "/LED_GND"
+    (clearance_class Power)
+    (via_rule Power)
+    (rule
+      (width 600.0)
+    )
+    (circuit 
+      (use_layer F.Cu B.Cu)
+    )
+  )
+)
