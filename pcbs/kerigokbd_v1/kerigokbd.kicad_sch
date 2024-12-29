@@ -11610,7 +11610,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "kbd_local:YS-SK6812MINI-E"
+		(property "Footprint" "kbd_local:YS-SK6812MINI-E-dual"
 			(at 275.59 76.2 0)
 			(effects
 				(font
@@ -12246,7 +12246,7 @@
 				(hide yes)
 			)
 		)
-		(property "Footprint" "kbd_local:YS-SK6812MINI-E"
+		(property "Footprint" "kbd_local:YS-SK6812MINI-E-dual"
 			(at 275.59 58.42 0)
 			(effects
 				(font

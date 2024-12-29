@@ -4,8 +4,8 @@
     fortyfive_degree
   )
   (autoroute_settings
-    (fanout on)
-    (autoroute on)
+    (fanout off)
+    (autoroute off)
     (postroute on)
     (vias on)
     (via_costs 50)
@@ -28,7 +28,7 @@
   (rule
     (width 160.0)
     (clearance 100.0)
-    (clearance 80.0 (type smd_to_turn_gap))
+    (clearance 0.0 (type smd_to_turn_gap))
     (clearance 25.0 (type smd))
     (clearance 100.0 (type "kicad_default"))
     (clearance 100.0 (type Power))
