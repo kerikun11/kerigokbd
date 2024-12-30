@@ -1,17 +1,6 @@
 #include "kerigokbd.h"
 
-/* LED defintions */
-#define LED_VALUE 192
-#define COLOR_RED LED_VALUE * 2 / 3, 0, 0
-#define COLOR_GREEN 0, LED_VALUE * 2 / 3, 0
-#define COLOR_BLUE 0, 0, LED_VALUE * 2 / 3
-#define COLOR_MAGENTA LED_VALUE * 2 / 3, 0, LED_VALUE * 2 / 3
-#define COLOR_YELLOW LED_VALUE, LED_VALUE * 2 / 3, 0
-#define COLOR_CYAN 0, LED_VALUE * 2 / 3, LED_VALUE * 2 / 3
-#define COLOR_WHITE LED_VALUE * 2 / 3, LED_VALUE * 2 / 3, LED_VALUE * 2 / 3
-#define COLOR_ORANGE LED_VALUE, LED_VALUE / 4, 0
-#define COLOR_PURPLE RGB_PURPLE
-
+#ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
 static bool is_keycode_special(uint16_t keycode) {
     if (IS_MODIFIER_KEYCODE(keycode)) return true;               //< Ctrl, Alt, Shift, Win
     if (KC_ENTER <= keycode && keycode <= KC_SPACE) return true; //< ENT, ESC, BSPC, TAB, SPC
@@ -69,3 +58,4 @@ bool rgb_matrix_user_keyfunc(void) {
     }
     return false;
 }
+#endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS

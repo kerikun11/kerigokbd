@@ -3,11 +3,11 @@
 ![KERIgoKBD v1](images/kerigokbd_v1.jpg)
 ![KERIgoKBD v1](images/kerigokbd_v1_shining.jpg)
 
-*KERI's Ergonomic Keyboard based on Corne V4 Chocolate*
+*KERI's Ergonomic Keyboard Version 1*
 
 * Keyboard Maintainer: [kerikun11](https://github.com/kerikun11)
-* Hardware Supported: [Corne V4](https://github.com/foostan/crkbd), RP2040 Controller
-* Hardware Availability: [Corne V4](https://github.com/foostan/crkbd)
+* Hardware Supported: [KERIgoKBD v1](https://github.com/kerikun11/kerigokbd), RP2040 Controller
+* Hardware Availability: [KERIgoKBD v1](https://github.com/kerikun11/kerigokbd)
 
 Make example for this keyboard (after setting up your build environment):
 
