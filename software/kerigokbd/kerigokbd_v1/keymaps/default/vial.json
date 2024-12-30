@@ -1,7 +1,7 @@
 {
     "name": "KERIgoKBD",
-    "vendorId": "0x4653",
-    "productId": "0x0004",
+    "vendorId": "0x1209",
+    "productId": "0xE501",
     "matrix": { "rows": 8, "cols": 7 },
     "lighting": "vialrgb",
     "layouts": {

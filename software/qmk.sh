@@ -5,7 +5,8 @@ set -eu
 
 ## definitions
 QMK_DIR=$(git rev-parse --show-toplevel)/external/qmk_firmware
-QMK_KEYBOARD=kerigokbd
+QMK_KEYBOARD=kerigokbd/kerigokbd_v1
+# QMK_KEYBOARD=kerigokbd/kerigokbd_corne_v4
 QMK_KEYMAP=default
 
 ## parse options

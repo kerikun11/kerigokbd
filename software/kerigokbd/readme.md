@@ -1,13 +1,13 @@
-# KERIgoKBD v1
+# KERIgoKBD
 
-![KERIgoKBD v1](images/kerigokbd_v1.jpg)
-![KERIgoKBD v1](images/kerigokbd_v1_shining.jpg)
+![KERIgoKBD](kerigokbd_corne_v4/images/kerigokbd_v1.jpg)
+![KERIgoKBD](kerigokbd_corne_v4/images/kerigokbd_v1_shining.jpg)
 
 *KERI's Ergonomic Keyboard Version 1*
 
 * Keyboard Maintainer: [kerikun11](https://github.com/kerikun11)
-* Hardware Supported: [KERIgoKBD v1](https://github.com/kerikun11/kerigokbd), RP2040 Controller
-* Hardware Availability: [KERIgoKBD v1](https://github.com/kerikun11/kerigokbd)
+* Hardware Supported: [KERIgoKBD](https://github.com/kerikun11/kerigokbd), RP2040 Controller
+* Hardware Availability: [KERIgoKBD](https://github.com/kerikun11/kerigokbd)
 
 Make example for this keyboard (after setting up your build environment):
 
