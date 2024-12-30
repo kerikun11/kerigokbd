@@ -573,7 +573,7 @@
       "plot": "gerber",
       "pos_files": "",
       "specctra_dsn": "kerigokbd.dsn",
-      "step": "../../../../../../../Desktop/corne-pcb.STEP",
+      "step": "kerigokbd.STEP",
       "svg": "svg",
       "vrml": "../../../../../../Desktop/corne.wrl"
     },

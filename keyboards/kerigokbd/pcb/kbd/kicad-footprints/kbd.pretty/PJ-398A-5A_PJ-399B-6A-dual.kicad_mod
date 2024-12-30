@@ -314,7 +314,7 @@
 		(layers "B.Cu" "B.Paste" "B.Mask")
 		(uuid "7c7556b7-2c08-47e0-91c9-a00aed4b1cef")
 	)
-	(model "${KBD_DIR}/kicad-packages3D/kbd.3dshapes/PJ-399B-6A.step"
+	(model "${KBD_DIR}/kicad-packages3D/kbd.3dshapes/PJ-398A-5A.step"
 		(offset
 			(xyz 0 2.5 -2.1)
 		)
