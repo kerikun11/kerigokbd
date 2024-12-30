@@ -31,11 +31,11 @@ kerigokbd/
 ## ハードウェア
 
 - KERIgoKBD Corne v4
-  - [Corne V4](https://github.com/foostan/crkbd)ベースのキーボード。
+  - [Corne V4 Chocolate](https://github.com/foostan/crkbd)のケースをカスタマイズしたもの。
     ![KERIgoKBD v1](software/kerigokbd/kerigokbd_corne_v4/images/kerigokbd_v1.jpg)
     ![KERIgoKBD v1](software/kerigokbd/kerigokbd_corne_v4/images/kerigokbd_v1_shining.jpg)
 - KERIgoKBD v1
-  - 設計中
+  - (設計中)
 
 ## ソフトウェア
 
