@@ -1,5 +1,5 @@
 {
-    "keyboard_name": "KERIgoKBD",
+    "keyboard_name": "KERIgoKBD v1",
     "manufacturer": "kerikun11",
     "maintainer": "kerikun11",
     "url": "https://github.com/kerikun11/kerigokbd",
@@ -7,9 +7,9 @@
     "processor": "RP2040",
     "bootloader": "rp2040",
     "usb": {
-        "device_version": "1.0.0",
+        "vid": "0x1209",
         "pid": "0xE501",
-        "vid": "0x1209"
+        "device_version": "1.0.0"
     },
     "build": {
         "lto": true
