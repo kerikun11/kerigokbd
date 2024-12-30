@@ -1,6 +1,6 @@
 # KERI's QMK Firmware
 
-けりの自作キーボードのファームウェア
+けりの自作キーボードのソースコード。
 
 ```tree
 kerigokbd/

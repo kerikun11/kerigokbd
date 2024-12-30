@@ -8,7 +8,7 @@
     "bootloader": "rp2040",
     "usb": {
         "device_version": "1.0.0",
-        "pid": "0x0001",
+        "pid": "0xE501",
         "vid": "0x1209"
     },
     "build": {
@@ -72,7 +72,7 @@
         }
     },
     "layouts": {
-        "LAYOUT_split_3x6_4_ex2": {
+        "LAYOUT_split_6_7_7_4": {
             "layout": [
                 { "matrix": [ 0, 0 ], "x": 0, "y": 0.3 },
                 { "matrix": [ 0, 1 ], "x": 1, "y": 0.3 },
