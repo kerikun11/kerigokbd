@@ -1,22 +1,25 @@
 #!/bin/bash
 set -eu
 
-function setup_qmk_keyboard() {
+## defintions
+KEYBOARDS_DIR=software/keyboards
+QMK_DIR=external/qmk_firmware
+VIAL_DIR=external/vial-qmk
+
+function register_qmk_keyboard() {
     ## params
-    KEYBOARD_DIR=software/$1
-    QMK_FIRMWARE_DIR=external/$2
+    KEYBOARD_NAME=$1
+    QMK_FIRMWARE_DIR=$2
     ## process
     cd $(git rev-parse --show-toplevel)
-    ## for QMK Firmware
-    QMK_FIRMWARE_DIR=external/qmk_firmware
     # make a symbolic link
-    ln -rsf $KEYBOARD_DIR $QMK_FIRMWARE_DIR/keyboards
+    ln -rsf $KEYBOARDS_DIR/$KEYBOARD_NAME $QMK_FIRMWARE_DIR/keyboards/
     # locally ignore the link in git
-    echo "$KEYBOARD_DIR" >>.git/modules/$QMK_FIRMWARE_DIR/info/exclude
+    echo "/keyboards/$KEYBOARD_NAME" >>.git/modules/$QMK_FIRMWARE_DIR/info/exclude
 }
 
-setup_qmk_keyboard kerigokbd qmk_firmware
-setup_qmk_keyboard kerigokbd vial-qmk
-
-setup_qmk_keyboard keyball qmk_firmware
-setup_qmk_keyboard keyball vial-qmk
+for keyboard in $(ls $KEYBOARDS_DIR/); do
+    echo $keyboard
+    register_qmk_keyboard $keyboard $QMK_DIR
+    register_qmk_keyboard $keyboard $VIAL_DIR
+done
