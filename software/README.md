@@ -1,4 +1,6 @@
-# ファームウェアのビルドと書き込みの方法
+# ソフトウェア
+
+ファームウェアのビルドと書き込みの方法
 
 ## 前提
 
@@ -10,7 +12,7 @@
 カスタムファームウェアのディレクトリをQMKリポジトリの中にシンボリックで追加して、不要な差分が表示されないように無視設定を行う。
 
 ```sh
-# clone this repository with submodules
+## clone this repository with submodules
 git clone --recursive https://github.com/kerikun11/kerigokbd.git
 cd kerigokbd
 ```
@@ -18,25 +20,17 @@ cd kerigokbd
 QMKファームウェアのリポジトリのkeyboardsディレクトリ内にカスタムキーボードのリンクを追加する。
 
 ```sh
+## make symbolic links to QMK Firmware repository
 ./scripts/setup.sh
 ```
 
-## キーボード選択
+## ビルドと書き込み
 
 ```sh
-# KERIgoKBD Corne v4
-./scripts/qmk_config_kerigokbd_corne_v4.sh
-# KERIgoKBD v1
-./scripts/qmk_config_kerigokbd_v1.sh
-```
-
-### ビルドと書き込み
-
-```sh
-# compile
+## compile
 ./scripts/qmk.sh
-# compile and flash
+## compile and flash
 ./scripts/qmk.sh -f
-# clean and compile
-./scripts/qmk.sh -c
+## clean, compile, and flash
+./scripts/qmk.sh -c -f
 ```

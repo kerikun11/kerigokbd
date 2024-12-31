@@ -39,5 +39,5 @@ kerigokbd/
 
 ## ソフトウェア
 
-- QMK Firmware
-  - [software](./software/)
+- [software](./software/)
+  - [QMK Firmware](https://qmk.fm/)のプロジェクト
