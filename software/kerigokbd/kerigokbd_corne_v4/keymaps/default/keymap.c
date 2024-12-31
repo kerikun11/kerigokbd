@@ -1,4 +1,4 @@
-/* keymap.c for via */
+/* keymap.c for KERIgoKBD Corne V4 */
 #include QMK_KEYBOARD_H
 #include <kerigokbd.h>
 
@@ -20,19 +20,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [2] = LAYOUT_split_3x6_3_ex2(
       _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,  KC_F11,     KC_F12,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, _______,
       _______, JP_LPRN, JP_LCBR, JP_RCBR, JP_LBRC, JP_RBRC, MS_BTN3,    MS_BTN3, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, JP_RPRN, _______,
-      _______, MS_BTN2, MS_WHLL, MS_WHLD, MS_WHLU, MS_WHLR,                      MS_LEFT, MS_DOWN,   MS_UP, MS_RGHT, MS_BTN1, _______,
+      _______, MS_BTN2, MS_WHLL, MS_WHLU, MS_WHLD, MS_WHLR,                      MS_LEFT, MS_DOWN,   MS_UP, MS_RGHT, MS_BTN1, _______,
                                           KC_LGUI, _______, _______,    _______, _______, _______
   ),
   [3] = LAYOUT_split_3x6_3_ex2(
-      _______, JP_EXLM,   JP_AT, JP_HASH,  JP_DLR, JP_PERC, KC_VOLU,    KC_BRIU, JP_CIRC, JP_AMPR, JP_ASTR, JP_PLUS, JP_PIPE, _______,
-      _______,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5, KC_VOLD,    KC_BRID,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0, _______,
-      _______, JP_TILD,  JP_GRV, JP_SCLN, JP_COLN, JP_UNDS,                      JP_QUOT, JP_DQUO, JP_COMM,  JP_DOT, JP_SLSH, _______,
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
                                           _______, _______, _______,    _______, _______, _______
   ),
   [4] = LAYOUT_split_3x6_3_ex2(
-      _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,  KC_F11,     KC_F12,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, _______,
-      _______, XXXXXXX, XXXXXXX, JP_LPRN, JP_RPRN, XXXXXXX, JP_ZKHK,    JP_EISU, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,  JP_EQL, _______,
-      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      JP_LBRC, JP_RBRC, JP_LCBR, JP_RCBR, JP_BSLS, _______,
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
                                           _______, _______, _______,    _______, _______, _______
   ),
   [5] = LAYOUT_split_3x6_3_ex2(

@@ -1,6 +1,8 @@
+/* keymap.c for KERIgoKBD v1 */
 #include QMK_KEYBOARD_H
 #include <kerigokbd.h>
 
+// clang-format off
 #ifdef LAYOUT_split_6_7_7_4
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_split_6_7_7_4(
@@ -18,7 +20,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [2] = LAYOUT_split_6_7_7_4(
       _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                        KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, _______,
       _______, JP_LPRN, JP_LCBR, JP_RCBR, JP_LBRC, JP_RBRC,  KC_F11,     KC_F12, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, JP_RPRN, _______,
-      _______, MS_BTN2, MS_WHLL, MS_WHLD, MS_WHLU, MS_WHLR, _______,    _______, MS_LEFT, MS_DOWN,   MS_UP, MS_RGHT, MS_BTN1, _______,
+      _______, MS_BTN2, MS_WHLL, MS_WHLU, MS_WHLD, MS_WHLR, _______,    _______, MS_LEFT, MS_DOWN,   MS_UP, MS_RGHT, MS_BTN1, _______,
                                  _______, _______, _______, _______,    _______, _______, _______, _______
   ),
   [3] = LAYOUT_split_6_7_7_4(
@@ -41,3 +43,4 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 };
 #endif
+// clang-format on
