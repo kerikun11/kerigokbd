@@ -1,35 +1,44 @@
 #!/bin/bash
+# QMK Firmware Tools
 
 ## script config
 set -eu
 
-## parse options
-flag_v=false # vial
+## parse command-line options
 flag_c=false # clean
 flag_f=false # flash
-while getopts "vcf" opt; do
+flag_v=false # vial
+flag_k=false # kerigokbd v1
+while getopts "cfvk" opt; do
     case $opt in
-    v) flag_v=true ;;
     c) flag_c=true ;;
     f) flag_f=true ;;
+    v) flag_v=true ;;
+    k) flag_k=true ;;
     *) echo "invalid option: $opt" ;;
     esac
 done
 
-## qmk firmware
+## check flags
+QMK_DIR=$(git rev-parse --show-toplevel)/external/qmk_firmware
+QMK_KEYMAP=default
 if $flag_v; then
     QMK_DIR=$(git rev-parse --show-toplevel)/external/vial-qmk
-else
-    QMK_DIR=$(git rev-parse --show-toplevel)/external/qmk_firmware
+    QMK_KEYMAP=vial
+fi
+QMK_KEYBOARD=kerigokbd/kerigokbd_corne_v4
+if $flag_k; then
+    QMK_KEYBOARD=kerigokbd/kerigokbd_v1
 fi
 
 ## main process
+set -x
 cd $QMK_DIR
 if $flag_c; then
     qmk clean
 fi
 if $flag_f; then
-    qmk flash
+    qmk flash -kb $QMK_KEYBOARD -km $QMK_KEYMAP
 else
-    qmk compile
+    qmk compile -kb $QMK_KEYBOARD -km $QMK_KEYMAP
 fi

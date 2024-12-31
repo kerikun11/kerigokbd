@@ -1,3 +1,4 @@
+/* config.h for KERIgoKBD Corne V4 */
 #pragma once
 
 /* USB */
