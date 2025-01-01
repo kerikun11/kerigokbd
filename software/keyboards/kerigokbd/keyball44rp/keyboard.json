@@ -16,6 +16,7 @@
         "extrakey": true,
         "mousekey": true,
         "rgb_matrix": true,
+        "pointing_device": true,
         "nkro": true
     },
     "dynamic_keymap": {

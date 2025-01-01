@@ -1,6 +1,7 @@
 /* keymap.c for default (via) */
 #include QMK_KEYBOARD_H
 #include <kerigokbd.h>
+#include "keyball44rp.h"
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -23,9 +24,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
           KC_F11, KC_F12, /**/ _______, _______, _______, /* */ _______, _______, /* */ XXXXXXX, XXXXXXX, /**/ QK_BOOT
   ),
   [3] = LAYOUT_universal(
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /* */ RGB_MOD, RGB_SPI, RGB_VAI, RGB_HUI, RGB_SAI, _______,
-    _______, XXXXXXX, XXXXXXX, MS_BTN3, MS_BTN1, MS_BTN2, /* */RGB_RMOD, RGB_SPD, RGB_VAD, RGB_HUD, RGB_SAD, _______,
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /* */ RGB_M_P, RGB_M_R,RGB_M_SW, RGB_M_G,RGB_M_TW, _______,
+    _______, SP_RMOD, SP_MOD, DF_RMOD,  DF_MOD, XXXXXXX, /* */ RGB_MOD, RGB_SPI, RGB_VAI, RGB_HUI, RGB_SAI, _______,
+    _______, DRGSCRL, SNIPING, MS_BTN3, MS_BTN1, MS_BTN2, /* */RGB_RMOD, RGB_SPD, RGB_VAD, RGB_HUD, RGB_SAD, _______,
+    _______, DRG_TOG, SNP_TOG, XXXXXXX, XXXXXXX, XXXXXXX, /* */ RGB_M_P, RGB_M_R,RGB_M_SW, RGB_M_G,RGB_M_TW, _______,
         _______, _______, /**/ _______, _______, _______, /* */ _______, _______, /* */ XXXXXXX, XXXXXXX, /**/ QK_BOOT
   ),
 };

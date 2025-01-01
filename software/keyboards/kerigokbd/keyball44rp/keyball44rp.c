@@ -18,7 +18,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "keyballrp.h"
+#include "keyball44rp.h"
 #include "transactions.h"
 #include <string.h>
 
