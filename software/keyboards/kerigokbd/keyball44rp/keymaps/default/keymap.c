@@ -1,6 +1,6 @@
 /* keymap.c for default (via) */
 #include QMK_KEYBOARD_H
-#include "keyballrp.h"
+#include <kerigokbd.h>
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {

@@ -9,16 +9,16 @@ flag_c=false # clean
 flag_f=false # flash
 flag_v=false # vial
 flag_k=false # kerigokbd v1
-flag_b=false # keyball
 flag_r=false # keyballrp
+flag_b=false # keyball
 while getopts "cfvkbr" opt; do
     case $opt in
     c) flag_c=true ;;
     f) flag_f=true ;;
     v) flag_v=true ;;
     k) flag_k=true ;;
-    b) flag_b=true ;;
     r) flag_r=true ;;
+    b) flag_b=true ;;
     *) echo "invalid option: $opt" ;;
     esac
 done
@@ -33,11 +33,11 @@ fi
 QMK_KEYBOARD=kerigokbd/kerigokbd_corne_v4
 if $flag_k; then
     QMK_KEYBOARD=kerigokbd/kerigokbd_v1
+elif $flag_r; then
+    QMK_KEYBOARD=kerigokbd/keyball44rp
 elif $flag_b; then
     QMK_KEYBOARD=keyball/keyball44
     QMK_KEYMAP=via
-elif $flag_r; then
-    QMK_KEYBOARD=keyballrp
 fi
 
 ## main process
