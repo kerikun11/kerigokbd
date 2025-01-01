@@ -3,13 +3,13 @@
     "manufacturer": "kerikun11",
     "maintainer": "kerikun11",
     "url": "https://github.com/kerikun11/kerigokbd",
-    "bootloader_instructions": "Turn the power on with pressing Q or P.",
     "processor": "RP2040",
     "bootloader": "rp2040",
+    "bootloader_instructions": "Turn the power on with pressing Q or P.",
     "usb": {
-        "device_version": "4.1.0",
         "vid": "0x4653",
-        "pid": "0x0004"
+        "pid": "0x0004",
+        "device_version": "4.1.0"
     },
     "build": {
         "lto": true

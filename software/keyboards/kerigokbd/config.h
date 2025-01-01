@@ -7,4 +7,4 @@
 #define PICO_XOSC_STARTUP_DELAY_MULTIPLIER 64
 
 /* RGB Matrix */
-#define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_CUSTOM_keyfunc
+#define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_CUSTOM_keyfunc // c.f. rgb_matrix_user.inc
