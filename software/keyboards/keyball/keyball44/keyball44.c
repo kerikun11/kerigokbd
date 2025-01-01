@@ -44,3 +44,24 @@ void keyball_on_adjust_layout(keyball_adjust_t v) {
     rgblight_set_effect_range(0, lednum_this + lednum_that);
 #endif
 }
+
+#define RGBLIGHT_TIMEOUT 30000
+static uint32_t last_activity_time = 0;
+static bool     rgblight_active    = true;
+void matrix_scan_user(void) {
+    uint32_t current_time = timer_read32();
+    if (rgblight_active && (current_time - last_activity_time > RGBLIGHT_TIMEOUT)) {
+        rgblight_disable();
+        rgblight_active = false;
+    }
+}
+bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+    if (record->event.pressed) {
+        last_activity_time = timer_read32();
+        if (!rgblight_active) {
+            rgblight_enable();
+            rgblight_active = true;
+        }
+    }
+    return true;
+}
