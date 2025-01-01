@@ -1,43 +1,27 @@
-// Copyright 2023 yinouet (@yinouet)
+// Copyright 2025 kerikun11
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #pragma once
 
-/* disable action features */
-// #define NO_ACTION_LAYER
-// #define NO_ACTION_TAPPING
-// #define NO_ACTION_ONESHOT
-
-/* SPI & PMW3360 settings. */
+/* SPI */
+#undef RP_SPI_USE_SPI0
+#define RP_SPI_USE_SPI0 TRUE
 #define SPI_DRIVER SPID0
 #define SPI_SCK_PIN GP22
 #define SPI_MISO_PIN GP20
 #define SPI_MOSI_PIN GP23
-#define POINTING_DEVICE_CS_PIN GP21
 
+/* Pointing Device */
+#define POINTING_DEVICE_CS_PIN GP21
+#define POINTING_DEVICE_RIGHT
 #define POINTING_DEVICE_INVERT_X
 #define POINTING_DEVICE_ROTATION_90
-
-/* Split parameters */
-#define SPLIT_HAND_MATRIX_GRID GP27, GP9
-#define SPLIT_HAND_MATRIX_GRID_LOW_IS_LEFT
-#define SPLIT_USB_DETECT
-#define SPLIT_USB_TIMEOUT 2500
-
-/* RGB Light */
-#ifdef RGBLIGHT_ENABLE
-// #    define RGBLIGHT_EFFECT_BREATHING
-// #    define RGBLIGHT_EFFECT_RAINBOW_MOOD
-#    define RGBLIGHT_EFFECT_RAINBOW_SWIRL
-// #    define RGBLIGHT_EFFECT_SNAKE
-// #    define RGBLIGHT_EFFECT_KNIGHT
-// #    define RGBLIGHT_EFFECT_CHRISTMAS
-// #    define RGBLIGHT_EFFECT_STATIC_GRADIENT
-// #    define RGBLIGHT_EFFECT_RGB_TEST
-// #    define RGBLIGHT_EFFECT_ALTERNATING
-// #    define RGBLIGHT_EFFECT_TWINKLE
-#endif
-
-#define TAP_CODE_DELAY 5
 #define POINTING_DEVICE_AUTO_MOUSE_ENABLE
-#define AUTO_MOUSE_DEFAULT_LAYER 1
+
+/* Split */
+#define SPLIT_HAND_MATRIX_GRID_LOW_IS_LEFT
+#define SPLIT_POINTING_ENABLE
+
+// #define AUTO_MOUSE_DEFAULT_LAYER 1
+
+// #define TAP_CODE_DELAY 5
