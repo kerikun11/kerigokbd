@@ -1,4 +1,4 @@
-# KERI's QMK Firmware
+# KERIgoKBD (KERI's Ergonomic Keyboard)
 
 けりの自作キーボードのソースコード。
 
@@ -12,17 +12,18 @@ kerigokbd/
 │       ├── case/                   # STL
 │       └── pcb/                    # KiCad
 ├── software/
-│   └── kerigokbd/                  # Keyboard Entry of QMK Firmware
-│       ├── kerigokbd_v1/
-│       │   ├── keymaps/
-│       │   │   ├── default/
-│       │   │   │   └── keymap.c
-│       │   ├── keyboard.json
-│       │   └── config.h
-│       ├── rules.mk
-│       ├── kerigokbd.c
-│       ├── kerigokbd.h
-│       └── readme.md
+│   └── keyboards/                  # Keyboard Entries of QMK Firmware
+│       └── kerigokbd/
+│           ├── kerigokbd_v1/
+│           │   ├── keymaps/
+│           │   │   ├── default/
+│           │   │   │   └── keymap.c
+│           │   ├── keyboard.json
+│           │   └── config.h
+│           ├── rules.mk
+│           ├── kerigokbd.c
+│           ├── kerigokbd.h
+│           └── readme.md
 ├── .clang-format
 ├── .gitmodules
 └── README.md

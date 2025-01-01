@@ -1,6 +1,11 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright 2025 KERI's Lab
+
 #include "kerigokbd.h"
 
-#ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+/* RGB Matrix Custom Effect "keyfunc" */
+#ifdef RGB_MATRIX_CUSTOM_USER
+
 static bool is_keycode_special(uint16_t keycode) {
     if (IS_MODIFIER_KEYCODE(keycode)) return true;               //< Ctrl, Alt, Shift, Win
     if (KC_ENTER <= keycode && keycode <= KC_SPACE) return true; //< ENT, ESC, BSPC, TAB, SPC
@@ -58,4 +63,4 @@ bool rgb_matrix_user_keyfunc(void) {
     }
     return false;
 }
-#endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+#endif // RGB_MATRIX_CUSTOM_USER

@@ -1,3 +1,5 @@
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright 2025 KERI's Lab
 #pragma once
 
 #include <quantum.h>
@@ -23,7 +25,6 @@
 #define COLOR_PURPLE RGB_PURPLE
 
 /* RGB Matrix */
-#define RGB_MATRIX_CUSTOM_EFFECT_IMPLS
-#ifdef RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+#ifdef RGB_MATRIX_CUSTOM_USER
 bool rgb_matrix_user_keyfunc(void);
-#endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS
+#endif // RGB_MATRIX_CUSTOM_USER
