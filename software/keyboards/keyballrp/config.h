@@ -3,28 +3,10 @@
 
 #pragma once
 
-/*
- * Feature disable options
- *  These options are also useful to firmware size reduction.
- */
-
-/* disable debug print */
-//#define NO_DEBUG
-
-/* disable print */
-//#define NO_PRINT
-
 /* disable action features */
-//#define NO_ACTION_LAYER
-//#define NO_ACTION_TAPPING
-//#define NO_ACTION_ONESHOT
-
-/* Key matrix configuration. 
-#define MATRIX_ROW_PINS \
-    { GP29, GP28, GP27, GP26 }
-#define MATRIX_COL_PINS \
-    { GP4, GP5, GP6, GP7, GP8, GP9 }
-*/
+// #define NO_ACTION_LAYER
+// #define NO_ACTION_TAPPING
+// #define NO_ACTION_ONESHOT
 
 /* SPI & PMW3360 settings. */
 #define SPI_DRIVER SPID0
@@ -37,7 +19,25 @@
 #define POINTING_DEVICE_ROTATION_90
 
 /* Split parameters */
-// #define SOFT_SERIAL_PIN    GP1    
-#define SPLIT_HAND_MATRIX_GRID  GP27, GP9
+#define SPLIT_HAND_MATRIX_GRID GP27, GP9
+#define SPLIT_HAND_MATRIX_GRID_LOW_IS_LEFT
 #define SPLIT_USB_DETECT
-#define SPLIT_USB_TIMEOUT       2500
+#define SPLIT_USB_TIMEOUT 2500
+
+/* RGB Light */
+#ifdef RGBLIGHT_ENABLE
+// #    define RGBLIGHT_EFFECT_BREATHING
+// #    define RGBLIGHT_EFFECT_RAINBOW_MOOD
+#    define RGBLIGHT_EFFECT_RAINBOW_SWIRL
+// #    define RGBLIGHT_EFFECT_SNAKE
+// #    define RGBLIGHT_EFFECT_KNIGHT
+// #    define RGBLIGHT_EFFECT_CHRISTMAS
+// #    define RGBLIGHT_EFFECT_STATIC_GRADIENT
+// #    define RGBLIGHT_EFFECT_RGB_TEST
+// #    define RGBLIGHT_EFFECT_ALTERNATING
+// #    define RGBLIGHT_EFFECT_TWINKLE
+#endif
+
+#define TAP_CODE_DELAY 5
+#define POINTING_DEVICE_AUTO_MOUSE_ENABLE
+#define AUTO_MOUSE_DEFAULT_LAYER 1
