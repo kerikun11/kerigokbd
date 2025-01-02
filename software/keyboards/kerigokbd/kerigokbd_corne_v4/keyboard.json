@@ -11,9 +11,6 @@
         "pid": "0x0004",
         "device_version": "4.1.0"
     },
-    "build": {
-        "lto": true
-    },
     "features": {
         "bootmagic": true,
         "command": false,
@@ -165,14 +162,14 @@
             "cycle_left_right": true,
             "cycle_up_down": false,
             "rainbow_moving_chevron": false,
-            "cycle_out_in": true,
+            "cycle_out_in": false,
             "cycle_out_in_dual": false,
-            "cycle_pinwheel": true,
-            "cycle_spiral": false,
+            "cycle_pinwheel": false,
+            "cycle_spiral": true,
             "dual_beacon": false,
             "rainbow_beacon": false,
             "rainbow_pinwheels": false,
-            "raindrops": false,
+            "raindrops": true,
             "jellybean_raindrops": false,
             "hue_breathing": false,
             "hue_pendulum": false,
