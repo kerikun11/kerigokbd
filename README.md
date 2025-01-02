@@ -15,14 +15,8 @@ kerigokbd/
 │   └── keyboards/                  # Keyboard Entries of QMK Firmware
 │       └── kerigokbd/
 │           ├── kerigokbd_v1/
-│           │   ├── keymaps/
-│           │   │   ├── default/
-│           │   │   │   └── keymap.c
-│           │   ├── keyboard.json
-│           │   └── config.h
-│           ├── rules.mk
-│           ├── kerigokbd.c
-│           ├── kerigokbd.h
+│           ├── kerigokbd_corne_v4/
+│           ├── keyball44rp/
 │           └── readme.md
 ├── .clang-format
 ├── .gitmodules
@@ -31,14 +25,14 @@ kerigokbd/
 
 ## ハードウェア
 
-- KERIgoKBD Corne v4
-  - [Corne V4 Chocolate](https://github.com/foostan/crkbd)のケースをカスタマイズしたもの。
-    ![KERIgoKBD v1](software/kerigokbd/kerigokbd_corne_v4/images/kerigokbd_v1.jpg)
-    ![KERIgoKBD v1](software/kerigokbd/kerigokbd_corne_v4/images/kerigokbd_v1_shining.jpg)
 - KERIgoKBD v1
   - (設計中)
+- KERIgoKBD Corne v4
+  - [Corne V4 Chocolate](https://github.com/foostan/crkbd)のケースをカスタマイズしたもの。
+- Keyball44 RP2040
+  - [Keyball44](https://github.com/Yowkees/keyball)のマイコンボードをRP2040に差し替えたもの。
 
 ## ソフトウェア
 
-- [software](./software/)
-  - [QMK Firmware](https://qmk.fm/)のプロジェクト
+- [QMK Firmware](https://qmk.fm/)のプロジェクト
+  - [software](./software/)を参照。
