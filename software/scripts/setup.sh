@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eu
 
-## defintions
+## definitions
 KEYBOARDS_DIR=software/keyboards
 QMK_DIR=external/qmk_firmware
 VIAL_DIR=external/vial-qmk
@@ -18,6 +18,7 @@ function register_qmk_keyboard() {
     echo "/keyboards/$KEYBOARD_NAME" >>.git/modules/$QMK_FIRMWARE_DIR/info/exclude
 }
 
+## actual process
 for keyboard in $(ls $KEYBOARDS_DIR/); do
     echo $keyboard
     register_qmk_keyboard $keyboard $QMK_DIR

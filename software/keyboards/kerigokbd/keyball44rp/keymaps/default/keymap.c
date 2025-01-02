@@ -1,6 +1,6 @@
-/* keymap.c for default (via) */
+/* keymap.c for Keyball44 default (via) */
 #include QMK_KEYBOARD_H
-#include <kerigokbd.h>
+#include "kerigokbd.h"
 #include "keyball44rp.h"
 
 // clang-format off

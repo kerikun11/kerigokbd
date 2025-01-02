@@ -1,6 +1,6 @@
 /* keymap.c for KERIgoKBD Corne V4 */
 #include QMK_KEYBOARD_H
-#include <kerigokbd.h>
+#include "kerigokbd.h"
 
 // clang-format off
 #ifdef LAYOUT_split_3x6_3_ex2

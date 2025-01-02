@@ -1,6 +1,6 @@
 /* keymap.c for KERIgoKBD v1 */
 #include QMK_KEYBOARD_H
-#include <kerigokbd.h>
+#include "kerigokbd.h"
 
 // clang-format off
 #ifdef LAYOUT_split_6_7_7_4

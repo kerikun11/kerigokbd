@@ -1,4 +1,7 @@
-/* config.h for KERIgoKBD */
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright 2025 KERI's Lab
+// config.h for KERIgoKBD
+
 #pragma once
 
 /* RP2040- and hardware-specific config */
