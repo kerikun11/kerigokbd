@@ -14,7 +14,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [1] = LAYOUT_universal(
     _______, JP_EXLM, JP_DQUO, JP_HASH,  JP_DLR, JP_PERC, /* */ JP_AMPR, JP_QUOT, JP_ASTR, JP_CIRC, JP_TILD, _______,
     _______,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5, /* */    KC_6,    KC_7,    KC_8,    KC_9,    KC_0, _______,
-    _______,  JP_GRV,   JP_AT, JP_SCLN, JP_COLN, JP_UNDS, /* */ JP_PIPE, JP_PLUS,  JP_EQL, _______, JP_BSLS, _______,
+    _______,  JP_GRV,   JP_AT, JP_SCLN, JP_COLN, JP_UNDS, /* */ JP_PIPE, JP_PLUS,  JP_EQL,  JP_DOT, JP_BSLS, _______,
         _______, _______, /**/ _______, _______, _______, /* */ _______, _______, /* */ XXXXXXX, XXXXXXX, /**/ QK_BOOT
   ),
   [2] = LAYOUT_universal(
@@ -24,9 +24,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
           KC_F11, KC_F12, /**/ _______, _______, _______, /* */ _______, _______, /* */ XXXXXXX, XXXXXXX, /**/ QK_BOOT
   ),
   [3] = LAYOUT_universal(
-    _______, SP_RMOD, SP_MOD, DF_RMOD,  DF_MOD, XXXXXXX, /* */ RGB_MOD, RGB_SPI, RGB_VAI, RGB_HUI, RGB_SAI, _______,
+    _______, SP_RMOD, SP_MOD, DF_RMOD,  DF_MOD, XXXXXXX, /* */  RGB_MOD, RGB_SPI, RGB_VAI, RGB_HUI, RGB_SAI, _______,
     _______, DRGSCRL, SNIPING, MS_BTN3, MS_BTN1, MS_BTN2, /* */RGB_RMOD, RGB_SPD, RGB_VAD, RGB_HUD, RGB_SAD, _______,
-    _______, DRG_TOG, SNP_TOG, XXXXXXX, XXXXXXX, XXXXXXX, /* */ RGB_M_P, RGB_M_R,RGB_M_SW, RGB_M_G,RGB_M_TW, _______,
+    _______, DRG_TOG, SNP_TOG, XXXXXXX, JP_MHEN, JP_HENK, /* */ RGB_M_P, RGB_M_R,RGB_M_SW, RGB_M_G,RGB_M_TW, _______,
         _______, _______, /**/ _______, _______, _______, /* */ _______, _______, /* */ XXXXXXX, XXXXXXX, /**/ QK_BOOT
   ),
 };

@@ -14,7 +14,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [1] = LAYOUT_split_6_7_7_4(
     _______, JP_EXLM, JP_DQUO, JP_HASH,  JP_DLR, JP_PERC,          /**/          JP_AMPR, JP_QUOT, JP_ASTR, JP_CIRC, JP_TILD, _______,
     _______,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5, KC_VOLU, /**/ KC_BRIU,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0, _______,
-    _______,  JP_GRV,   JP_AT, JP_SCLN, JP_COLN, JP_UNDS, KC_VOLD, /**/ KC_BRID, JP_PIPE, JP_PLUS,  JP_EQL, _______, JP_BSLS, _______,
+    _______,  JP_GRV,   JP_AT, JP_SCLN, JP_COLN, JP_UNDS, KC_VOLD, /**/ KC_BRID, JP_PIPE, JP_PLUS,  JP_EQL,  JP_DOT, JP_BSLS, _______,
                                _______, _______, _______, _______, /**/ _______, _______, _______, _______
   ),
   [2] = LAYOUT_split_6_7_7_4(
