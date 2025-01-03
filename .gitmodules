@@ -4,3 +4,6 @@
 [submodule "external/vial-qmk"]
 	path = external/vial-qmk
 	url = https://github.com/vial-kb/vial-qmk.git
+[submodule "hardware/kerigokbd_v1/pcb/kicad-kbd"]
+	path = hardware/kerigokbd_v1/pcb/kicad-kbd
+	url = https://github.com/kerikun11/kicad-kbd.git
