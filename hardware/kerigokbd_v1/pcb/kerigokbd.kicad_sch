@@ -10068,7 +10068,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_01x04"
+		(property "Value" "I2C"
 			(at 127 61.722 0)
 			(effects
 				(font
@@ -10208,7 +10208,7 @@
 				)
 			)
 		)
-		(property "Value" "Conn_01x03"
+		(property "Value" "SWD"
 			(at 147.32 61.976 0)
 			(effects
 				(font

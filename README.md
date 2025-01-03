@@ -25,12 +25,12 @@ kerigokbd/
 
 ## ハードウェア
 
-- KERIgoKBD v1
+- [KERIgoKBD v1](./hardware/kerigokbd_v1/)
   - (設計中)
 - KERIgoKBD Corne v4
-  - [Corne V4 Chocolate](https://github.com/foostan/crkbd)のケースをカスタマイズしたもの。
+  - [foostan](https://github.com/foostan)さんの[Corne V4 Chocolate](https://github.com/foostan/crkbd)のケースをカスタマイズしたもの。
 - Keyball44 RP2040
-  - [Keyball44](https://github.com/Yowkees/keyball)のマイコンボードをRP2040に差し替えたもの。
+  - [Yowkees](https://github.com/Yowkees)さんの[Keyball44](https://github.com/Yowkees/keyball)のマイコンボードをRP2040に差し替えたもの。
 
 ## ソフトウェア
 
