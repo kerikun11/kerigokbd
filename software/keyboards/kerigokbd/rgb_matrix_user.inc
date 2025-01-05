@@ -65,6 +65,8 @@ static bool keyfunc(effect_params_t* params) {
                 /* Bootloader */ rgb_matrix_set_color(index, COLOR_RED);
             } else if (IS_MOUSEKEY_MOVE(keycode) || IS_MOUSEKEY_WHEEL(keycode)) {
                 /* Mouse (Move) */ rgb_matrix_set_color(index, COLOR_PURPLE);
+            } else if (keycode == MS_BTN4 || keycode == MS_BTN5) {
+                /* Mouse (Button 4/5) */ rgb_matrix_set_color(index, COLOR_ORANGE);
             } else if (IS_MOUSEKEY_BUTTON(keycode)) {
                 /* Mouse (Button) */ rgb_matrix_set_color(index, COLOR_BLUE);
             } else if (IS_UNDERGLOW_KEYCODE(keycode)) {

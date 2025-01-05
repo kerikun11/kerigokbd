@@ -21,13 +21,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5, /* */   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, _______,
     _______, JP_LPRN, JP_LCBR, JP_RCBR, JP_LBRC, JP_RBRC, /* */ KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, JP_RPRN, _______,
     _______, MS_BTN2, MS_WHLL, MS_WHLU, MS_WHLD, MS_WHLR, /* */ MS_LEFT, MS_DOWN,   MS_UP, MS_RGHT, MS_BTN1, _______,
-          KC_F11, KC_F12, /**/ _______, _______, _______, /* */ _______, _______, /* */ XXXXXXX, XXXXXXX, /**/ QK_BOOT
+          KC_F11, KC_F12, /**/ _______, _______, _______, /* */ TO(4), _______, /* */ XXXXXXX, XXXXXXX, /**/ TO(4)
   ),
   [3] = LAYOUT_universal(
-    _______, SP_RMOD, SP_MOD, DF_RMOD,  DF_MOD, XXXXXXX, /* */  RGB_MOD, RGB_SPI, RGB_VAI, RGB_HUI, RGB_SAI, _______,
-    _______, DRGSCRL, SNIPING, MS_BTN3, MS_BTN1, MS_BTN2, /* */RGB_RMOD, RGB_SPD, RGB_VAD, RGB_HUD, RGB_SAD, _______,
-    _______, DRG_TOG, SNP_TOG, XXXXXXX, JP_MHEN, JP_HENK, /* */ RGB_M_P, RGB_M_R,RGB_M_SW, RGB_M_G,RGB_M_TW, _______,
+    _______, SP_RMOD,  SP_MOD, DRGSCRL, DF_RMOD,  DF_MOD, /* */ RGB_MOD, RGB_SPI, RGB_VAI, RGB_HUI, RGB_SAI, _______,
+    _______, MS_BTN4, MS_BTN2, MS_BTN3, MS_BTN1, MS_BTN5, /* */RGB_RMOD, RGB_SPD, RGB_VAD, RGB_HUD, RGB_SAD, _______,
+    _______, DRG_TOG, SNP_TOG, SNIPING, JP_MHEN, JP_HENK, /* */ RGB_M_P, RGB_M_R,RGB_M_SW, RGB_M_G,RGB_M_TW, _______,
         KC_VOLD, KC_VOLU, /**/ _______, _______, _______, /* */ _______, _______, /* */ XXXXXXX, XXXXXXX, /**/ QK_BOOT
+  ),
+  [4] = LAYOUT_universal(
+    _______, SP_RMOD,  SP_MOD, DRGSCRL, DF_RMOD,  DF_MOD, /* */  DF_MOD, DF_RMOD, DRGSCRL,  SP_MOD, SP_RMOD, _______,
+    _______, MS_BTN4, MS_BTN2, MS_BTN3, MS_BTN1, MS_BTN5, /* */ MS_BTN4, MS_BTN1, MS_BTN3, MS_BTN2, MS_BTN5, _______,
+    _______, XXXXXXX, XXXXXXX, SNIPING, XXXXXXX, XXXXXXX, /* */ XXXXXXX, XXXXXXX, SNIPING, XXXXXXX, XXXXXXX, _______,
+            KEY_WIN, KEY_ALT, /**/ TO(0), TO(0), _______, /* */ _______, TO(0), /* */ XXXXXXX, XXXXXXX, /**/ TO(0)
   ),
 };
 // clang-format on

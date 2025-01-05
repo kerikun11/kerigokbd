@@ -14,10 +14,10 @@
 ```sh
 ## clone this repository with submodules
 git clone --recursive https://github.com/kerikun11/kerigokbd.git
-cd kerigokbd
+cd kerigokbd/software
 ```
 
-QMKファームウェアのリポジトリのkeyboardsディレクトリ内にカスタムキーボードのリンクを追加する。
+QMKファームウェアのリポジトリのkeyboardsディレクトリ内にカスタムキーボードへのリンクを追加する。
 
 ```sh
 ## make symbolic links to QMK Firmware repository
