@@ -1,4 +1,7 @@
-/* keymap.c for Keyball44 default (via) */
+// SPDX-License-Identifier: GPL-2.0-or-later
+// Copyright 2025 KERI's Lab
+// keymap.c for Keyball44 default (via)
+
 #include QMK_KEYBOARD_H
 #include "kerigokbd.h"
 #include "keyball44rp.h"

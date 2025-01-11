@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Copyright 2025 KERI's Lab
+// Common Definitions for KERIgoKBD
 
 #pragma once
 
