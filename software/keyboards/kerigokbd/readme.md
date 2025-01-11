@@ -1,16 +1,15 @@
 # KERIgoKBD
 
-![KERIgoKBD](kerigokbd_corne_v4/images/kerigokbd_v1.jpg)
-![KERIgoKBD](kerigokbd_corne_v4/images/kerigokbd_v1_shining.jpg)
-
 *KERI's Ergonomic Keyboards*
 
 * Keyboard Maintainer: [@kerikun11](https://github.com/kerikun11)
 * Hardware Supported:
   * [KERIgoKBD v1](../../../hardware/kerigokbd_v1/)
+    ![KERIgoKBD v1](./kerigokbd_v1/images/kerigokbd_v1.jpg)
   * [Corne V4 Chocolate](https://github.com/foostan/crkbd)
+    ![KERIgoKBD Corne V4](./kerigokbd_corne_v4/images/kerigokbd_corne_v4.jpg)
   * [Keyball44](https://github.com/Yowkees/keyball) with RP2040 Pro Micro
-* Hardware Availability: [KERIgoKBD](https://github.com/kerikun11/kerigokbd)
+    ![Keyball44rp](./keyball44rp/images/keyball44rp.jpg)
 
 Make example for this keyboard (after setting up your build environment):
 
