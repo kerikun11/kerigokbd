@@ -25,7 +25,7 @@ done
 
 ## check flags
 QMK_DIR=$(git rev-parse --show-toplevel)/external/qmk_firmware
-QMK_KEYMAP=default
+QMK_KEYMAP=via
 if $flag_v; then
     QMK_DIR=$(git rev-parse --show-toplevel)/external/vial-qmk
     QMK_KEYMAP=vial
@@ -37,7 +37,6 @@ elif $flag_r; then
     QMK_KEYBOARD=kerigokbd/keyball44rp
 elif $flag_b; then
     QMK_KEYBOARD=keyball/keyball44
-    QMK_KEYMAP=via
 fi
 
 ## main process
