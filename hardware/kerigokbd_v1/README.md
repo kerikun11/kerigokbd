@@ -32,3 +32,9 @@ Autodesk Fusionで設計。Bambu Lab P1S PLA White Marbleで印刷。
 
 ![KERIgoKBD v1 Case Top](./images/kerigokbd_v1_case_top.jpg)
 ![KERIgoKBD v1 Case Bottom](./images/kerigokbd_v1_case_bottom.jpg)
+
+## ファームウェア
+
+QMK Firmwareに対応。
+
+ソースコード: [kerigokbd_v1](../../software/keyboards/kerigokbd/kerigokbd_v1/)
