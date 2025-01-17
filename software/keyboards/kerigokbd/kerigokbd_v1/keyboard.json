@@ -16,6 +16,7 @@
         "command": false,
         "console": false,
         "mousekey": true,
+        "extrakey": true,
         "nkro": true,
         "rgb_matrix": true
     },
@@ -23,7 +24,6 @@
     "dynamic_keymap": {
         "layer_count": 6
     },
-    "diode_direction": "COL2ROW",
     "matrix_pins": {
         "direct": [
             [  "GP1",  "GP2",  "GP3",  "GP4",  "GP5",  "GP6",   null ],

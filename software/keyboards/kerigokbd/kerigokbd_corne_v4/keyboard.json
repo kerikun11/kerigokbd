@@ -25,7 +25,6 @@
     "dynamic_keymap": {
         "layer_count": 6
     },
-    "diode_direction": "COL2ROW",
     "matrix_pins": {
         "direct":[
             ["GP22", "GP20", "GP23", "GP26", "GP29",  "GP0",  "GP4"],
