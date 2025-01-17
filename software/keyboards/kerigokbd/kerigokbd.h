@@ -12,3 +12,5 @@
 #define KEY_FUN MO(2)
 #define KEY_ALT LALT_T(JP_MHEN)
 #define KEY_WIN RWIN_T(JP_HENK)
+#define K_PSCR LSG(KC_S)
+#define K_APSCR A(KC_PSCR)
