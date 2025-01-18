@@ -32,7 +32,7 @@ kerigokbd/
 - Hardware: [KERIgoKBD v1 Design](./hardware/kerigokbd_v1/)
 - Firmware: [KERIgoKBD v1 Firmware](./software/keyboards/kerigokbd/kerigokbd_v1/)
 
-![KERIgoKBD v1](./hardware/kerigokbd_v1/images/kerigokbd_v1_projection.jpg)
+![KERIgoKBD v1](./hardware/kerigokbd_v1/images/kerigokbd_v1.jpg)
 
 ### KERIgoKBD Corne v4
 

@@ -4,7 +4,7 @@
 
 KERI's Ergonomic Keyboard Version 1
 
-![KERIgoKBD v1](./images/kerigokbd_v1_projection.jpg)
+![KERIgoKBD v1](./images/kerigokbd_v1.jpg)
 
 ## リンク集
 

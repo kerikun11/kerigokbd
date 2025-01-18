@@ -2,7 +2,7 @@
 
 *KERI's Ergonomic Keyboards*
 
-![KERIgoKBD v1](../../../../hardware/kerigokbd_v1/images/kerigokbd_v1_projection.jpg)
+![KERIgoKBD v1](../../../../hardware/kerigokbd_v1/images/kerigokbd_v1.jpg)
 
 * Keyboard Maintainer: [@kerikun11](https://github.com/kerikun11)
 * Hardware Supported: [KERIgoKBD v1](../../../../hardware/kerigokbd_v1/)
