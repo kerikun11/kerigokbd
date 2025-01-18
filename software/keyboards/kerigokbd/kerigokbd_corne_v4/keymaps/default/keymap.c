@@ -9,10 +9,10 @@
 #ifdef LAYOUT_split_3x6_3_ex2
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [0] = LAYOUT_split_3x6_3_ex2(
-     KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,     MO(5), /**/      MO(5),    KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,
-    KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G, LSG(KC_S), /**/ A(KC_PSCR),    KC_H,    KC_J,    KC_K,    KC_L, JP_MINS,  KC_ENT,
-    KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,            /**/                KC_N,    KC_M, JP_COMM,  JP_DOT, JP_SLSH,  KC_DEL,
-                                        KEY_ALT, KEY_NUM,    KC_ESC, /**/     KC_SPC, KEY_FUN, KEY_WIN
+     KC_TAB,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,   MO(5), /**/   MO(5),    KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, KC_BSPC,
+    KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G,  K_PSCR, /**/ K_APSCR,    KC_H,    KC_J,    KC_K,    KC_L, JP_MINS,  KC_ENT,
+    KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B,          /**/             KC_N,    KC_M, JP_COMM,  JP_DOT, JP_SLSH,  KC_DEL,
+                                        KEY_ALT, KEY_NUM,  KC_ESC, /**/  KC_SPC, KEY_FUN, KEY_WIN
   ),
   [1] = LAYOUT_split_3x6_3_ex2(
     _______, JP_EXLM, JP_DQUO, JP_HASH,  JP_DLR, JP_PERC, KC_VOLU, /**/ KC_BRIU, JP_AMPR, JP_QUOT, JP_ASTR, JP_CIRC, JP_TILD, _______,
@@ -39,10 +39,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                         _______, _______, _______, /**/ _______, _______, _______
   ),
   [5] = LAYOUT_split_3x6_3_ex2(
-    XXXXXXX, RGB_SAI, RGB_HUI, RGB_VAI, RGB_SPI, RGB_MOD, XXXXXXX, /**/ XXXXXXX, RGB_MOD, RGB_SPI, RGB_VAI, RGB_HUI, RGB_SAI, XXXXXXX,
-    XXXXXXX, RGB_SAD, RGB_HUD, RGB_VAD, RGB_SPD,RGB_RMOD, RGB_M_R, /**/ RGB_TOG,RGB_RMOD, RGB_SPD, RGB_VAD, RGB_HUD, RGB_SAD, XXXXXXX,
-    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          /**/          RGB_M_P, RGB_M_R,RGB_M_SW, RGB_M_G,RGB_M_TW, XXXXXXX,
-                                        XXXXXXX, XXXXXXX, QK_BOOT, /**/ QK_BOOT, XXXXXXX, XXXXXXX
+    XXXXXXX, RGB_SAI, RGB_HUI, RGB_VAI, RGB_SPI, RGB_MOD, RGB_TOG, /**/ RGB_TOG, RGB_MOD, RGB_SPI, RGB_VAI, RGB_HUI, RGB_SAI, XXXXXXX,
+    XXXXXXX, RGB_SAD, RGB_HUD, RGB_VAD, RGB_SPD,RGB_RMOD, RGB_M_R, /**/ RGB_M_R,RGB_RMOD, RGB_SPD, RGB_VAD, RGB_HUD, RGB_SAD, XXXXXXX,
+    XXXXXXX,RGB_M_TW,RGB_M_SW, RGB_M_G, RGB_M_B, RGB_M_P,          /**/          RGB_M_P, RGB_M_B, RGB_M_G,RGB_M_SW,RGB_M_TW, XXXXXXX,
+                                        XXXXXXX,   TO(1), QK_BOOT, /**/ QK_BOOT,   TO(2), XXXXXXX
   ),
 };
 #endif
