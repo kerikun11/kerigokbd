@@ -13,9 +13,8 @@ KERI's Ergonomic Keyboard Version 1
 
 | 項目             | 内容                                                                                                                |
 | :--------------- | :------------------------------------------------------------------------------------------------------------------ |
-| マイコン         | [RP2040](https://www.raspberrypi.com/products/rp2040/specifications/) (Dual Cortex-M0+ 133MHz 264kB)                |
+| マイコン         | [RP2040](https://www.raspberrypi.com/products/rp2040/specifications/) (Cortex-M0+ 133MHz x2, 264kB SRAM)            |
 | フラッシュ       | W25Q16JVUXIQ (2MB)                                                                                                  |
-| キー数           | 48 (24 + 24)                                                                                                        |
 | キースイッチ     | [Kailh Deep Sea Silent Mini Low Profile Key Switch (Linear)](https://www.aliexpress.com/item/1005007364820059.html) |
 | キーキャップ     | [NuPhy nSA Keycaps (Shine-through White)](https://www.aliexpress.com/item/1005006384968360.html)                    |
 | 左右接続ケーブル | [10cm 3.5mm AUX Cable (White 3 Pole)](https://www.aliexpress.com/item/1005002484746676.html)                        |
@@ -23,7 +22,7 @@ KERI's Ergonomic Keyboard Version 1
 
 ## レイアウト
 
-- 左右分離
+- 左右分離(合計48キー)
 - 左右それぞれ3行6列の40%レイアウト
 - 親指キー4つずつ
 - 中央に追加キー2つずつ
@@ -52,6 +51,6 @@ Autodesk Fusionで設計。Bambu Lab P1S PLA White Marbleで印刷。
 
 ## ファームウェア
 
-QMK Firmwareに対応。
+[QMK Firmware](https://docs.qmk.fm/)のキーボードとして実装。Remapに対応。
 
 - ソースコード: [kerigokbd_v1](../../software/keyboards/kerigokbd/kerigokbd_v1/)
