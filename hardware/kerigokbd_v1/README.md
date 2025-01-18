@@ -4,7 +4,7 @@
 
 KERI's Ergonomic Keyboard Version 1
 
-![KERIgoKBD v1](../../software/keyboards/kerigokbd/kerigokbd_v1/images/kerigokbd_v1_projection.jpg)
+![KERIgoKBD v1](./images/kerigokbd_v1_projection.jpg)
 
 ## リンク集
 
@@ -29,7 +29,7 @@ KERI's Ergonomic Keyboard Version 1
 - 親指キー4つずつ
 - 中央に追加キー2つずつ
 
-![KERIgoKBD v1](../../software/keyboards/kerigokbd/kerigokbd_v1/images/kerigokbd_v1_top.jpg)
+![KERIgoKBD v1](./images/kerigokbd_v1_top.jpg)
 
 ## 基板
 

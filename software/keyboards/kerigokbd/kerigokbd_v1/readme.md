@@ -1,28 +1,24 @@
 # KERIgoKBD
 
-*KERI's Ergonomic Keyboard*
+*KERI's Ergonomic Keyboards*
+
+![KERIgoKBD v1](../../../../hardware/kerigokbd_v1/images/kerigokbd_v1_projection.jpg)
 
 * Keyboard Maintainer: [@kerikun11](https://github.com/kerikun11)
-* Hardware Supported:
-  * [KERIgoKBD v1](../../../hardware/kerigokbd_v1/)
-  * [Corne V4 Chocolate](https://github.com/foostan/crkbd)
-  * [Keyball44](https://github.com/Yowkees/keyball) with RP2040 Pro Micro
+* Hardware Supported: [KERIgoKBD v1](../../../../hardware/kerigokbd_v1/)
+* Hardware Availability: only design data
 
 Make example for this keyboard (after setting up your build environment):
 
     make kerigokbd/kerigokbd_v1:default
 
-    make kerigokbd/kerigokbd_corne_v4:default
-
-    make kerigokbd/keyball44rp:default
+    make kerigokbd/kerigokbd_v1:via
 
 Flashing example for this keyboard:
 
     make kerigokbd/kerigokbd_v1:default:flash
 
-    make kerigokbd/kerigokbd_corne_v4:default:flash
-
-    make kerigokbd/keyball44rp:default:flash
+    make kerigokbd/kerigokbd_v1:via:flash
 
 See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_tools) and the [make instructions](https://docs.qmk.fm/#/getting_started_make_guide) for more information. Brand new to QMK? Start with our [Complete Newbs Guide](https://docs.qmk.fm/#/newbs).
 

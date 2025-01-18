@@ -26,6 +26,22 @@ QMKファームウェアのリポジトリのkeyboardsディレクトリ内に�
 
 ## ビルドと書き込み
 
+QMKファームウェアのディレクトリでqmkコマンドを実行する。
+
+```sh
+cd ../external/qmk_firmware
+## setup
+qmk setup
+## clean
+qmk clean
+## compile
+qmk compile -kb kerigokbd/kerigokbd_v1 -km via
+## compile and flash
+qmk flash -kb kerigokbd/kerigokbd_v1 -km via
+```
+
+または下記スクリプトでも実行できる。
+
 ```sh
 ## compile
 ./scripts/qmk.sh
