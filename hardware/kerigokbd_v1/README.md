@@ -24,16 +24,17 @@ KERI's Ergonomic Keyboard Version 1
 
 ## レイアウト
 
-- 左右分離(合計48キー)
-- 左右それぞれ3行6列の40%レイアウト
+- 左右分離
+- 左右それぞれ3行6列をベースとした40%レイアウト (合計48キー)
 - 親指キー4つずつ
 - 中央に追加キー2つずつ
+- 全キーにRGBバックライトLED
 
 ![KERIgoKBD v1](./images/kerigokbd_v1_top.jpg)
 
 ## 基板
 
-KiCadで設計。JLCPCBに発注。左右分離の各基板をひとつの基板の両面で兼用することで基板発注コストを抑えた。
+KiCadで設計。JLCPCBに発注。左右分離の各基板をひとつの基板の両面で兼用して基板発注コストを抑えた。
 
 - 設計データ：[pcb](./pcb/)
 
@@ -59,4 +60,6 @@ Autodesk Fusionで設計。Bambu Lab P1S PLA White Marbleで印刷。
 
 ## ライセンス
 
-この作品は [クリエイティブ・コモンズ 表示-非営利 4.0 国際 ライセンス](https://creativecommons.org/licenses/by-nc/4.0/deed.ja)の下に提供されています。
+この作品は [クリエイティブ・コモンズ 表示-非営利 4.0 国際 ライセンス](https://creativecommons.org/licenses/by-nc/4.0/deed.ja)の下に提供されている。
+
+This work is licensed under a [Creative Commons Attribution-NonCommercial 4.0 International License](https://creativecommons.org/licenses/by-nc/4.0/).
