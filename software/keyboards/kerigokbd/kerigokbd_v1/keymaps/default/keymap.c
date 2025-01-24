@@ -33,10 +33,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                _______, _______, _______, _______, /**/ _______, _______, _______, _______
   ),
   [4] = LAYOUT_split_6_7_7_4(
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          /**/          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    _______, XXXXXXX, QK_KB_2, MS_BTN3, XXXXXXX, QK_KB_0,          /**/          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    _______, XXXXXXX, QK_KB_3, QK_KB_6, QK_KB_4, QK_KB_1, XXXXXXX, /**/ XXXXXXX, MS_BTN3, MS_BTN1, MS_BTN2, XXXXXXX, XXXXXXX, _______,
     _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-                               _______, _______, _______, _______, /**/ _______, _______, _______, _______
+                               _______, MS_BTN2, MS_BTN1, XXXXXXX, /**/ MS_BTN3, XXXXXXX, XXXXXXX, XXXXXXX
   ),
   [5] = LAYOUT_split_6_7_7_4(
     XXXXXXX, RGB_SAI, RGB_HUI, RGB_VAI, RGB_SPI, RGB_MOD,          /**/          RGB_MOD, RGB_SPI, RGB_VAI, RGB_HUI, RGB_SAI, XXXXXXX,
