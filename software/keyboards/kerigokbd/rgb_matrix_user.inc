@@ -9,7 +9,7 @@ RGB_MATRIX_EFFECT(keyfunc)
 #    include <color.h>
 
 /* LED Color defintions */
-#    define LED_VALUE 192
+#    define LED_VALUE 96
 #    define COLOR_RED LED_VALUE * 2 / 3, 0, 0
 #    define COLOR_GREEN 0, LED_VALUE * 2 / 3, 0
 #    define COLOR_BLUE 0, 0, LED_VALUE * 2 / 3
@@ -18,7 +18,7 @@ RGB_MATRIX_EFFECT(keyfunc)
 #    define COLOR_CYAN 0, LED_VALUE * 2 / 3, LED_VALUE * 2 / 3
 #    define COLOR_WHITE LED_VALUE * 2 / 3, LED_VALUE * 2 / 3, LED_VALUE * 2 / 3
 #    define COLOR_ORANGE LED_VALUE, LED_VALUE / 4, 0
-#    define COLOR_PURPLE RGB_PURPLE
+#    define COLOR_PURPLE LED_VALUE / 2, 0, LED_VALUE
 
 static bool is_keycode_special(uint16_t keycode) {
     if (IS_MODIFIER_KEYCODE(keycode)) return true;               //< Ctrl, Alt, Shift, Win
