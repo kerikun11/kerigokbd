@@ -3,4 +3,4 @@
 # RGB Matrix
 RGB_MATRIX_CUSTOM_USER = yes
 
-SRC += lib/trackpad.c
+# SRC += lib/trackpad.c

@@ -66,10 +66,12 @@ static bool keyfunc(effect_params_t* params) {
             } else if (IS_MOUSEKEY_MOVE(keycode) || IS_MOUSEKEY_WHEEL(keycode)) {
                 /* Mouse (Move) */ rgb_matrix_set_color(index, COLOR_PURPLE);
             } else if (keycode == MS_BTN1) {
-                /* Mouse (Button) */ rgb_matrix_set_color(index, COLOR_BLUE);
+                /* Mouse (Button) */ rgb_matrix_set_color(index, COLOR_CYAN);
             } else if (keycode == MS_BTN2) {
                 /* Mouse (Button) */ rgb_matrix_set_color(index, COLOR_MAGENTA);
-            } else if (keycode == MS_BTN3 || keycode == MS_BTN4 || keycode == MS_BTN5) {
+            } else if (keycode == MS_BTN3) {
+                /* Mouse (Button) */ rgb_matrix_set_color(index, COLOR_ORANGE);
+            } else if (keycode == MS_BTN4 || keycode == MS_BTN5) {
                 /* Mouse (Button 4/5) */ rgb_matrix_set_color(index, COLOR_ORANGE);
             } else if (keycode >= QK_KB_0 && keycode <= QK_KB_3) {
                 /* User */ rgb_matrix_set_color(index, COLOR_CYAN);
