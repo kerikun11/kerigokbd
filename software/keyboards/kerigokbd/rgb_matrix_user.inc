@@ -23,7 +23,7 @@ RGB_MATRIX_EFFECT(keyfunc)
 static bool is_keycode_special(uint16_t keycode) {
     if (IS_MODIFIER_KEYCODE(keycode)) return true;               //< Ctrl, Alt, Shift, Win
     if (KC_ENTER <= keycode && keycode <= KC_SPACE) return true; //< ENT, ESC, BSPC, TAB, SPC
-    if (keycode == KC_DEL || keycode == KEY_ALT || keycode == KEY_WIN) return true;
+    if (keycode == KC_DEL || keycode == KG_ALT || keycode == KG_WIN) return true;
     return false;
 }
 
@@ -55,9 +55,9 @@ static bool keyfunc(effect_params_t* params) {
                 /* Special */ rgb_matrix_set_color(index, COLOR_GREEN);
             } else if (is_keycode_symbol(keycode)) {
                 /* Symbol */ rgb_matrix_set_color(index, COLOR_YELLOW);
-            } else if ((keycode >= KC_1 && keycode <= KC_0) || keycode == KEY_NUM) {
+            } else if ((keycode >= KC_1 && keycode <= KC_0) || keycode == KG_NUM) {
                 /* Number */ rgb_matrix_set_color(index, COLOR_MAGENTA);
-            } else if ((keycode >= KC_F1 && keycode <= KC_F12) || keycode == KEY_FUN) {
+            } else if ((keycode >= KC_F1 && keycode <= KC_F12) || keycode == KG_FUN) {
                 /* Function */ rgb_matrix_set_color(index, COLOR_CYAN);
             } else if (keycode >= KC_RIGHT && keycode <= KC_UP) {
                 /* Arrow */ rgb_matrix_set_color(index, COLOR_ORANGE);

@@ -12,7 +12,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB ,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T, /**/    KC_Y,    KC_U,    KC_I,    KC_O,   KC_P,  KC_BSPC,
     KC_LCTL,    KC_A,    KC_S,    KC_D,    KC_F,    KC_G, /**/    KC_H,    KC_J,    KC_K,    KC_L, JP_MINS,  KC_ENT,
     KC_LSFT,    KC_Z,    KC_X,    KC_C,    KC_V,    KC_B, /**/    KC_N,    KC_M, JP_COMM,  JP_DOT, JP_SLSH,  KC_DEL,
-      MO(3), KEY_WIN,    /**/  KEY_ALT,   MO(1),  KC_ESC, /**/  KC_SPC,   MO(2),    /**/  XXXXXXX, XXXXXXX, /**/ K_PSCR
+      MO(3),  KG_WIN,    /**/   KG_ALT,   MO(1),  KC_ESC, /**/  KC_SPC,   MO(2),    /**/  XXXXXXX, XXXXXXX, /**/ KG_PSCR
   ),
   [1] = LAYOUT_universal(
     _______, JP_EXLM, JP_DQUO, JP_HASH,  JP_DLR, JP_PERC, /**/ JP_AMPR, JP_QUOT, JP_ASTR, JP_CIRC, JP_TILD, _______,

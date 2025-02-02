@@ -60,6 +60,6 @@ Autodesk Fusionで設計。Bambu Lab P1S PLA White Marbleで印刷。
 
 ## ライセンス
 
-この作品は [クリエイティブ・コモンズ 表示-非営利 4.0 国際 ライセンス](https://creativecommons.org/licenses/by-nc/4.0/deed.ja)の下に提供されている。
+この作品は[クリエイティブ・コモンズ 表示-非営利 4.0 国際 ライセンス](https://creativecommons.org/licenses/by-nc/4.0/deed.ja)の下に提供されている。
 
 This work is licensed under a [Creative Commons Attribution-NonCommercial 4.0 International License](https://creativecommons.org/licenses/by-nc/4.0/).
