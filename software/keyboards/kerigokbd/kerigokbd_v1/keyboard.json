@@ -54,7 +54,7 @@
         },
         "serial": {
             "driver": "vendor",
-            "pin": "GP0"
+            "pin": "GP29"
         }
     },
     "layouts": {
