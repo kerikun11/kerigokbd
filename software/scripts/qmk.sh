@@ -43,7 +43,7 @@ if $flag_o; then
 elif $flag_r; then
     QMK_KEYBOARD=kerigokbd/keyball44rp
 elif $flag_t; then
-    QMK_KEYBOARD=kerigokbd/trackpad_test
+    QMK_KEYBOARD=kerigokbd/examples/trackpad_cirque
 elif $flag_b; then
     QMK_KEYBOARD=keyball/keyball44
 fi
