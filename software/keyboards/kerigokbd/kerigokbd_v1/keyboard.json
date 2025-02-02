@@ -9,15 +9,14 @@
     "usb": {
         "vid": "0x1209",
         "pid": "0xE501",
-        "device_version": "1.0.0"
+        "device_version": "1.0.1"
     },
     "features": {
         "bootmagic": true,
-        "command": false,
-        "console": false,
+        "command": true,
+        "console": true,
         "mousekey": true,
         "extrakey": true,
-        "pointing_device": true,
         "rgb_matrix": true,
         "nkro": true
     },
