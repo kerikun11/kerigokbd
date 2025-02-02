@@ -7,16 +7,18 @@ set -eu
 ## parse command-line options
 flag_c=false # clean
 flag_f=false # flash
+flag_l=false # lint
 flag_v=false # vial
 flag_d=false # default keymap
 flag_o=false # Corne V4
 flag_r=false # keyballrp
 flag_b=false # keyball
 flag_t=false # trackpad
-while getopts "cfvdobrt" opt; do
+while getopts "cflvdobrt" opt; do
     case $opt in
     c) flag_c=true ;;
     f) flag_f=true ;;
+    l) flag_l=true ;;
     v) flag_v=true ;;
     d) flag_d=true ;;
     o) flag_o=true ;;
@@ -58,4 +60,7 @@ if $flag_f; then
     qmk flash -kb $QMK_KEYBOARD -km $QMK_KEYMAP
 else
     qmk compile -kb $QMK_KEYBOARD -km $QMK_KEYMAP
+fi
+if $flag_l; then
+    qmk lint -kb $QMK_KEYBOARD -km $QMK_KEYMAP
 fi
