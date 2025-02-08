@@ -5,9 +5,9 @@
 	(uuid "4cc5d416-57f5-4147-8183-e03ae6b1198a")
 	(paper "A4")
 	(title_block
-		(title "KERIgoKBD v1")
-		(date "2024-12-29")
-		(rev "1.0.0")
+		(title "KERIgoKBD v1.1")
+		(date "2025-02-08")
+		(rev "1.1.0")
 		(company "KERI's Lab")
 	)
 	(lib_symbols
@@ -6884,7 +6884,6 @@
 	)
 	(label "KEY2"
 		(at 96.52 113.03 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6895,7 +6894,6 @@
 	)
 	(label "D+"
 		(at 45.72 45.72 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1 1)
@@ -6906,7 +6904,6 @@
 	)
 	(label "QSPI_SD3"
 		(at 45.72 138.43 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6917,7 +6914,6 @@
 	)
 	(label "LED"
 		(at 173.99 34.29 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6928,7 +6924,6 @@
 	)
 	(label "KEY23"
 		(at 248.92 156.21 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6939,7 +6934,6 @@
 	)
 	(label "SDA"
 		(at 130.81 62.23 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1 1)
@@ -6950,7 +6944,6 @@
 	)
 	(label "SWCLK"
 		(at 149.86 62.23 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -6961,7 +6954,6 @@
 	)
 	(label "KEY13"
 		(at 261.62 130.81 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6972,7 +6964,6 @@
 	)
 	(label "QSPI_SD2"
 		(at 144.78 181.61 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6983,7 +6974,6 @@
 	)
 	(label "QSPI_SD1"
 		(at 144.78 179.07 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -6994,7 +6984,6 @@
 	)
 	(label "KEY11"
 		(at 236.22 130.81 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7005,7 +6994,6 @@
 	)
 	(label "KEY16"
 		(at 210.82 143.51 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7016,7 +7004,6 @@
 	)
 	(label "KEY22"
 		(at 236.22 156.21 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7027,7 +7014,6 @@
 	)
 	(label "KEY24"
 		(at 96.52 168.91 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7038,7 +7024,6 @@
 	)
 	(label "KEY22"
 		(at 96.52 163.83 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7049,7 +7034,6 @@
 	)
 	(label "QSPI_SD1"
 		(at 45.72 133.35 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7060,7 +7044,6 @@
 	)
 	(label "KEY10"
 		(at 96.52 133.35 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7071,7 +7054,6 @@
 	)
 	(label "SWD"
 		(at 149.86 67.31 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.016 1.016)
@@ -7082,7 +7064,6 @@
 	)
 	(label "KEY23"
 		(at 96.52 166.37 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7093,7 +7074,6 @@
 	)
 	(label "KEY3"
 		(at 210.82 118.11 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7104,7 +7084,6 @@
 	)
 	(label "KEY16"
 		(at 96.52 148.59 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7115,7 +7094,6 @@
 	)
 	(label "SPLIT_HAND"
 		(at 96.52 171.45 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7126,7 +7104,6 @@
 	)
 	(label "KEY4"
 		(at 96.52 118.11 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7137,7 +7114,6 @@
 	)
 	(label "QSPI_SCLK"
 		(at 144.78 173.99 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7148,7 +7124,6 @@
 	)
 	(label "SCL"
 		(at 130.81 64.77 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1 1)
@@ -7159,7 +7134,6 @@
 	)
 	(label "KEY15"
 		(at 96.52 146.05 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7170,7 +7144,6 @@
 	)
 	(label "LED_GND"
 		(at 185.42 87.63 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7181,7 +7154,6 @@
 	)
 	(label "QSPI_SD2"
 		(at 45.72 135.89 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7192,7 +7164,6 @@
 	)
 	(label "KEY18"
 		(at 96.52 153.67 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7203,7 +7174,6 @@
 	)
 	(label "QSPI_SD3"
 		(at 144.78 184.15 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7214,7 +7184,6 @@
 	)
 	(label "SWCLK"
 		(at 45.72 173.99 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7225,7 +7194,6 @@
 	)
 	(label "KEY20"
 		(at 261.62 143.51 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7236,7 +7204,6 @@
 	)
 	(label "KEY12"
 		(at 248.92 130.81 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7247,7 +7214,6 @@
 	)
 	(label "KEY14"
 		(at 185.42 143.51 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7258,7 +7224,6 @@
 	)
 	(label "D-"
 		(at 40.64 118.11 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7269,7 +7234,6 @@
 	)
 	(label "KEY8"
 		(at 96.52 128.27 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7280,7 +7244,6 @@
 	)
 	(label "KEY7"
 		(at 96.52 125.73 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7291,7 +7254,6 @@
 	)
 	(label "KEY6"
 		(at 96.52 123.19 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7302,7 +7264,6 @@
 	)
 	(label "QSPI_SS"
 		(at 144.78 171.45 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7313,7 +7274,6 @@
 	)
 	(label "KEY19"
 		(at 248.92 143.51 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7324,7 +7284,6 @@
 	)
 	(label "KEY5"
 		(at 96.52 120.65 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7335,7 +7294,6 @@
 	)
 	(label "QSPI_SD0"
 		(at 45.72 130.81 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7346,7 +7304,6 @@
 	)
 	(label "KEY18"
 		(at 236.22 143.51 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7357,7 +7314,6 @@
 	)
 	(label "KEY15"
 		(at 198.12 143.51 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7368,7 +7324,6 @@
 	)
 	(label "KEY21"
 		(at 223.52 156.21 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7379,7 +7334,6 @@
 	)
 	(label "D+"
 		(at 45.72 48.26 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1 1)
@@ -7390,7 +7344,6 @@
 	)
 	(label "KEY17"
 		(at 96.52 151.13 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7401,7 +7354,6 @@
 	)
 	(label "KEY1"
 		(at 96.52 110.49 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7412,7 +7364,6 @@
 	)
 	(label "KEY14"
 		(at 96.52 143.51 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7423,7 +7374,6 @@
 	)
 	(label "KEY10"
 		(at 223.52 130.81 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7434,7 +7384,6 @@
 	)
 	(label "KEY11"
 		(at 96.52 135.89 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7445,7 +7394,6 @@
 	)
 	(label "KEY20"
 		(at 96.52 158.75 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7456,7 +7404,6 @@
 	)
 	(label "SCL"
 		(at 96.52 179.07 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7467,7 +7414,6 @@
 	)
 	(label "SERIAL"
 		(at 153.67 121.92 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1 1)
@@ -7478,7 +7424,6 @@
 	)
 	(label "KEY7"
 		(at 185.42 130.81 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7489,7 +7434,6 @@
 	)
 	(label "D+"
 		(at 40.64 115.57 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7500,7 +7444,6 @@
 	)
 	(label "KEY1"
 		(at 185.42 118.11 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7511,7 +7454,6 @@
 	)
 	(label "QSPI_SCLK"
 		(at 45.72 140.97 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7522,7 +7464,6 @@
 	)
 	(label "KEY24"
 		(at 261.62 156.21 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7533,7 +7474,6 @@
 	)
 	(label "KEY2"
 		(at 198.12 118.11 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7544,7 +7484,6 @@
 	)
 	(label "KEY8"
 		(at 198.12 130.81 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7555,7 +7494,6 @@
 	)
 	(label "QSPI_SS"
 		(at 45.72 125.73 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7566,7 +7504,6 @@
 	)
 	(label "D-"
 		(at 45.72 40.64 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1 1)
@@ -7577,7 +7514,6 @@
 	)
 	(label "KEY5"
 		(at 236.22 118.11 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7588,7 +7524,6 @@
 	)
 	(label "USB_VBUS_PIN"
 		(at 66.04 38.1 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7599,7 +7534,6 @@
 	)
 	(label "QSPI_SD0"
 		(at 144.78 176.53 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7610,7 +7544,6 @@
 	)
 	(label "SERIAL"
 		(at 96.52 184.15 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7621,7 +7554,6 @@
 	)
 	(label "KEY21"
 		(at 96.52 161.29 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7632,7 +7564,6 @@
 	)
 	(label "KEY13"
 		(at 96.52 140.97 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7643,7 +7574,6 @@
 	)
 	(label "KEY4"
 		(at 223.52 118.11 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7654,7 +7584,6 @@
 	)
 	(label "USB_VBUS_PIN"
 		(at 96.52 181.61 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7665,7 +7594,6 @@
 	)
 	(label "KEY9"
 		(at 210.82 130.81 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7676,7 +7604,6 @@
 	)
 	(label "KEY9"
 		(at 96.52 130.81 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7687,7 +7614,6 @@
 	)
 	(label "SDA"
 		(at 96.52 176.53 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7698,7 +7624,6 @@
 	)
 	(label "KEY19"
 		(at 96.52 156.21 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7709,7 +7634,6 @@
 	)
 	(label "SWD"
 		(at 45.72 176.53 180)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7720,7 +7644,6 @@
 	)
 	(label "LED"
 		(at 96.52 107.95 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7731,7 +7654,6 @@
 	)
 	(label "KEY3"
 		(at 96.52 115.57 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7742,7 +7664,6 @@
 	)
 	(label "KEY6"
 		(at 248.92 118.11 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7753,7 +7674,6 @@
 	)
 	(label "KEY12"
 		(at 96.52 138.43 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7764,7 +7684,6 @@
 	)
 	(label "KEY17"
 		(at 223.52 143.51 90)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -7775,7 +7694,6 @@
 	)
 	(label "D-"
 		(at 45.72 43.18 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1 1)
@@ -7786,7 +7704,6 @@
 	)
 	(label "SPLIT_HAND"
 		(at 118.11 115.57 0)
-		(fields_autoplaced yes)
 		(effects
 			(font
 				(size 1.27 1.27)
