@@ -10,6 +10,7 @@ KERI's Ergonomic Keyboard Version 1
 
 - [KERIgoKBD v1 - Remap](https://remap-keys.app/catalog/8pqWZfIyb0UqzhvSmsgh/keymap?id=7BYIomuRTYIakkXWYzAK)
 - [KERIgoKBD v1 - Keyboard Layout Editor](https://www.keyboard-layout-editor.com/#/gists/ef55d575836d948b814d1c28ccc5c396)
+- [KERIgoKBD v1 - Firmware](../../software/keyboards/kerigokbd/kerigokbd_v1/)
 
 ## スペック
 
@@ -24,12 +25,15 @@ KERI's Ergonomic Keyboard Version 1
 
 ## レイアウト
 
-- 左右分離
-- 左右それぞれ3行6列をベースとした40%レイアウト (合計48キー)
-- 親指キー4つずつ
-- 中央に追加キー2つずつ
+けりの手の形状に合わせた独自レイアウト
+
+- 左右分離（左右それぞれ24キーで合計48キー）
+- 数字キーのない40%レイアウト
+- 左右に4つずつの親指キー
+- 中央に2つずつの追加キー
 - 全キーにRGBバックライトLED
 
+[KERIgoKBD v1 - Keyboard Layout Editor](https://www.keyboard-layout-editor.com/#/gists/ef55d575836d948b814d1c28ccc5c396)
 ![KERIgoKBD v1](./images/kerigokbd_v1_top.jpg)
 
 ## 基板
@@ -40,8 +44,6 @@ KiCadで設計。JLCPCBに発注。左右分離の各基板をひとつの基板
 
 ![KERIgoKBD v1 Sketch](./pcb/kerigokbd.svg)
 ![KERIgoKBD v1 PCB](./images/kerigokbd_v1_pcb.jpg)
-<!-- ![KERIgoKBD v1 PCB Front](./images/kerigokbd_v1_pcb_front.jpg) -->
-<!-- ![KERIgoKBD v1 PCB Back](./images/kerigokbd_v1_pcb_back.jpg) -->
 
 ## ケース
 
@@ -54,7 +56,7 @@ Autodesk Fusionで設計。Bambu Lab P1S PLA White Marbleで印刷。
 
 ## ファームウェア
 
-[QMK Firmware](https://docs.qmk.fm/)のキーボードとして実装。Remapに対応。
+オープンソースプロジェクト[QMK Firmware](https://docs.qmk.fm/)のキーボードとして実装。Remapに対応。
 
 - ソースコード: [kerigokbd_v1](../../software/keyboards/kerigokbd/kerigokbd_v1/)
 

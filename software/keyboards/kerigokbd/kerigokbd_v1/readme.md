@@ -4,9 +4,9 @@
 
 ![KERIgoKBD v1](../../../../hardware/kerigokbd_v1/images/kerigokbd_v1.jpg)
 
-* Keyboard Maintainer: [@kerikun11](https://github.com/kerikun11)
+* Keyboard Maintainer: [kerikun11](https://github.com/kerikun11)
 * Hardware Supported: [KERIgoKBD v1](../../../../hardware/kerigokbd_v1/)
-* Hardware Availability: only design data
+* Hardware Availability: Not For Sale
 
 Make example for this keyboard (after setting up your build environment):
 
