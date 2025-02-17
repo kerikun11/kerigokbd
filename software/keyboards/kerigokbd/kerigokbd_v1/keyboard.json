@@ -42,7 +42,7 @@
             "matrix": [ 4, 1 ]
         },
         "handedness": {
-            "pin": "GP27"
+            "pin": "GP25"
         },
         "transport": {
             "protocol": "serial",
@@ -116,7 +116,7 @@
     },
     "ws2812": {
         "driver": "vendor",
-        "pin": "GP25"
+        "pin": "GP0"
     },
     "rgb_matrix": {
         "driver": "ws2812",
