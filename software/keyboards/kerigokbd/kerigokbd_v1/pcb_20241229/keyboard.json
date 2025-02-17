@@ -1,0 +1,16 @@
+{
+    "usb": {
+        "device_version": "1.0.0"
+    },
+    "split": {
+        "handedness": {
+            "pin": "GP27"
+        },
+        "serial": {
+            "pin": "GP29"
+        }
+    },
+    "ws2812": {
+        "pin": "GP25"
+    }
+}

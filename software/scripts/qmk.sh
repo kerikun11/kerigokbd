@@ -4,63 +4,59 @@
 ## script config
 set -eu
 
+## default values
+QMK_DIR=$(git rev-parse --show-toplevel)/external/qmk_firmware
+QMK_KEYMAP=via
+QMK_KEYBOARD=kerigokbd/kerigokbd_v1/pcb_20250208
+
 ## parse command-line options
-flag_c=false # clean
-flag_f=false # flash
-flag_l=false # lint
-flag_v=false # vial
-flag_d=false # default keymap
-flag_o=false # Corne V4
-flag_r=false # keyballrp
-flag_b=false # keyball
-flag_t=false # trackpad
-while getopts "cflvdobrt" opt; do
+while getopts "b:m:cfldvorbt" opt; do
     case $opt in
-    c) flag_c=true ;;
-    f) flag_f=true ;;
-    l) flag_l=true ;;
-    v) flag_v=true ;;
-    d) flag_d=true ;;
-    o) flag_o=true ;;
-    r) flag_r=true ;;
-    b) flag_b=true ;;
-    t) flag_t=true ;;
+    b) QMK_KEYBOARD=$OPTARG ;;
+    m) QMK_KEYMAP=$OPTARG ;;
+    c) flag_c=true ;; # clean
+    f) flag_f=true ;; # flash
+    l) flag_l=true ;; # lint
+    d) flag_d=true ;; # use default keymap instead of via
+    v) flag_v=true ;; # vial
+    o) flag_o=true ;; # corne
+    r) flag_r=true ;; # keyballrp
+    t) flag_t=true ;; # trackpad
     *) echo "invalid option: $opt" ;;
     esac
 done
 
-## check flags
-QMK_DIR=$(git rev-parse --show-toplevel)/external/qmk_firmware
-QMK_KEYMAP=via
-if $flag_d; then
-    QMK_KEYMAP=default
-fi
-if $flag_v; then
+## vial
+if declare -p flag_v &>/dev/null; then
     QMK_DIR=$(git rev-parse --show-toplevel)/external/vial-qmk
     QMK_KEYMAP=vial
 fi
-QMK_KEYBOARD=kerigokbd/kerigokbd_v1
-if $flag_o; then
+## keyboard
+if declare -p flag_o &>/dev/null; then
     QMK_KEYBOARD=kerigokbd/kerigokbd_corne_v4
-elif $flag_r; then
+elif declare -p flag_r &>/dev/null; then
     QMK_KEYBOARD=kerigokbd/keyball44rp
-elif $flag_t; then
+elif declare -p flag_t &>/dev/null; then
     QMK_KEYBOARD=kerigokbd/examples/trackpad_cirque
-elif $flag_b; then
-    QMK_KEYBOARD=keyball/keyball44
+fi
+## keymap
+if declare -p flag_d &>/dev/null; then
+    QMK_KEYMAP=default
 fi
 
 ## main process
-set -x
 cd $QMK_DIR
-if $flag_c; then
+if declare -p flag_c &>/dev/null; then (
+    set -x
     qmk clean
-fi
-if $flag_f; then
+); fi
+if declare -p flag_f &>/dev/null; then (
+    set -x
     qmk flash -kb $QMK_KEYBOARD -km $QMK_KEYMAP
-else
-    qmk compile -kb $QMK_KEYBOARD -km $QMK_KEYMAP
-fi
-if $flag_l; then
+); elif declare -p flag_l &>/dev/null; then (
+    set -x
     qmk lint -kb $QMK_KEYBOARD -km $QMK_KEYMAP
-fi
+); else (
+    set -x
+    qmk compile -kb $QMK_KEYBOARD -km $QMK_KEYMAP
+); fi

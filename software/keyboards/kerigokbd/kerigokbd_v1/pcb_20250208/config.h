@@ -9,5 +9,5 @@
 
 /* I2C */
 // #define I2C_DRIVER I2CD0 // see https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf#page=13
-// #define I2C1_SDA_PIN GP26
-// #define I2C1_SCL_PIN GP27
+// #define I2C0_SDA_PIN GP26
+// #define I2C0_SCL_PIN GP27
