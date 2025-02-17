@@ -1,8 +1,8 @@
 # KERIgoKBD
 
-*KERI's Ergonomic Keyboard*
+KERI's Ergonomic Keyboard
 
-* Keyboard Maintainer: [@kerikun11](https://github.com/kerikun11)
+* Keyboard Maintainer: [kerikun11](https://github.com/kerikun11)
 * Hardware Supported:
   * [KERIgoKBD v1](../../../hardware/kerigokbd_v1/)
   * [Corne V4 Chocolate](https://github.com/foostan/crkbd)
