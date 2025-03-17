@@ -36,7 +36,7 @@ kerigokbd/
 
 ### KERIgoKBD Corne v4
 
-[foostan](https://github.com/foostan)さんの[Corne V4 Chocolate](https://github.com/foostan/crkbd)のケースをカスタマイズしたもの。
+[foostan](https://github.com/foostan)さんの[Corne V4 Chocolate](https://github.com/foostan/crkbd)のケースとファームウェアをカスタマイズしたもの。
 
 - Hardware: https://github.com/foostan/crkbd
 - Firmware: [KERIgoKBD Corne V4](./software/keyboards/kerigokbd/kerigokbd_corne_v4/)

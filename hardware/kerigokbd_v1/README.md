@@ -8,7 +8,7 @@ KERI's Ergonomic Keyboard Version 1
 
 ## リンク集
 
-- [KERIgoKBD v1 - Remap](https://remap-keys.app/catalog/8pqWZfIyb0UqzhvSmsgh/keymap?id=7BYIomuRTYIakkXWYzAK)
+- [KERIgoKBD v1 - Remap](https://remap-keys.app/catalog/8pqWZfIyb0UqzhvSmsgh/keymap?id=74vyciDXcUU3OP2Ju8dM)
 - [KERIgoKBD v1 - Keyboard Layout Editor](https://www.keyboard-layout-editor.com/#/gists/ef55d575836d948b814d1c28ccc5c396)
 - [KERIgoKBD v1 - Firmware](../../software/keyboards/kerigokbd/kerigokbd_v1/)
 
