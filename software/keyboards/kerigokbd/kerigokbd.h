@@ -14,3 +14,13 @@
 #define KG_WIN RWIN_T(JP_HENK)
 #define KG_PSCR LSG(KC_S)
 #define KG_PSC2 A(KC_PSCR)
+
+/* Custom Keycodes */
+enum kerigokbd_keycodes {
+    // full name
+    KG_POINTING_SLOW   = QK_KB_0,
+    KG_POINTING_SCROLL = QK_KB_1,
+    // aliases
+    KG_SLOW = KG_POINTING_SLOW,
+    KG_SCRL = KG_POINTING_SCROLL,
+};
