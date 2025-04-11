@@ -3,15 +3,17 @@
 
 #include QMK_KEYBOARD_H
 
-void keyboard_pre_init_user(void) {
+void keyboard_pre_init_kb(void) {
     setPinInputHigh(SPLIT_HAND_PIN);
+    keyboard_pre_init_user();
 }
 
 #ifdef POINTING_DEVICE_ENABLE
 
-#    if defined(POINTING_DEVICE_AUTO_MOUSE_ENABLE)
-void pointing_device_init_user(void) {
+#    ifdef POINTING_DEVICE_AUTO_MOUSE_ENABLE
+void pointing_device_init_kb(void) {
     set_auto_mouse_enable(true); // always required before the auto mouse feature will work
+    pointing_device_init_user();
 }
 bool is_mouse_record_kb(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
@@ -30,7 +32,7 @@ static bool slow_mode   = false;
 static float accum_h = 0;
 static float accum_v = 0;
 
-report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
+report_mouse_t pointing_device_task_kb(report_mouse_t mouse_report) {
     float divisor = SCROLL_DIVISOR;
     if (slow_mode) {
         mouse_report.x /= 4;
@@ -47,10 +49,10 @@ report_mouse_t pointing_device_task_user(report_mouse_t mouse_report) {
         mouse_report.x = 0;
         mouse_report.y = 0;
     }
-    return mouse_report;
+    return pointing_device_task_user(mouse_report);
 }
 
-bool process_record_user(uint16_t keycode, keyrecord_t *record) {
+bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case KG_POINTING_SCROLL:
             scroll_mode = record->event.pressed;
@@ -59,15 +61,15 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
             slow_mode = record->event.pressed;
             break;
     }
-    return true;
+    return process_record_user(keycode, record);
 }
 
-layer_state_t layer_state_set_user(layer_state_t state) {
+layer_state_t layer_state_set_kb(layer_state_t state) {
     if (get_highest_layer(state) != AUTO_MOUSE_DEFAULT_LAYER) {
         scroll_mode = false;
         slow_mode   = false;
     }
-    return state;
+    return layer_state_set_user(state);
 }
 
 #endif // POINTING_DEVICE_ENABLE
