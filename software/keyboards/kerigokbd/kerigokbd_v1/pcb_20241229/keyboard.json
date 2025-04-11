@@ -7,7 +7,7 @@
             "pin": "GP27"
         },
         "serial": {
-            "pin": "GP29"
+            "pin": "GP0"
         }
     },
     "ws2812": {
