@@ -12,8 +12,10 @@
 #define KG_FUN MO(2)
 #define KG_ALT LALT_T(JP_MHEN)
 #define KG_WIN RWIN_T(JP_HENK)
-#define KG_PSCR LSG(KC_S)
-#define KG_PSC2 A(KC_PSCR)
+#define KG_EXUL MO(5)      //< Extra Upper Left Key
+#define KG_EXUR MO(5)      //< Extra Upper Right Key
+#define KG_EXBL KC_PSCR    //< Extra Bottom Left Key
+#define KG_EXBR A(KC_PSCR) //< Extra Bottom Right Key
 
 /* Custom Keycodes */
 enum kerigokbd_keycodes {
