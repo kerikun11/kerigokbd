@@ -10,7 +10,7 @@ QMK_KEYMAP=via
 QMK_KEYBOARD=kerigokbd/kerigokbd_v1/pcb_20250208
 
 ## parse command-line options
-while getopts "b:m:cfldvorbt" opt; do
+while getopts "b:m:cfldvort" opt; do
     case $opt in
     b) QMK_KEYBOARD=$OPTARG ;;
     m) QMK_KEYMAP=$OPTARG ;;
