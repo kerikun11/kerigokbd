@@ -17,7 +17,7 @@
         "mousekey": true,
         "extrakey": true,
         "rgb_matrix": true,
-        "pointing_device": true,
+        "pointing_device": false,
         "nkro": true
     },
     "host_language": "japanese",
