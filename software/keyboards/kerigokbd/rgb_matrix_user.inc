@@ -8,7 +8,7 @@ RGB_MATRIX_EFFECT(keyfunc)
 #    include "kerigokbd.h"
 #    include <color.h>
 
-/* LED Color defintions */
+/* LED Color definitions */
 #    define LED_VALUE 96
 #    define COLOR_RED LED_VALUE * 2 / 3, 0, 0
 #    define COLOR_GREEN 0, LED_VALUE * 2 / 3, 0
@@ -21,9 +21,16 @@ RGB_MATRIX_EFFECT(keyfunc)
 #    define COLOR_PURPLE LED_VALUE / 2, 0, LED_VALUE
 
 static bool is_keycode_special(uint16_t keycode) {
-    if (IS_MODIFIER_KEYCODE(keycode)) return true;               //< Ctrl, Alt, Shift, Win
-    if (KC_ENTER <= keycode && keycode <= KC_SPACE) return true; //< ENT, ESC, BSPC, TAB, SPC
-    if (keycode == KC_DEL || keycode == KG_ALT || keycode == KG_WIN) return true;
+    if (IS_MODIFIER_KEYCODE(keycode)) return true; //< Ctrl, Alt, Shift, Win
+    switch (keycode) {
+        case KC_ENTER ... KC_SPACE: //< ENT, ESC, BSPC, TAB, SPC
+        case KC_DEL:
+        case KG_ALT:
+        case KG_WIN:
+        case KG_ESC:
+        case KC_VOLU ... KC_VOLD:
+            return true;
+    }
     return false;
 }
 
