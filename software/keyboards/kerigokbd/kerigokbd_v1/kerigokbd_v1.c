@@ -73,3 +73,20 @@ layer_state_t layer_state_set_kb(layer_state_t state) {
 }
 
 #endif // POINTING_DEVICE_ENABLE
+
+// bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+//     switch (keycode) {
+//         case KG_WIN_1 ... KG_WIN_5:
+//             if (record->event.pressed) {
+//                 register_code(KC_LGUI);
+//                 tap_code(KC_1 + (keycode - KG_WIN_1));
+//             }
+//             break;
+//     }
+//     return process_record_user(keycode, record);
+// }
+
+// layer_state_t layer_state_set_kb(layer_state_t state) {
+//     unregister_code(KC_LGUI);
+//     return layer_state_set_user(state);
+// }

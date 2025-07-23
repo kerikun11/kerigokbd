@@ -13,17 +13,28 @@
 #define KG_ESC LT(3, KC_ESC)
 #define KG_ALT LALT_T(JP_MHEN)
 #define KG_WIN RWIN_T(JP_HENK)
-#define KG_EXUL MO(5)      //< Extra Upper Left Key
-#define KG_EXUR MO(5)      //< Extra Upper Right Key
-#define KG_EXBL KC_PSCR    //< Extra Bottom Left Key
-#define KG_EXBR A(KC_PSCR) //< Extra Bottom Right Key
+#define KG_EXTL MO(5)      //< Central Extra Key (Top Left)
+#define KG_EXTR MO(5)      //< Central Extra Key (Top Right)
+#define KG_EXBL KC_PSCR    //< Central Extra Key (Bottom Left)
+#define KG_EXBR A(KC_PSCR) //< Central Extra Key (Bottom Right)
 
 /* Custom Keycodes */
 enum kerigokbd_keycodes {
     // full name
     KG_POINTING_SLOW   = QK_KB_0,
     KG_POINTING_SCROLL = QK_KB_1,
+    // KG_WIN_1           = QK_KB_2,
+    // KG_WIN_2           = QK_KB_3,
+    // KG_WIN_3           = QK_KB_4,
+    // KG_WIN_4           = QK_KB_5,
+    // KG_WIN_5           = QK_KB_6,
+
     // aliases
     KG_SLOW = KG_POINTING_SLOW,
     KG_SCRL = KG_POINTING_SCROLL,
+    // KG_WIN1 = KG_WIN_1,
+    // KG_WIN2 = KG_WIN_2,
+    // KG_WIN3 = KG_WIN_3,
+    // KG_WIN4 = KG_WIN_4,
+    // KG_WIN5 = KG_WIN_5,
 };

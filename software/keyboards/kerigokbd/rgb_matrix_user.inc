@@ -50,7 +50,7 @@ static bool keyfunc(effect_params_t* params) {
             uint8_t index = g_led_config.matrix_co[row][col];
             if (index == NO_LED) continue;
             int8_t   layer   = get_highest_layer(layer_state);
-            uint16_t keycode = keymap_key_to_keycode(layer, (keypos_t){col, row});
+            uint16_t keycode = KC_TRNS;
             for (; layer >= 0 && keycode == KC_TRNS; layer--)
                 keycode = keymap_key_to_keycode(layer, (keypos_t){col, row});
             /* set color */
@@ -80,10 +80,12 @@ static bool keyfunc(effect_params_t* params) {
                 /* Mouse (Button Center) */ rgb_matrix_set_color(index, COLOR_ORANGE);
             } else if (keycode == MS_BTN4 || keycode == MS_BTN5) {
                 /* Mouse (Button 4/5) */ rgb_matrix_set_color(index, COLOR_ORANGE);
-            } else if (keycode >= QK_KB_0 && keycode <= QK_KB_3) {
-                /* User */ rgb_matrix_set_color(index, COLOR_CYAN);
-            } else if (keycode >= QK_KB_4 && keycode <= QK_KB_7) {
-                /* User */ rgb_matrix_set_color(index, COLOR_MAGENTA);
+            } else if (keycode >= A(KC_1) && keycode <= A(KC_0)) {
+                /* Alt+Num */ rgb_matrix_set_color(index, COLOR_GREEN);
+            // } else if (keycode >= KG_WIN_1 && keycode <= KG_WIN_5) {
+            //     /* KG+NUM */ rgb_matrix_set_color(index, COLOR_MAGENTA);
+            } else if (keycode >= KG_POINTING_SLOW && keycode <= KG_POINTING_SCROLL) {
+                /* KG */ rgb_matrix_set_color(index, COLOR_CYAN);
             } else if (IS_UNDERGLOW_KEYCODE(keycode)) {
                 /* LED */ rgb_matrix_set_color(index, COLOR_GREEN);
             } else {
