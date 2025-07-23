@@ -58,5 +58,5 @@ if declare -p flag_f &>/dev/null; then (
     qmk lint -kb $QMK_KEYBOARD -km $QMK_KEYMAP
 ); else (
     set -x
-    qmk compile -kb $QMK_KEYBOARD -km $QMK_KEYMAP
+    qmk compile -kb $QMK_KEYBOARD -km $QMK_KEYMAP --compiledb
 ); fi

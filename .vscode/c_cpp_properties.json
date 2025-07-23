@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "defines": [
+                "LAYOUT_split_6_7_7_4",
+                "RGB_MATRIX_CUSTOM_EFFECT_IMPLS"
+            ],
+            "compilerPath": "/usr/bin/arm-none-eabi-gcc",
+            "cStandard": "c17",
+            "intelliSenseMode": "${default}",
+            "compileCommands": [
+                "external/qmk_firmware/compile_commands.json"
+            ]
+        }
+    ],
+    "version": 4
+}
