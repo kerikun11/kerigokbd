@@ -30,7 +30,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,          /**/            KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, _______,
     _______, A(KC_1), A(KC_2), A(KC_3), A(KC_4), A(KC_5),  KC_F11, /**/ XXXXXXX, A(KC_6), A(KC_7), A(KC_8), A(KC_9), A(KC_0), _______,
     _______,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F12, /**/ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
- // _______, C(KC_Z), C(KC_X), C(KC_C), C(KC_V), C(KC_B),  KC_F12, /**/ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
                                _______, _______, _______, _______, /**/ _______, _______, _______, _______
   ),
   [4] = LAYOUT_split_6_7_7_4( /* Auto Mouse Layer (PointingDevice only) */

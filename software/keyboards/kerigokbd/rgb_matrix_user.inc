@@ -82,8 +82,6 @@ static bool keyfunc(effect_params_t* params) {
                 /* Mouse (Button 4/5) */ rgb_matrix_set_color(index, COLOR_ORANGE);
             } else if (keycode >= A(KC_1) && keycode <= A(KC_0)) {
                 /* Alt+Num */ rgb_matrix_set_color(index, COLOR_GREEN);
-            // } else if (keycode >= KG_WIN_1 && keycode <= KG_WIN_5) {
-            //     /* KG+NUM */ rgb_matrix_set_color(index, COLOR_MAGENTA);
             } else if (keycode >= KG_POINTING_SLOW && keycode <= KG_POINTING_SCROLL) {
                 /* KG */ rgb_matrix_set_color(index, COLOR_CYAN);
             } else if (IS_UNDERGLOW_KEYCODE(keycode)) {

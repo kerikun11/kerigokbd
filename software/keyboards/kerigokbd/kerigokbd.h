@@ -23,18 +23,8 @@ enum kerigokbd_keycodes {
     // full name
     KG_POINTING_SLOW   = QK_KB_0,
     KG_POINTING_SCROLL = QK_KB_1,
-    // KG_WIN_1           = QK_KB_2,
-    // KG_WIN_2           = QK_KB_3,
-    // KG_WIN_3           = QK_KB_4,
-    // KG_WIN_4           = QK_KB_5,
-    // KG_WIN_5           = QK_KB_6,
 
     // aliases
     KG_SLOW = KG_POINTING_SLOW,
     KG_SCRL = KG_POINTING_SCROLL,
-    // KG_WIN1 = KG_WIN_1,
-    // KG_WIN2 = KG_WIN_2,
-    // KG_WIN3 = KG_WIN_3,
-    // KG_WIN4 = KG_WIN_4,
-    // KG_WIN5 = KG_WIN_5,
 };
