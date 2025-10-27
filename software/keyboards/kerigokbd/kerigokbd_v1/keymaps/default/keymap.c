@@ -15,18 +15,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                 KG_WIN,  KG_ALT,  KG_NUM,  KG_ESC, /**/  KC_SPC,  KG_FUN,  KG_WIN,  KG_ALT
   ),
   [1] = LAYOUT_split_6_7_7_4( /* Numbers and Symbols Layer */
-    _______, JP_EXLM, JP_DQUO, JP_HASH,  JP_DLR, JP_PERC,          /**/          JP_AMPR, JP_QUOT, JP_ASTR, JP_CIRC, JP_TILD, _______,
-    _______,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5, KC_VOLU, /**/ KC_VOLU,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0, _______,
-    KC_LWIN,  JP_GRV,   JP_AT, JP_SCLN, JP_COLN, JP_UNDS, KC_VOLD, /**/ KC_VOLD, JP_PIPE, JP_PLUS,  JP_EQL,  JP_DOT, JP_BSLS, _______,
-                               _______, _______, _______, _______, /**/ _______, _______, _______, _______
+    _______, JP_EXLM, JP_DQUO, JP_HASH,  JP_DLR, JP_PERC,          /**/          JP_AMPR, JP_QUOT, JP_ASTR, JP_PLUS, JP_PIPE, _______,
+    _______,    KC_1,    KC_2,    KC_3,    KC_4,    KC_5, JP_TILD, /**/ JP_CIRC,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,  JP_DOT,
+    KC_LWIN,  JP_GRV,   JP_AT, JP_SCLN, JP_COLN, JP_UNDS, KC_VOLD, /**/ KC_VOLU, JP_LBRC ,JP_RBRC, JP_LCBR, JP_RCBR, JP_BSLS,  JP_EQL,
+                               _______, _______, _______, _______, /**/ _______, JP_LPRN, JP_RPRN, _______
   ),
   [2] = LAYOUT_split_6_7_7_4( /* Functions and Navigation Layer */
     _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,          /**/            KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, _______,
-    _______, JP_LPRN, JP_LCBR, JP_RCBR, JP_LBRC, JP_RBRC,  KC_F11, /**/  KC_F12, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, JP_RPRN, _______,
-    _______, MS_BTN2, MS_WHLL, MS_WHLU, MS_WHLD, MS_WHLR, MS_BTN3, /**/ MS_BTN3, MS_LEFT, MS_DOWN,   MS_UP, MS_RGHT, MS_BTN1, _______,
-                               _______, _______, _______, _______, /**/ _______, _______, _______, _______
+    _______, KC_HOME, MS_BTN1, MS_WHLU, MS_BTN2, KC_PGUP,  KC_F11, /**/  KC_F12, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,  KC_TAB, _______,
+    _______,  KC_END, MS_WHLL, MS_WHLD, MS_WHLR, KC_PGDN, MS_BTN3, /**/ MS_BTN1, MS_LEFT, MS_DOWN,   MS_UP, MS_RGHT, MS_BTN2, _______,
+                                KG_WIN,  KG_ALT,  KG_NUM,  KG_ESC, /**/  KC_SPC,  KG_FUN,  KG_WIN,  KG_ALT
   ),
-  [3] = LAYOUT_split_6_7_7_4( /* Escape Layer */
+  [3] = LAYOUT_split_6_7_7_4( /* Escape Layer (Tentative) */
     _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,          /**/            KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, _______,
     _______, A(KC_1), A(KC_2), A(KC_3), A(KC_4), A(KC_5),  KC_F11, /**/ XXXXXXX, A(KC_6), A(KC_7), A(KC_8), A(KC_9), A(KC_0), _______,
     _______,   KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,  KC_F12, /**/ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
@@ -41,8 +41,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [5] = LAYOUT_split_6_7_7_4( /* Settings Layer */
     XXXXXXX, RGB_SAI, RGB_HUI, RGB_VAI, RGB_SPI, RGB_MOD,          /**/          RGB_MOD, RGB_SPI, RGB_VAI, RGB_HUI, RGB_SAI, XXXXXXX,
     XXXXXXX, RGB_SAD, RGB_HUD, RGB_VAD, RGB_SPD,RGB_RMOD, RGB_TOG, /**/ RGB_TOG,RGB_RMOD, RGB_SPD, RGB_VAD, RGB_HUD, RGB_SAD, XXXXXXX,
-    XXXXXXX,RGB_M_TW,RGB_M_SW, RGB_M_G, RGB_M_B, RGB_M_P, RGB_M_R, /**/ RGB_M_R, RGB_M_P, RGB_M_B, RGB_M_G,RGB_M_SW,RGB_M_TW, XXXXXXX,
-                               XXXXXXX, XXXXXXX,   TO(1), QK_BOOT, /**/ QK_BOOT,   TO(2), XXXXXXX, XXXXXXX
+    QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, QK_BOOT,
+                               XXXXXXX, XXXXXXX,   TO(1), XXXXXXX, /**/ XXXXXXX,   TO(2), XXXXXXX, XXXXXXX
   ),
   [6] = LAYOUT_split_6_7_7_4( /* Reserved */
     _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          /**/          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,

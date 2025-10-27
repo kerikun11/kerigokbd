@@ -28,7 +28,7 @@ static bool is_keycode_special(uint16_t keycode) {
         case KG_ALT:
         case KG_WIN:
         case KG_ESC:
-        case KC_VOLU ... KC_VOLD:
+        case KC_MUTE ... KC_VOLD:
             return true;
     }
     return false;
@@ -43,7 +43,7 @@ static bool is_keycode_symbol(uint16_t keycode) {
     return false;
 }
 
-static bool keyfunc(effect_params_t* params) {
+static bool keyfunc(effect_params_t *params) {
     for (uint8_t row = 0; row < MATRIX_ROWS; row++) {
         for (uint8_t col = 0; col < MATRIX_COLS; col++) {
             /* get keycode */
