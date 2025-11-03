@@ -15,9 +15,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                KG_WIN , KG_ALT , KG_NUM , KG_ESC , /**/ KC_SPC , KG_FUN , KG_WIN , KG_ALT
   ),
   [1] = LAYOUT_split_6_7_7_4( /* Numbers and Symbols Layer */
-    _______, JP_EXLM, JP_DQUO, JP_HASH, JP_DLR , JP_PERC,          /**/          JP_AMPR, JP_QUOT, JP_ASTR, JP_PLUS, JP_PIPE, _______,
-    _______, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , JP_TILD, /**/ JP_CIRC, KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , JP_DOT ,
-    KC_LWIN, JP_GRV , JP_AT  , JP_SCLN, JP_COLN, JP_UNDS, KC_VOLD, /**/ KC_VOLU, JP_LBRC ,JP_RBRC, JP_LCBR, JP_RCBR, JP_BSLS, JP_EQL ,
+    _______, JP_EXLM, JP_AT  , JP_HASH, JP_DLR , JP_PERC,          /**/          JP_CIRC, JP_AMPR, JP_ASTR, JP_PLUS, JP_PIPE, _______,
+    _______, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , JP_DQUO, /**/ JP_QUOT, KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , JP_DOT ,
+    KC_LWIN, JP_GRV , JP_TILD, JP_SCLN, JP_COLN, JP_UNDS, KC_VOLD, /**/ KC_VOLU, JP_LBRC ,JP_RBRC, JP_LCBR, JP_RCBR, JP_BSLS, JP_EQL ,
                                _______, _______, _______, _______, /**/ _______, JP_LPRN, JP_RPRN, _______
   ),
   [2] = LAYOUT_split_6_7_7_4( /* Functions and Navigation Layer */
