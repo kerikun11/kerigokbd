@@ -18,25 +18,25 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, JP_EXLM, JP_AT  , JP_HASH, JP_DLR , JP_PERC,          /**/          JP_CIRC, JP_AMPR, JP_ASTR, JP_PLUS, JP_PIPE, _______,
     _______, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , JP_DQUO, /**/ JP_QUOT, KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , JP_DOT ,
     KC_LWIN, JP_GRV , JP_TILD, JP_SCLN, JP_COLN, JP_UNDS, KC_VOLD, /**/ KC_VOLU, JP_LBRC ,JP_RBRC, JP_LCBR, JP_RCBR, JP_BSLS, JP_EQL ,
-                               _______, _______, _______, _______, /**/ _______, JP_LPRN, JP_RPRN, _______
+                               JP_ZKHK, _______, _______, _______, /**/ _______, JP_LPRN, JP_RPRN, _______
   ),
   [2] = LAYOUT_split_6_7_7_4( /* Functions and Navigation Layer */
-    _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,          /**/            KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10, _______,
-    _______, KC_HOME, MS_BTN1, MS_WHLU, MS_BTN2, KC_PGUP,  KC_F11, /**/  KC_F12, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, MS_BTN2,  KC_ENT,
-    KC_LSFT,  KC_END, MS_WHLL, MS_WHLD, MS_WHLR, KC_PGDN, MS_BTN3, /**/ MS_BTN3, MS_LEFT, MS_DOWN,   MS_UP, MS_RGHT, MS_BTN1,  KC_DEL,
-                               _______, _______, _______, _______, /**/ _______,  KG_FUN,  KG_WIN, _______
+    _______, KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  ,          /**/          KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , _______,
+    _______, KC_HOME, MS_BTN1, MS_WHLU, MS_BTN2, KC_PGUP,  KC_F11, /**/  KC_F12, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, MS_BTN2,  KC_ENT,
+    KC_LSFT, KC_END , MS_WHLL, MS_WHLD, MS_WHLR, KC_PGDN, MS_BTN3, /**/ MS_BTN3, MS_LEFT, MS_DOWN, MS_UP  , MS_RGHT, MS_BTN1,  KC_DEL,
+                               _______, KC_LWIN, _______, _______, /**/ _______,  KG_FUN,  KG_WIN, _______
   ),
   [3] = LAYOUT_split_6_7_7_4( /* Tenkey and Left Hand Device */
-    _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,          /**/          KC_P7  , KC_P8  , KC_P9  , KC_PMNS,  KC_TAB, _______,
-    _______, A(KC_1), A(KC_2), A(KC_3), A(KC_4), A(KC_5),  KC_F11, /**/ KC_PSLS, KC_P4  , KC_P5  , KC_P6  , KC_PPLS,   KC_UP, _______,
+    _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,          /**/          KC_P7  , KC_P8  , KC_P9  , KC_PMNS, KC_TAB , _______,
+    _______, A(KC_1), A(KC_2), A(KC_3), A(KC_4), A(KC_5),  KC_F11, /**/ KC_PSLS, KC_P4  , KC_P5  , KC_P6  , KC_PPLS, KC_UP  , _______,
     _______, C(KC_Z), C(KC_X), C(KC_C), C(KC_V), C(KC_B),  KC_F12, /**/ KC_PAST, KC_P1  , KC_P2  , KC_P3  , KC_LEFT, KC_DOWN, KC_RGHT,
-                               XXXXXXX, XXXXXXX, XXXXXXX, KG_MAIN, /**/ KC_NUM , MO(4)  , KC_P0  , KC_PDOT
+                               XXXXXXX, XXXXXXX,  KC_NUM, KG_MAIN, /**/ JP_LPRN, JP_RPRN, KC_P0  , KC_PDOT
   ),
   [4] = LAYOUT_split_6_7_7_4( /* Tentative Layer */
     _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          /**/          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/ XXXXXXX, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT, XXXXXXX, _______,
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_DEL ,
-                               _______, _______, _______, KG_MAIN, /**/ _______, _______, _______, _______
+    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+                               _______, _______, _______, _______, /**/ _______, _______, _______, _______
   ),
   [5] = LAYOUT_split_6_7_7_4( /* Auto Mouse Layer (PointingDevice only) */
     _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          /**/          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
