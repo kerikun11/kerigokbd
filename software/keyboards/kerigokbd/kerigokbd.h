@@ -14,13 +14,16 @@
 #define KG_ESC LT(3, KC_ESC)
 #define KG_TNUM TO(1) // TO_NUM
 #define KG_TFUN TO(2) // TO_FUN
-#define KG_TTEN TO(3) // TO_TENKEY
-#define KG_ALT LALT_T(JP_MHEN)
-#define KG_WIN RWIN_T(JP_HENK)
-#define KG_EXTL MO(6)      //< Central Extra Key (Top Left)
-#define KG_EXTR MO(6)      //< Central Extra Key (Top Right)
-#define KG_EXBL KC_PSCR    //< Central Extra Key (Bottom Left)
-#define KG_EXBR A(KC_PSCR) //< Central Extra Key (Bottom Right)
+#define KG_TESC TO(3) // TO_ESC
+#define KG_LALT LALT_T(JP_MHEN)
+#define KG_RWIN RWIN_T(JP_HENK)
+#define KG_LWIN LWIN_T(KC_PSCR)
+#define KG_RALT RALT_T(KC_APP)
+#define KG_EXTL LT(6, KC_HOME) //< Central Extra Key (Top Left)
+#define KG_EXTR LT(6, KC_PGUP) //< Central Extra Key (Top Right)
+#define KG_EXBL KC_END         //< Central Extra Key (Bottom Left)
+#define KG_EXBR KC_PGDN        //< Central Extra Key (Bottom Right)
+#define KG_APRS A(KC_PSCR)
 
 /* Custom Keycodes */
 enum kerigokbd_keycodes {

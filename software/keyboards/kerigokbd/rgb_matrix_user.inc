@@ -26,10 +26,12 @@ static bool is_keycode_special(uint16_t keycode) {
     switch (keycode) {
         case KC_ENTER ... KC_SPACE: //< ENT, ESC, BSPC, TAB, SPC
         case KC_DEL:
-        case KG_ALT:
-        case KG_WIN:
-        case KG_ESC:
         case KC_KP_ENTER:
+        case KG_LWIN:
+        case KG_LALT:
+        case KG_RWIN:
+        case KG_RALT:
+        case KG_ESC:
             return true;
     }
     return false;
@@ -92,14 +94,14 @@ static bool keyfunc(effect_params_t *params) {
             } else if (keycode == MS_BTN4 || keycode == MS_BTN5) {
                 /* Mouse (Button 4/5) */ rgb_matrix_set_color(index, COLOR_ORANGE);
             } else if (keycode >= KC_MUTE && keycode <= KC_VOLD) {
-                /* Audio */ rgb_matrix_set_color(index, COLOR_PURPLE);
+                /* Audio */ rgb_matrix_set_color(index, COLOR_GREEN);
             } else if (keycode >= A(KC_1) && keycode <= A(KC_0)) {
                 /* Alt+Num */ rgb_matrix_set_color(index, COLOR_GREEN);
             } else if (keycode >= KG_POINTING_SLOW && keycode <= KG_POINTING_SCROLL) {
                 /* KG */ rgb_matrix_set_color(index, COLOR_CYAN);
             } else if (IS_UNDERGLOW_KEYCODE(keycode)) {
                 /* LED */ rgb_matrix_set_color(index, COLOR_GREEN);
-            } else if (keycode == KG_TTEN) {
+            } else if (keycode == KG_TESC) {
                 /* To Numpad Layer */ rgb_matrix_set_color(index, COLOR_ORANGE);
             } else if (keycode == KG_MAIN) {
                 /* To Main Layer */ rgb_matrix_set_color(index, COLOR_BLUE);

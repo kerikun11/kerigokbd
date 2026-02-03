@@ -12,18 +12,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,          /**/          KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSPC,
     KC_LCTL, KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , KG_EXTL, /**/ KG_EXTR, KC_H   , KC_J   , KC_K   , KC_L   , JP_MINS, KC_ENT ,
     KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , KG_EXBL, /**/ KG_EXBR, KC_N   , KC_M   , JP_COMM, JP_DOT , JP_SLSH, KC_DEL ,
-                               KC_LWIN, KG_ALT , KG_NUM , KG_ESC , /**/ KC_SPC , KG_FUN , KG_WIN , KC_RALT
+                               KG_LWIN, KG_LALT, KG_NUM , KG_ESC , /**/ KC_SPC , KG_FUN , KG_RWIN, KG_RALT
   ),
   [1] = LAYOUT_split_6_7_7_4( /* Numbers and Symbols Layer */
     _______, JP_EXLM, JP_DQUO, JP_HASH, JP_DLR , JP_PERC,          /**/          JP_AMPR, JP_QUOT, JP_EQL , JP_TILD, JP_PIPE, _______,
-    _______, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , KC_HOME, /**/ KC_PGUP, KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______,
-    KC_LWIN, JP_GRV , JP_AT  , JP_SCLN, JP_COLN, JP_UNDS, KC_END , /**/ KC_PGDN, JP_CIRC, JP_PLUS, JP_ASTR, JP_DOT , JP_BSLS, _______,
-                               _______, _______, _______, _______, /**/ _______, _______, KC_RALT, _______
+    _______, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , KC_PSCR, /**/ KC_PGUP, KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______,
+    KC_LWIN, JP_GRV , JP_AT  , JP_SCLN, JP_COLN, JP_UNDS, KG_APRS, /**/ KC_PGDN, JP_CIRC, JP_PLUS, JP_ASTR, JP_DOT , JP_BSLS, _______,
+                               _______, _______, _______, _______, /**/ _______, _______, _______, _______
   ),
   [2] = LAYOUT_split_6_7_7_4( /* Functions and Navigation Layer */
     _______, KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  ,          /**/          KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , _______,
     _______, JP_LPRN, JP_LCBR, JP_RCBR, JP_LBRC ,JP_RBRC,  KC_F11, /**/  KC_F12, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, JP_RPRN, _______,
-    KC_LSFT, MS_BTN2, MS_WHLL, MS_WHLU, MS_WHLD, MS_WHLR, MS_BTN3, /**/ MS_BTN3, MS_LEFT, MS_DOWN, MS_UP  , MS_RGHT, MS_BTN1, MS_BTN2,
+    KC_LSFT, MS_BTN2, MS_WHLL, MS_WHLU, MS_WHLD, MS_WHLR, MS_BTN3, /**/ MS_BTN3, MS_LEFT, MS_DOWN, MS_UP  , MS_RGHT, MS_BTN1, _______,
                                JP_ZKHK, KC_LWIN, _______, _______, /**/ KC_MUTE, _______, KC_VOLD, KC_VOLU
   ),
   [3] = LAYOUT_split_6_7_7_4( /* Tenkey and Left Hand Device */
@@ -48,7 +48,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     XXXXXXX, RGB_SAI, RGB_HUI, RGB_VAI, RGB_SPI, RGB_MOD,          /**/          RGB_MOD, RGB_SPI, RGB_VAI, RGB_HUI, RGB_SAI, XXXXXXX,
     XXXXXXX, RGB_SAD, RGB_HUD, RGB_VAD, RGB_SPD,RGB_RMOD, RGB_TOG, /**/ RGB_TOG,RGB_RMOD, RGB_SPD, RGB_VAD, RGB_HUD, RGB_SAD, XXXXXXX,
     QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, QK_BOOT,
-                               XXXXXXX, XXXXXXX, KG_TNUM, KG_TTEN, /**/ XXXXXXX, KG_TFUN, XXXXXXX, XXXXXXX
+                               XXXXXXX, XXXXXXX, KG_TNUM, KG_TESC, /**/ XXXXXXX, KG_TFUN, XXXXXXX, XXXXXXX
   ),
 };
 #endif
