@@ -16,14 +16,14 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [1] = LAYOUT_split_6_7_7_4( /* Numbers and Symbols Layer */
     _______, JP_EXLM, JP_DQUO, JP_HASH, JP_DLR , JP_PERC,          /**/          JP_AMPR, JP_QUOT, JP_EQL , JP_TILD, JP_PIPE, _______,
-    _______, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , KC_PSCR, /**/ KC_PGUP, KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______,
-    KC_LWIN, JP_GRV , JP_AT  , JP_SCLN, JP_COLN, JP_UNDS, KG_APRS, /**/ KC_PGDN, JP_CIRC, JP_PLUS, JP_ASTR, JP_DOT , JP_BSLS, _______,
+    _______, KC_1   , KC_2   , KC_3   , KC_4   , KC_5   , KC_PSCR, /**/ KC_WBAK, KC_6   , KC_7   , KC_8   , KC_9   , KC_0   , _______,
+    KC_LWIN, JP_GRV , JP_AT  , JP_SCLN, JP_COLN, JP_UNDS, KG_APRS, /**/ KC_WFWD, JP_CIRC, JP_PLUS, JP_ASTR, JP_DOT , JP_BSLS, _______,
                                _______, _______, _______, _______, /**/ _______, _______, _______, _______
   ),
   [2] = LAYOUT_split_6_7_7_4( /* Functions and Navigation Layer */
     _______, KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  ,          /**/          KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , _______,
     _______, JP_LPRN, JP_LCBR, JP_RCBR, JP_LBRC ,JP_RBRC,  KC_F11, /**/  KC_F12, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, JP_RPRN, _______,
-    KC_LSFT, MS_BTN2, MS_WHLL, MS_WHLU, MS_WHLD, MS_WHLR, MS_BTN3, /**/ MS_BTN3, MS_LEFT, MS_DOWN, MS_UP  , MS_RGHT, MS_BTN1, _______,
+    KC_LSFT, MS_BTN2, MS_WHLL, MS_WHLU, MS_WHLD, MS_WHLR, MS_BTN3, /**/ MS_BTN2, MS_LEFT, MS_DOWN, MS_UP  , MS_RGHT, MS_BTN1, _______,
                                JP_ZKHK, KC_LWIN, _______, _______, /**/ KC_MUTE, _______, KC_VOLD, KC_VOLU
   ),
   [3] = LAYOUT_split_6_7_7_4( /* Tenkey and Left Hand Device */
