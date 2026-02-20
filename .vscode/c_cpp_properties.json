@@ -7,6 +7,7 @@
             ],
             "defines": [
                 "LAYOUT_split_6_7_7_4",
+                "LAYOUT_split_3x6_3_ex2",
                 "RGB_MATRIX_CUSTOM_EFFECT_IMPLS"
             ],
             "compilerPath": "/usr/bin/arm-none-eabi-gcc",
