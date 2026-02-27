@@ -5,9 +5,9 @@
 	(uuid "4cc5d416-57f5-4147-8183-e03ae6b1198a")
 	(paper "A4")
 	(title_block
-		(title "KERIgoKBD v1.1")
-		(date "2025-02-08")
-		(rev "1.1.0")
+		(title "KERIgoKBD v1.2")
+		(date "2026-02-22")
+		(rev "1.2.0")
 		(company "KERI's Lab")
 	)
 	(lib_symbols
