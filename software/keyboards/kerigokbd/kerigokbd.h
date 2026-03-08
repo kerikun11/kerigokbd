@@ -17,8 +17,8 @@
 #define KG_TESC TO(3) // TO_ESC
 #define KG_LALT LALT_T(JP_MHEN)
 #define KG_RWIN RWIN_T(JP_HENK)
-#define KG_LWIN LWIN_T(KC_PSCR)
-#define KG_RALT RALT_T(KC_APP)
+#define KG_L4 LWIN_T(KC_PSCR)
+#define KG_R4 RSFT_T(KC_APP)
 #define KG_EXTL LT(6, KC_PGUP) //< Central Extra Key (Top Left)
 #define KG_EXTR LT(6, KC_HOME) //< Central Extra Key (Top Right)
 #define KG_EXBL KC_PGDN        //< Central Extra Key (Bottom Left)

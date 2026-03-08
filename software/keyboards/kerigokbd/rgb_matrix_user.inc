@@ -27,10 +27,10 @@ static bool is_keycode_special(uint16_t keycode) {
         case KC_ENTER ... KC_SPACE: //< ENT, ESC, BSPC, TAB, SPC
         case KC_DEL:
         case KC_KP_ENTER:
-        case KG_LWIN:
+        case KG_L4:
         case KG_LALT:
         case KG_RWIN:
-        case KG_RALT:
+        case KG_R4:
         case KG_ESC:
             return true;
     }
