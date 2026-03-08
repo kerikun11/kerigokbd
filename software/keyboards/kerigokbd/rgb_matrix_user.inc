@@ -29,9 +29,9 @@ static bool is_keycode_special(uint16_t keycode) {
         case KC_KP_ENTER:
         case KG_L4:
         case KG_LALT:
+        case KG_ESC:
         case KG_RWIN:
         case KG_R4:
-        case KG_ESC:
             return true;
     }
     return false;
@@ -94,7 +94,9 @@ static bool keyfunc(effect_params_t *params) {
             } else if (keycode == MS_BTN4 || keycode == MS_BTN5) {
                 /* Mouse (Button 4/5) */ rgb_matrix_set_color(index, COLOR_ORANGE);
             } else if (keycode >= KC_MUTE && keycode <= KC_VOLD) {
-                /* Audio */ rgb_matrix_set_color(index, COLOR_GREEN);
+                /* Audio */ rgb_matrix_set_color(index, COLOR_BLUE);
+            } else if (keycode == KC_PSCR || keycode == A(KC_PSCR)) {
+                /* PrintScreen */ rgb_matrix_set_color(index, COLOR_BLUE);
             } else if (keycode >= A(KC_1) && keycode <= A(KC_0)) {
                 /* Alt+Num */ rgb_matrix_set_color(index, COLOR_GREEN);
             } else if (keycode >= KG_POINTING_SLOW && keycode <= KG_POINTING_SCROLL) {
