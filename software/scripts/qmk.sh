@@ -18,7 +18,6 @@ while getopts "b:m:cfldvort" opt; do
     f) flag_f=true ;; # flash
     l) flag_l=true ;; # lint
     d) flag_d=true ;; # use default keymap instead of via
-    v) flag_v=true ;; # vial
     o) flag_o=true ;; # corne
     r) flag_r=true ;; # keyballrp
     t) flag_t=true ;; # trackpad
@@ -26,11 +25,6 @@ while getopts "b:m:cfldvort" opt; do
     esac
 done
 
-## vial
-if declare -p flag_v &>/dev/null; then
-    QMK_DIR=$(git rev-parse --show-toplevel)/external/vial-qmk
-    QMK_KEYMAP=vial
-fi
 ## keyboard
 if declare -p flag_o &>/dev/null; then
     QMK_KEYBOARD=kerigokbd/kerigokbd_corne_v4

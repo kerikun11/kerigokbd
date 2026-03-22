@@ -4,7 +4,6 @@ set -eu
 ## definitions
 KEYBOARDS_DIR=software/keyboards
 QMK_DIR=external/qmk_firmware
-VIAL_DIR=external/vial-qmk
 
 function register_qmk_keyboard() {
     ## params
@@ -22,5 +21,4 @@ function register_qmk_keyboard() {
 for keyboard in $(ls $KEYBOARDS_DIR/); do
     echo $keyboard
     register_qmk_keyboard $keyboard $QMK_DIR
-    register_qmk_keyboard $keyboard $VIAL_DIR
 done

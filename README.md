@@ -5,8 +5,7 @@
 ```tree
 kerigokbd/
 ├── external/
-│   ├── qmk_firmware/               # QMK Firmware for VIA (git-submodule)
-│   └── vial-qmk/                   # QMK Firmware for VIAL (git-submodule)
+│   └── qmk_firmware/               # QMK Firmware for VIA (git-submodule)
 ├── hardware/
 │   └── kerigokbd_v1/
 │       ├── case/                   # STL
