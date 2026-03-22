@@ -11,7 +11,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   , /**/ KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSPC,
     KC_LCTL, KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , /**/ KC_H   , KC_J   , KC_K   , KC_L   , JP_MINS, KC_ENT ,
     KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , /**/ KC_N   , KC_M   , JP_COMM, JP_DOT , JP_SLSH, KC_DEL ,
-      KG_R4, KG_L4  ,     /**/ KG_LALT, KG_NUM , KG_ESC , /**/ KC_SPC , KG_FUN ,   /**/   XXXXXXX, XXXXXXX, /**/ KG_RWIN
+      KG_L4, KG_RWIN,     /**/ KG_LALT, KG_NUM , KG_ESC , /**/ KC_SPC , KG_FUN ,   /**/   XXXXXXX, XXXXXXX, /**/ MO(5)
   ),
   [1] = LAYOUT_universal( /* Numbers and Symbols Layer */
     _______, JP_EXLM, JP_DQUO, JP_HASH, JP_DLR , JP_PERC, /**/ JP_AMPR, JP_QUOT, JP_EQL , JP_TILD, JP_PIPE, _______,
@@ -29,13 +29,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______,   KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5, /**/ KC_P7  , KC_P8  , KC_P9  , KC_PMNS, KC_TAB , _______,
     _______, A(KC_1), A(KC_2), A(KC_3), A(KC_4), A(KC_5), /**/ KC_P4  , KC_P5  , KC_P6  , KC_PPLS, KC_UP  , _______,
     _______, C(KC_Z), C(KC_X), C(KC_C), C(KC_V), C(KC_B), /**/ KC_P1  , KC_P2  , KC_P3  , KC_LEFT, KC_DOWN, KC_RGHT,
-    QK_BOOT, XXXXXXX,    /**/  MS_BTN2, MS_BTN1,  KC_NUM, /**/ KC_P0  , KC_PDOT,    /**/  XXXXXXX, XXXXXXX, /**/ KG_MAIN
+    QK_BOOT, QK_BOOT,    /**/  MS_BTN2, MS_BTN1,  KC_NUM, /**/ KC_P0  , KC_PDOT,    /**/  XXXXXXX, XXXXXXX, /**/ KG_MAIN
   ),
   [4] = LAYOUT_universal( /* Auto Mouse Layer */
+    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/ XXXXXXX, MS_BTN1, MS_BTN3, MS_BTN2, XXXXXXX, _______,
+    _______, XXXXXXX, XXXXXXX, KG_SCRL, MS_BTN1, MS_BTN2, /**/ XXXXXXX, XXXXXXX, KG_SCRL, MS_BTN2, MS_BTN1, _______,
     _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-    _______, XXXXXXX, XXXXXXX, KG_SLOW, KG_SCRL, XXXXXXX, /**/ MS_BTN2, MS_BTN1, MS_BTN3, XXXXXXX, XXXXXXX, _______,
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-    QK_BOOT, XXXXXXX,    /**/  MS_BTN2, MS_BTN1, XXXXXXX, /**/ MS_BTN3, XXXXXXX,    /**/  XXXXXXX, XXXXXXX, /**/ QK_BOOT
+    QK_BOOT, KC_LWIN,    /**/  MS_BTN2, MS_BTN1, XXXXXXX, /**/ MS_BTN1, XXXXXXX,    /**/  XXXXXXX, XXXXXXX, /**/ KG_MAIN
   ),
   [5] = LAYOUT_universal(
     _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/ RGB_MOD, RGB_SPI, RGB_VAI, RGB_HUI, RGB_SAI, _______,

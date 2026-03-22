@@ -8,7 +8,7 @@
 #include <keymap_japanese.h>
 
 /* Special Keys */
-#define KG_L4 MO(3)
+#define KG_L4 LT(3, KC_CALC)
 #define KG_LALT LALT_T(JP_MHEN)
 #define KG_NUM MO(1)
 #define KG_ESC LSFT_T(KC_ESC)
@@ -31,10 +31,8 @@
 /* Custom Keycodes */
 enum kerigokbd_keycodes {
     // full name
-    KG_POINTING_SLOW   = QK_KB_0,
     KG_POINTING_SCROLL = QK_KB_1,
 
     // aliases
-    KG_SLOW = KG_POINTING_SLOW,
     KG_SCRL = KG_POINTING_SCROLL,
 };
