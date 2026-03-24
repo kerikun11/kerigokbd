@@ -9,7 +9,7 @@ KERI's Ergonomic Keyboard Version 1
 ## リンク集
 
 - [KERIgoKBD v1 - Remap](https://remap-keys.app/catalog/8pqWZfIyb0UqzhvSmsgh/keymap?id=74vyciDXcUU3OP2Ju8dM)
-- [KERIgoKBD v1 - Keyboard Layout Editor](https://www.keyboard-layout-editor.com/#/gists/ef55d575836d948b814d1c28ccc5c396)
+- [KERIgoKBD v1 - Keyboard Layout Editor](https://www.keyboard-layout-editor.com/#/gists/4df243fe8d3c3bd252abc2dfd63d19ec)
 - [KERIgoKBD v1 - Firmware](../../software/keyboards/kerigokbd/kerigokbd_v1/)
 
 ## スペック
@@ -35,7 +35,6 @@ KERI's Ergonomic Keyboard Version 1
 - 中央に2つずつの追加キー
 - 全キーにRGBバックライトLED
 
-[KERIgoKBD v1 - Keyboard Layout Editor](https://www.keyboard-layout-editor.com/#/gists/ef55d575836d948b814d1c28ccc5c396)
 ![KERIgoKBD v1](./images/kerigokbd_v1_top.jpg)
 
 ## 基板

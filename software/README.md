@@ -35,9 +35,9 @@ qmk setup
 ## clean
 qmk clean
 ## compile
-qmk compile -kb kerigokbd/kerigokbd_v1 -km via
+qmk compile -kb kerigokbd/kerigokbd_v1/pcb_20250208 -km via
 ## compile and flash
-qmk flash -kb kerigokbd/kerigokbd_v1 -km via
+qmk flash -kb kerigokbd/kerigokbd_v1/pcb_20250208 -km via
 ```
 
 または下記スクリプトでも実行できる。
