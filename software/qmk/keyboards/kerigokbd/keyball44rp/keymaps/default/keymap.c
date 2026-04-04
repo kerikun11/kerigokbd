@@ -38,8 +38,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     QK_BOOT, KC_LWIN,    /**/  MS_BTN2, MS_BTN1, XXXXXXX, /**/ MS_BTN1, XXXXXXX,    /**/  XXXXXXX, XXXXXXX, /**/ KG_MAIN
   ),
   [5] = LAYOUT_universal(
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/ RGB_MOD, RGB_SPI, RGB_VAI, RGB_HUI, RGB_SAI, _______,
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/RGB_RMOD, RGB_SPD, RGB_VAD, RGB_HUD, RGB_SAD, _______,
+    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/ RM_NEXT, RM_SPDU, RM_VALU, RM_HUEU, RM_SATU, _______,
+    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/ RM_PREV, RM_SPDD, RM_VALD, RM_HUED, RM_SATD, _______,
     _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/ RGB_M_P, RGB_M_R,RGB_M_SW, RGB_M_G,RGB_M_TW, _______,
     KC_VOLD, KC_VOLU,    /**/  _______,   TO(1), _______, /**/ _______,   TO(2),    /**/  XXXXXXX, XXXXXXX, /**/ _______
   ),
