@@ -9,7 +9,7 @@
     "usb": {
         "vid": "0x1209",
         "pid": "0xE501",
-        "device_version": "1.1.0"
+        "device_version": "1.2.0"
     },
     "features": {
         "bootmagic": true,
