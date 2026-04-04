@@ -7,21 +7,24 @@
 #include <quantum.h>
 #include <keymap_japanese.h>
 
-/* Special Keys */
-#define KG_L4 LT(3, KC_CALC)
+/* Thumb Keys */
+#define KG_L4 KC_LWIN
 #define KG_LALT LALT_T(JP_MHEN)
 #define KG_NUM MO(1)
-#define KG_ESC LSFT_T(KC_ESC)
+#define KG_ESC LT(3, KC_ESC)
+
 #define KG_SPC KC_SPC
 #define KG_FUN MO(2)
 #define KG_RWIN RWIN_T(JP_HENK)
-#define KG_R4 RSFT_T(KC_PSCR)
+#define KG_R4 KC_RCTL
 
-#define KG_EXTL LT(6, KC_PGUP) //< Central Extra Key (Top Left)
-#define KG_EXTR LT(6, KC_HOME) //< Central Extra Key (Top Right)
-#define KG_EXBL LT(5, KC_PGDN) //< Central Extra Key (Bottom Left)
-#define KG_EXBR LT(5, KC_END)  //< Central Extra Key (Bottom Right)
+/* Central Extra Keys */
+#define KG_EXTL LT(4, KC_PGUP) //< Central Extra Key (Top Left)
+#define KG_EXBL LT(6, KC_PGDN) //< Central Extra Key (Bottom Left)
+#define KG_EXTR LT(4, KC_HOME) //< Central Extra Key (Top Right)
+#define KG_EXBR LT(6, KC_END)  //< Central Extra Key (Bottom Right)
 
+/* Aliases */
 #define KG_MAIN TO(0) // TO_MAIN
 #define KG_TNUM TO(1) // TO_NUM
 #define KG_TFUN TO(2) // TO_FUN

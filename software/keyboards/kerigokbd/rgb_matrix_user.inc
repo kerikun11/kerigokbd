@@ -47,8 +47,9 @@ static bool is_keycode_symbol(uint16_t keycode) {
         case JP_UNDS:
         case JP_PIPE:
         case JP_YEN:
-        case KC_KP_DOT:
         case KC_KP_SLASH ... KC_KP_PLUS:
+        case KC_KP_DOT:
+        case KC_KP_EQUAL:
             return true;
     }
     return false;
