@@ -1,5 +1,5 @@
-[submodule "software/qmk_firmware"]
-	path = software/qmk_firmware
+[submodule "software/qmk/firmware"]
+	path = software/qmk/firmware
 	url = https://github.com/qmk/qmk_firmware.git
 [submodule "hardware/kerigokbd_v1/pcb/kbd"]
 	path = hardware/kerigokbd_v1/pcb/kbd

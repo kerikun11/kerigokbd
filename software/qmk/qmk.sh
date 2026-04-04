@@ -5,15 +5,36 @@
 set -eu
 
 ## default values
-QMK_DIR=$(git rev-parse --show-toplevel)/software/qmk_firmware
+TOP_DIR=$(git rev-parse --show-toplevel)
+QMK_DIR=$TOP_DIR/software/qmk/firmware
+KEYBOARDS_DIR=$TOP_DIR/software/qmk/keyboards
 QMK_KEYMAP=via
 QMK_KEYBOARD=kerigokbd/kerigokbd_v1/pcb_20250208
 
+function register_qmk_keyboards() {
+    local qmk_exclude
+    qmk_exclude=$(git -C "$QMK_DIR" rev-parse --git-path info/exclude)
+
+    for keyboard_path in "$KEYBOARDS_DIR"/*; do
+        [ -d "$keyboard_path" ] || continue
+
+        local keyboard_name
+        keyboard_name=$(basename "$keyboard_path")
+
+        echo "$keyboard_name"
+        ln -rsfn "$keyboard_path" "$QMK_DIR/keyboards/"
+        if ! grep -qxF "/keyboards/$keyboard_name" "$qmk_exclude"; then
+            echo "/keyboards/$keyboard_name" >>"$qmk_exclude"
+        fi
+    done
+}
+
 ## parse command-line options
-while getopts "b:m:cfldvort" opt; do
+while getopts "b:m:csfldvort" opt; do
     case $opt in
     b) QMK_KEYBOARD=$OPTARG ;;
     m) QMK_KEYMAP=$OPTARG ;;
+    s) flag_s=true ;; # setup only
     c) flag_c=true ;; # clean
     f) flag_f=true ;; # flash
     l) flag_l=true ;; # lint
@@ -39,18 +60,24 @@ if declare -p flag_d &>/dev/null; then
 fi
 
 ## main process
-cd $QMK_DIR
+register_qmk_keyboards
+
+if declare -p flag_s &>/dev/null; then
+    exit 0
+fi
+
+cd "$QMK_DIR"
 if declare -p flag_c &>/dev/null; then (
     set -x
     qmk clean
 ); fi
 if declare -p flag_f &>/dev/null; then (
     set -x
-    qmk flash -kb $QMK_KEYBOARD -km $QMK_KEYMAP
+    qmk flash -kb "$QMK_KEYBOARD" -km "$QMK_KEYMAP"
 ); elif declare -p flag_l &>/dev/null; then (
     set -x
-    qmk lint -kb $QMK_KEYBOARD -km $QMK_KEYMAP
+    qmk lint -kb "$QMK_KEYBOARD" -km "$QMK_KEYMAP"
 ); else (
     set -x
-    qmk compile -kb $QMK_KEYBOARD -km $QMK_KEYMAP --compiledb
+    qmk compile -kb "$QMK_KEYBOARD" -km "$QMK_KEYMAP" --compiledb
 ); fi
