@@ -10,10 +10,12 @@ KERI's Ergonomic Keyboard Version 1
 
 けりの手の形状に合わせて設計した、左右分離の自作キーボード。
 
+- 肩への負担を和らげる左右分離のキーボード
 - 左右それぞれ24キー、合計48キー
 - 数字キーがない、いわゆる40%レイアウト
 - 左右に4つずつの親指キー
 - 中央に2つずつの追加キー
+- ロープロファイルのキースイッチによる薄型・軽量
 - 全キーにRGBバックライトLED
 - QMK Firmware / Remap 対応
 
@@ -57,6 +59,8 @@ Autodesk Fusionで設計。Bambu Lab P1S PLA White Marbleで印刷。
 
 ![KERIgoKBD v1 Case Top](./images/kerigokbd_v1_case_top.jpg)
 ![KERIgoKBD v1 Case Bottom](./images/kerigokbd_v1_case_bottom.jpg)
+
+大理石調の PLA White Marble を使うことで、見た目の雰囲気だけでなく積層痕も目立ちにくくしている。
 
 ## ファームウェア
 
