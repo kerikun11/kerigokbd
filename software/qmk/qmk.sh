@@ -9,7 +9,7 @@ TOP_DIR=$(git rev-parse --show-toplevel)
 QMK_DIR=$TOP_DIR/software/qmk/firmware
 KEYBOARDS_DIR=$TOP_DIR/software/qmk/keyboards
 QMK_KEYMAP=via
-QMK_KEYBOARD=kerigokbd/kerigokbd_v1/pcb_20250208
+QMK_KEYBOARD=kerigokbd/kerigokbd_v1
 
 function register_qmk_keyboards() {
     local qmk_exclude

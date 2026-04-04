@@ -8,7 +8,8 @@
     "bootloader_instructions": "Turn the power on with pressing Q or P.",
     "usb": {
         "vid": "0x1209",
-        "pid": "0xE501"
+        "pid": "0xE501",
+        "device_version": "1.1.0"
     },
     "features": {
         "bootmagic": true,
@@ -49,8 +50,12 @@
             },
             "watchdog": true
         },
+        "handedness": {
+            "pin": "GP25"
+        },
         "serial": {
-            "driver": "vendor"
+            "driver": "vendor",
+            "pin": "GP29"
         }
     },
     "layouts": {
@@ -111,6 +116,7 @@
         }
     },
     "ws2812": {
+        "pin": "GP0",
         "driver": "vendor"
     },
     "rgb_matrix": {
