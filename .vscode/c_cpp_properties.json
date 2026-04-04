@@ -14,7 +14,7 @@
             "cStandard": "c17",
             "intelliSenseMode": "${default}",
             "compileCommands": [
-                "external/qmk_firmware/compile_commands.json"
+                "software/qmk_firmware/compile_commands.json"
             ]
         }
     ],
