@@ -8,8 +8,8 @@ KERI's Ergonomic Keyboard Version 1
 
 ## リンク集
 
-- [KERIgoKBD v1 - Remap](https://remap-keys.app/catalog/8pqWZfIyb0UqzhvSmsgh/keymap?id=74vyciDXcUU3OP2Ju8dM)
-- [KERIgoKBD v1 - Keyboard Layout Editor](https://www.keyboard-layout-editor.com/#/gists/4df243fe8d3c3bd252abc2dfd63d19ec)
+- [KERIgoKBD v1 - Remap](https://remap-keys.app/catalog/8pqWZfIyb0UqzhvSmsgh/keymap?id=RpLYgWmZ0A9D40j9Gvdv)
+- [KERIgoKBD v1 - Keyboard Layout Editor](https://www.keyboard-layout-editor.com/#/gists/e9041aa9a964c55f5b5cef199f9d24c8)
 - [KERIgoKBD v1 - Firmware](../../software/keyboards/kerigokbd/kerigokbd_v1/)
 
 ## スペック
@@ -27,7 +27,7 @@ KERI's Ergonomic Keyboard Version 1
 
 ## レイアウト
 
-けりの手の形状に合わせた独自レイアウト
+けりの手の形状に合わせた独自のレイアウト。
 
 - 左右分離（左右それぞれ24キーで合計48キー）
 - 数字キーのない40%レイアウト
@@ -44,7 +44,7 @@ KiCadで設計。JLCPCBに発注。左右分離の各基板をひとつの基板
 - 設計データ：[pcb](./pcb/)
 
 ![KERIgoKBD v1 Sketch](./pcb/kerigokbd.svg)
-![KERIgoKBD v1 PCB](./images/kerigokbd_v1_pcb.jpg)
+![KERIgoKBD v1 PCB](./images/kerigokbd_v1.2_pcb.jpg)
 
 ## ケース
 
