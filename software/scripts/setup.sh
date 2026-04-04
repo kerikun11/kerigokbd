@@ -3,7 +3,7 @@ set -eu
 
 ## definitions
 KEYBOARDS_DIR=software/keyboards
-QMK_DIR=external/qmk_firmware
+QMK_DIR=software/qmk_firmware
 
 function register_qmk_keyboard() {
     ## params

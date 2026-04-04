@@ -5,7 +5,7 @@
 set -eu
 
 ## default values
-QMK_DIR=$(git rev-parse --show-toplevel)/external/qmk_firmware
+QMK_DIR=$(git rev-parse --show-toplevel)/software/qmk_firmware
 QMK_KEYMAP=via
 QMK_KEYBOARD=kerigokbd/kerigokbd_v1/pcb_20250208
 

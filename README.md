@@ -4,19 +4,18 @@
 
 ```tree
 kerigokbd/
-├── external/
-│   └── qmk_firmware/               # QMK Firmware for VIA (git-submodule)
 ├── hardware/
 │   └── kerigokbd_v1/
 │       ├── case/                   # STL
 │       └── pcb/                    # KiCad
 ├── software/
-│   └── keyboards/                  # Keyboard Entries of QMK Firmware
-│       └── kerigokbd/
-│           ├── kerigokbd_v1/
-│           ├── kerigokbd_corne_v4/
-│           ├── keyball44rp/
-│           └── readme.md
+│   ├── keyboards/                  # Keyboard Entries of QMK Firmware
+│   │   └── kerigokbd/
+│   │       ├── kerigokbd_v1/
+│   │       ├── kerigokbd_corne_v4/
+│   │       ├── keyball44rp/
+│   │       └── readme.md
+│   └── qmk_firmware/               # QMK Firmware for VIA (git-submodule)
 ├── .clang-format
 ├── .gitmodules
 └── README.md
