@@ -17,7 +17,7 @@ git clone --recursive https://github.com/kerikun11/kerigokbd.git
 cd kerigokbd/software
 ```
 
-`qmk.sh` は初回実行時にも、QMKファームウェアの `keyboards` ディレクトリ内へカスタムキーボードへのリンクを作成する。
+下記コマンドでQMK Firmwareの `keyboards` ディレクトリ内へカスタムキーボードへのリンクを作成する。
 
 ```sh
 ## setup only
