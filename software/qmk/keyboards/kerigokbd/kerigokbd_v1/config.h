@@ -4,14 +4,6 @@
 
 #pragma once
 
-/* USB */
-#define USB_VBUS_PIN GP28
-
-/* I2C */
-#define I2C_DRIVER I2CD1 // see https://datasheets.raspberrypi.com/rp2040/rp2040-datasheet.pdf#page=13
-#define I2C1_SDA_PIN GP26
-#define I2C1_SCL_PIN GP27
-
 /* Pointing Device (https://docs.qmk.fm/features/pointing_device#common-configuration) */
 #define SPLIT_POINTING_ENABLE
 #define POINTING_DEVICE_RIGHT
