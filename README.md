@@ -6,8 +6,10 @@
 kerigokbd/
 ├── hardware/
 │   └── kerigokbd_v1/
-│       ├── case/                   # STL
-│       └── pcb/                    # KiCad
+│       ├── v1.0.0_pcb_20241229/
+│       ├── v1.1.0_pcb_20250208/
+│       ├── v1.2.0_pcb_20260222/
+│       └── README.md
 ├── software/
 │   └── qmk/
 │       ├── firmware/               # QMK Firmware for VIA (git-submodule)
@@ -30,9 +32,10 @@ kerigokbd/
 [けり](https://github.com/kerikun11)のはじめての自作キーボード。
 
 - Hardware: [KERIgoKBD v1 Design](./hardware/kerigokbd_v1/)
+  現行版: `v1.2.0_pcb_20260222`
 - Firmware: [KERIgoKBD v1 Firmware](./software/qmk/keyboards/kerigokbd/kerigokbd_v1/)
 
-![KERIgoKBD v1](./hardware/kerigokbd_v1/images/kerigokbd_v1.jpg)
+![KERIgoKBD v1](./hardware/kerigokbd_v1/v1.0.0_pcb_20241229/images/kerigokbd_v1.jpg)
 
 ### KERIgoKBD Corne v4
 

@@ -2,32 +2,28 @@
 
 [![CC BY-NC 4.0](https://licensebuttons.net/l/by-nc/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc/4.0/deed.ja)
 
+けりの人間工学キーボード第1版  
 KERI's Ergonomic Keyboard Version 1
 
-![KERIgoKBD v1](./images/kerigokbd_v1.jpg)
+![KERIgoKBD v1](./v1.0.0_pcb_20241229/images/kerigokbd_v1.jpg)
 
-## 概要
+## ハードウェア版
 
-けりの手の形状に合わせて設計した、左右分離の自作キーボード。
+現行のハードウェアは `v1.2.0_pcb_20260222`。
+過去の基板リビジョンも、比較や参照ができるように版ごとのフォルダへ保存。
 
-- 肩への負担を和らげる左右分離のキーボード
-- 左右それぞれ24キー、合計48キー
-- 数字キーがない、いわゆる40%レイアウト
-- 左右に4つずつの親指キー
-- 中央に2つずつの追加キー
-- ロープロファイルのキースイッチによる薄型・軽量
-- 全キーにRGBバックライトLED
-- QMK Firmware / Remap 対応
+- [`v1.0.0_pcb_20241229`](./v1.0.0_pcb_20241229/)
+  初版アーカイブ。
+- [`v1.1.0_pcb_20250208`](./v1.1.0_pcb_20250208/)
+  PCB リビジョンとケースデータを更新。
+- [`v1.2.0_pcb_20260222`](./v1.2.0_pcb_20260222/)
+  現在の最新版アーカイブ。
 
-## リンク
+## リンク集
 
-- [Remap](https://remap-keys.app/catalog/8pqWZfIyb0UqzhvSmsgh/keymap?id=RpLYgWmZ0A9D40j9Gvdv)
-- [Keyboard Layout Editor](https://www.keyboard-layout-editor.com/#/gists/e9041aa9a964c55f5b5cef199f9d24c8)
-- [Firmware](../../software/qmk/keyboards/kerigokbd/kerigokbd_v1/)
-
-## 写真
-
-![KERIgoKBD v1 Top](./images/kerigokbd_v1_top.jpg)
+- [KERIgoKBD v1 - Remap](https://remap-keys.app/catalog/8pqWZfIyb0UqzhvSmsgh/keymap?id=RpLYgWmZ0A9D40j9Gvdv)
+- [KERIgoKBD v1 - Keyboard Layout Editor](https://www.keyboard-layout-editor.com/#/gists/e9041aa9a964c55f5b5cef199f9d24c8)
+- [KERIgoKBD v1 - Firmware](../../software/qmk/keyboards/kerigokbd/kerigokbd_v1/)
 
 ## スペック
 
@@ -42,34 +38,46 @@ KERI's Ergonomic Keyboard Version 1
 | 滑り止めシート   | [GRIPLUS ホワイト フリーカット](http://www.amazon.co.jp/dp/B08XHMGPWW/)                                             |
 | USBケーブル      | [USLION Magnetic USB Type-C ケーブル](https://www.aliexpress.com/item/1005006136597761.html)                        |
 
+## レイアウト
+
+けりの手の形状に合わせた独自のレイアウト。
+
+- 左右分離
+- 左右それぞれ24キー、合計48キー
+- 数字キーのない40%レイアウト
+- 左右に4つずつの親指キー
+- 中央に2つずつの追加キー
+- 全キーに RGB バックライト LED
+
+![KERIgoKBD v1 Top](./v1.0.0_pcb_20241229/images/kerigokbd_v1_top.jpg)
+
 ## 基板
 
-KiCadで設計。JLCPCBに発注。左右分離の各基板をひとつの基板の両面で兼用して、基板発注コストを抑えた。
+KiCad で設計。JLCPCB に発注。
+左右分離の各基板をひとつの基板の両面で兼用し、基板発注コストを抑制。
 
-- 設計データ: [pcb](./pcb/)
+- 現行設計データ: [`v1.2.0_pcb_20260222/pcb`](./v1.2.0_pcb_20260222/pcb/)
 
-![KERIgoKBD v1 Sketch](./pcb/kerigokbd.svg)
-![KERIgoKBD v1 PCB](./images/kerigokbd_v1.2_pcb.jpg)
+![KERIgoKBD v1 Sketch](./v1.2.0_pcb_20260222/pcb/kerigokbd.svg)
+![KERIgoKBD v1 PCB](./v1.2.0_pcb_20260222/images/kerigokbd_v1.2_pcb.jpg)
 
 ## ケース
 
-Autodesk Fusionで設計。Bambu Lab P1S PLA White Marbleで印刷。
+Autodesk Fusion で設計。Bambu Lab P1S PLA White Marble で印刷。
 
-- 設計データ: [case](./case/)
+- 現行設計データ: [`v1.2.0_pcb_20260222/case`](./v1.2.0_pcb_20260222/case/)
 
-![KERIgoKBD v1 Case Top](./images/kerigokbd_v1_case_top.jpg)
-![KERIgoKBD v1 Case Bottom](./images/kerigokbd_v1_case_bottom.jpg)
-
-大理石調の PLA White Marble を使うことで、見た目の雰囲気だけでなく積層痕も目立ちにくくしている。
+![KERIgoKBD v1 Case Top](./v1.1.0_pcb_20250208/images/kerigokbd_v1_case_top.jpg)
+![KERIgoKBD v1 Case Bottom](./v1.1.0_pcb_20250208/images/kerigokbd_v1_case_bottom.jpg)
 
 ## ファームウェア
 
-オープンソースプロジェクト [QMK Firmware](https://docs.qmk.fm/) のキーボードとして実装。Remapに対応。
+オープンソースプロジェクト [QMK Firmware](https://docs.qmk.fm/) のキーボードとして実装。Remap に対応。
 
-- ソースコード: [kerigokbd_v1](../../software/qmk/keyboards/kerigokbd/kerigokbd_v1/)
+- ソースコード: [`software/qmk/keyboards/kerigokbd/kerigokbd_v1`](../../software/qmk/keyboards/kerigokbd/kerigokbd_v1/)
 
 ## ライセンス
 
-この作品は[クリエイティブ・コモンズ 表示-非営利 4.0 国際 ライセンス](https://creativecommons.org/licenses/by-nc/4.0/deed.ja)の下に提供されている。
+この作品は [クリエイティブ・コモンズ 表示-非営利 4.0 国際 ライセンス](https://creativecommons.org/licenses/by-nc/4.0/deed.ja) の下に提供。
 
 This work is licensed under a [Creative Commons Attribution-NonCommercial 4.0 International License](https://creativecommons.org/licenses/by-nc/4.0/).
