@@ -7,17 +7,14 @@ KERI's Ergonomic Keyboard Version 1
 
 ![KERIgoKBD v1](./v1.0.0_pcb_20241229/images/kerigokbd_v1.jpg)
 
-## ハードウェア版
-
-現行のハードウェアは `v1.2.0_pcb_20260222`。
-過去の基板リビジョンも、比較や参照ができるように版ごとのフォルダへ保存。
+## ハードウェア
 
 - [`v1.0.0_pcb_20241229`](./v1.0.0_pcb_20241229/)
-  初版アーカイブ。
+  I2Cピンアサインにミスあり。I2C不使用なら問題なし。
 - [`v1.1.0_pcb_20250208`](./v1.1.0_pcb_20250208/)
-  PCB リビジョンとケースデータを更新。
+  I2Cピンアサインを修正。
 - [`v1.2.0_pcb_20260222`](./v1.2.0_pcb_20260222/)
-  現在の最新版アーカイブ。
+  小型化。マイコンのピンアサインに変更はないが、TRSピンアサインを変更。
 
 ## リンク集
 
@@ -63,7 +60,7 @@ KiCad で設計。JLCPCB に発注。
 
 ## ケース
 
-Autodesk Fusion で設計。Bambu Lab P1S PLA White Marble で印刷。
+Autodesk Fusion で設計。Bambu Lab P1S と PLA White Marble で印刷。
 
 - 現行設計データ: [`v1.2.0_pcb_20260222/case`](./v1.2.0_pcb_20260222/case/)
 
@@ -78,6 +75,6 @@ Autodesk Fusion で設計。Bambu Lab P1S PLA White Marble で印刷。
 
 ## ライセンス
 
-この作品は [クリエイティブ・コモンズ 表示-非営利 4.0 国際 ライセンス](https://creativecommons.org/licenses/by-nc/4.0/deed.ja) の下に提供。
+この作品は [クリエイティブ・コモンズ 表示-非営利 4.0 国際 ライセンス](https://creativecommons.org/licenses/by-nc/4.0/deed.ja) の下に提供されている。
 
 This work is licensed under a [Creative Commons Attribution-NonCommercial 4.0 International License](https://creativecommons.org/licenses/by-nc/4.0/).
