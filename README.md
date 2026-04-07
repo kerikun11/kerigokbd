@@ -5,7 +5,7 @@
 ```tree
 kerigokbd/
 ├── hardware/
-│   └── kerigokbd_v1/               # PCB, Case Design
+│   └── kerigokbd_v1/               # PCB Design, Case Model
 ├── software/
 │   └── qmk/
 │       ├── firmware/               # QMK Firmware for VIA (git-submodule)
@@ -15,7 +15,8 @@ kerigokbd/
 │       │       ├── kerigokbd_corne_v4/
 │       │       ├── keyball44rp/
 │       │       └── readme.md
-│       └── qmk.sh
+│       ├── qmk.sh                  # Build Script
+│       └── README.md               # Build Manual
 ├── .clang-format
 ├── .gitmodules
 └── README.md
@@ -31,6 +32,9 @@ kerigokbd/
 
 - Hardware: [KERIgoKBD v1 Design](./hardware/kerigokbd_v1/)
 - Firmware: [KERIgoKBD v1 Firmware](./software/qmk/keyboards/kerigokbd/kerigokbd_v1/)
+- Remap: [KERIgoKBD v1 - Remap](https://remap-keys.app/catalog/8pqWZfIyb0UqzhvSmsgh/keymap?id=RpLYgWmZ0A9D40j9Gvdv)
+- Keyboard Layout Editor: [KERIgoKBD v1 - Keyboard Layout Editor](https://www.keyboard-layout-editor.com/#/gists/e9041aa9a964c55f5b5cef199f9d24c8)
+- Case Model: [KERIgoKBD v1 Case - Free 3D Print Model - MakerWorld](https://makerworld.com/en/models/979242-kerigokbd-v1-case#profileId-2735533)
 
 ![KERIgoKBD v1](./hardware/kerigokbd_v1/v1.0.0_pcb_20241229/images/kerigokbd_v1.jpg)
 

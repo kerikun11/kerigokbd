@@ -1,9 +1,9 @@
-# KERIgoKBD v1
+# KERIgoKBD v1 Hardware Design
 
 [![CC BY-NC 4.0](https://licensebuttons.net/l/by-nc/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc/4.0/deed.ja)
 
-けりの人間工学キーボード第1版  
-KERI's Ergonomic Keyboard Version 1
+けりの人間工学キーボード第1版のハードウェア設計データ。  
+Hardware Design of KERI's Ergonomic Keyboard Version 1.
 
 ![KERIgoKBD v1](./v1.0.0_pcb_20241229/images/kerigokbd_v1.jpg)
 
@@ -15,12 +15,6 @@ KERI's Ergonomic Keyboard Version 1
   I2Cピンアサインを修正。
 - [`v1.2.0_pcb_20260222`](./v1.2.0_pcb_20260222/)
   小型化。マイコンのピンアサインに変更はないが、TRSピンアサインを変更。
-
-## リンク集
-
-- [KERIgoKBD v1 - Remap](https://remap-keys.app/catalog/8pqWZfIyb0UqzhvSmsgh/keymap?id=RpLYgWmZ0A9D40j9Gvdv)
-- [KERIgoKBD v1 - Keyboard Layout Editor](https://www.keyboard-layout-editor.com/#/gists/e9041aa9a964c55f5b5cef199f9d24c8)
-- [KERIgoKBD v1 - Firmware](../../software/qmk/keyboards/kerigokbd/kerigokbd_v1/)
 
 ## スペック
 
