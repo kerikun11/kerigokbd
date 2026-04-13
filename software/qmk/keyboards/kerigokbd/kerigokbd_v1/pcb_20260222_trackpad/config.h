@@ -20,7 +20,7 @@
 /* Auto Mouse Layer */
 #define POINTING_DEVICE_AUTO_MOUSE_ENABLE
 #define AUTO_MOUSE_DEFAULT_LAYER 6
-#define AUTO_MOUSE_TIME 1000
+#define AUTO_MOUSE_TIME 200
 
 /* Cirque Trackpad (https://docs.qmk.fm/features/pointing_device#cirque-trackpad) */
 #define CIRQUE_PINNACLE_DIAMETER_MM 35
