@@ -46,9 +46,7 @@ enum kerigokbd_layers {
 enum kerigokbd_keycodes {
     // full name
     KG_POINTING_SCROLL = QK_KB_1,
-    KG_POINTING_SLOW   = QK_KB_2,
 
     // aliases
     KG_SCRL = KG_POINTING_SCROLL,
-    KG_SLOW = KG_POINTING_SLOW,
 };
