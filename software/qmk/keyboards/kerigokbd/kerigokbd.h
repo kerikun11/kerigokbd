@@ -19,8 +19,8 @@ enum kerigokbd_layers {
 };
 
 /* Thumb Keys */
-#define KG_L4 KC_LWIN
-#define KG_LALT LALT_T(JP_ZKHK)
+#define KG_L4 LWIN_T(JP_HENK)
+#define KG_LALT LALT_T(JP_MHEN)
 #define KG_NUM MO(KGL_NUM)
 #define KG_ESC LT(KGL_ESC, KC_ESC)
 
