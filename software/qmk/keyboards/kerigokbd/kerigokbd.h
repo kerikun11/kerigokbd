@@ -9,7 +9,7 @@
 
 /* Thumb Keys */
 #define KG_L4 KC_LWIN
-#define KG_LALT LALT_T(JP_MHEN)
+#define KG_LALT LALT_T(JP_ZKHK)
 #define KG_NUM MO(1)
 #define KG_ESC LT(3, KC_ESC)
 
@@ -35,7 +35,9 @@
 enum kerigokbd_keycodes {
     // full name
     KG_POINTING_SCROLL = QK_KB_1,
+    KG_POINTING_SLOW   = QK_KB_2,
 
     // aliases
     KG_SCRL = KG_POINTING_SCROLL,
+    KG_SLOW = KG_POINTING_SLOW,
 };

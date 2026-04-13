@@ -39,10 +39,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                _______, _______, _______, _______, /**/ _______, _______, _______, _______
   ),
   [5] = LAYOUT_split_6_7_7_4( /* Auto Mouse Layer (PointingDevice only) */
-    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,          /**/          XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
-    _______, XXXXXXX, XXXXXXX, KG_SCRL, XXXXXXX, XXXXXXX, MS_BTN2, /**/ MS_BTN2, XXXXXXX, XXXXXXX, KG_SCRL, MS_BTN3, MS_BTN1, _______,
-    _______, MS_BTN2, MS_WHLL, MS_WHLU, MS_WHLD, MS_WHLR, MS_BTN3, /**/ MS_BTN3, MS_LEFT, MS_DOWN,   MS_UP, MS_RGHT, MS_BTN1, _______,
-                               KC_LWIN, KC_LALT, MS_BTN1, XXXXXXX, /**/ MS_BTN1, XXXXXXX, MS_BTN3, MS_BTN2
+    _______, XXXXXXX, MS_BTN1, MS_BTN3, MS_BTN2, XXXXXXX,          /**/          XXXXXXX, MS_BTN1, MS_BTN3, MS_BTN2, XXXXXXX, _______,
+    _______, XXXXXXX, XXXXXXX, KG_SCRL, XXXXXXX, XXXXXXX, MS_BTN3, /**/ MS_BTN3, XXXXXXX, XXXXXXX, KG_SCRL, XXXXXXX, XXXXXXX, _______,
+    _______, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, MS_BTN2, /**/ MS_BTN2, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+                               KC_LWIN, KC_LALT, MS_BTN1, XXXXXXX, /**/ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
   ),
   [6] = LAYOUT_split_6_7_7_4( /* Config Layer */
     XXXXXXX, RM_SATU, RM_HUEU, RM_VALU, RM_SPDU, RM_NEXT,          /**/          RM_NEXT, RM_SPDU, RM_VALU, RM_HUEU, RM_SATU, XXXXXXX,
