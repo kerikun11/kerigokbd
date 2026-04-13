@@ -11,6 +11,7 @@ void keyboard_pre_init_kb(void) {
 #ifdef POINTING_DEVICE_ENABLE
 
 #    ifdef POINTING_DEVICE_AUTO_MOUSE_ENABLE
+_Static_assert(AUTO_MOUSE_DEFAULT_LAYER == KGL_AM, "AUTO_MOUSE_DEFAULT_LAYER must match KGL_AM");
 void pointing_device_init_kb(void) {
     set_auto_mouse_enable(true); // always required before the auto mouse feature will work
     pointing_device_init_user();
