@@ -41,7 +41,6 @@ bool is_mouse_record_kb(uint16_t keycode, keyrecord_t *record) {
 
 // Trackpad tap gestures
 #    define TRACKPAD_TAP_TERM 200
-#    define TRACKPAD_MULTI_TAP_TERM 350
 #    define TRACKPAD_CLICK_TERM 20
 #    define TRACKPAD_TAP_MOVE 48
 
@@ -51,8 +50,12 @@ typedef struct {
     bool     moved;
     bool     button_down;
     bool     click;
+    bool     click_gap;
+    bool     pending_click;
+    bool     tap_drag_pending;
     bool     auto_mouse_active;
     uint8_t  tap_count;
+    uint8_t  clicks_pending;
     uint16_t timer;
     uint16_t last_tap_timer;
     uint16_t click_timer;
@@ -142,44 +145,127 @@ static inline bool trackpad_tap_moved_(void) {
     return abs((int16_t)(trackpad.x - trackpad.start_x)) + abs((int16_t)(trackpad.y - trackpad.start_y)) > TRACKPAD_TAP_MOVE;
 }
 
+static inline bool trackpad_tap_term_expired_(uint16_t timer) {
+    return timer_elapsed(timer) > TRACKPAD_TAP_TERM;
+}
+
+static inline void clear_trackpad_taps_(void) {
+    trackpad.tap_count        = 0;
+    trackpad.pending_click    = false;
+    trackpad.tap_drag_pending = false;
+}
+
+static inline bool trackpad_tap_window_active_(void) {
+    return trackpad.tap_count && !trackpad_tap_term_expired_(trackpad.last_tap_timer);
+}
+
+static inline bool trackpad_click_idle_(void) {
+    return !trackpad.click && !trackpad.click_gap && !trackpad.clicks_pending;
+}
+
+static inline void start_trackpad_clicks_(uint8_t count) {
+    if (!count) return;
+    trackpad.pending_click = false;
+    if (!trackpad_click_idle_()) {
+        trackpad.clicks_pending += count;
+        return;
+    }
+    trackpad.click          = true;
+    trackpad.clicks_pending = count - 1;
+    trackpad.click_timer    = timer_read();
+}
+
+static inline void update_trackpad_auto_mouse_(void) {
+    set_trackpad_auto_mouse_(trackpad.down || trackpad.pending_click || trackpad.tap_drag_pending || trackpad.button_down || !trackpad_click_idle_());
+}
+
+static inline void update_trackpad_clicks_(void) {
+    if (trackpad.click && timer_elapsed(trackpad.click_timer) >= TRACKPAD_CLICK_TERM) {
+        trackpad.click       = false;
+        trackpad.click_timer = timer_read();
+        if (trackpad.clicks_pending) {
+            trackpad.click_gap = true;
+        }
+    } else if (trackpad.click_gap && timer_elapsed(trackpad.click_timer) >= TRACKPAD_CLICK_TERM) {
+        trackpad.click_gap = false;
+        trackpad.click     = true;
+        trackpad.clicks_pending--;
+        trackpad.click_timer = timer_read();
+    }
+}
+
+static inline void register_trackpad_tap_(void) {
+    if (trackpad_tap_window_active_()) {
+        trackpad.tap_count++;
+    } else {
+        trackpad.tap_count = 1;
+    }
+    trackpad.last_tap_timer = timer_read();
+
+    if (trackpad.tap_count == 1) {
+        trackpad.pending_click = true;
+    } else if (trackpad.tap_count == 2) {
+        start_trackpad_clicks_(2);
+    } else {
+        start_trackpad_clicks_(1);
+        trackpad.tap_count = 0;
+    }
+}
+
 static void update_trackpad_taps_(void) {
     bool pressed  = trackpad.down && !trackpad.was_down;
     bool released = trackpad.was_down && !trackpad.down;
 
-    if (trackpad.tap_count && timer_elapsed(trackpad.last_tap_timer) > TRACKPAD_MULTI_TAP_TERM && !trackpad.down) {
+    if (trackpad.pending_click && trackpad_tap_term_expired_(trackpad.last_tap_timer)) {
+        start_trackpad_clicks_(trackpad.tap_count);
+        clear_trackpad_taps_();
+    }
+
+    if (trackpad.tap_count && !trackpad.pending_click && trackpad_tap_term_expired_(trackpad.last_tap_timer) && !trackpad.down) {
         trackpad.tap_count = 0;
     }
 
     if (pressed) {
-        set_trackpad_auto_mouse_(true);
-        trackpad.timer       = timer_read();
-        trackpad.start_x     = trackpad.x;
-        trackpad.start_y     = trackpad.y;
-        trackpad.moved       = false;
-        trackpad.button_down = trackpad.tap_count && timer_elapsed(trackpad.last_tap_timer) <= TRACKPAD_MULTI_TAP_TERM;
+        bool multi_tap = trackpad_tap_window_active_();
+        bool tap_drag  = trackpad.pending_click && multi_tap;
+
+        trackpad.timer            = timer_read();
+        trackpad.start_x          = trackpad.x;
+        trackpad.start_y          = trackpad.y;
+        trackpad.moved            = false;
+        trackpad.button_down      = false;
+        trackpad.tap_drag_pending = tap_drag;
+        if (tap_drag) {
+            trackpad.pending_click = false;
+        } else if (!multi_tap) {
+            clear_trackpad_taps_();
+        }
     }
 
     if (trackpad.down && trackpad_tap_moved_()) {
         trackpad.moved = true;
     }
 
+    if (trackpad.tap_drag_pending && trackpad.down && (trackpad.moved || timer_elapsed(trackpad.timer) >= TRACKPAD_TAP_TERM)) {
+        trackpad.button_down      = true;
+        clear_trackpad_taps_();
+    }
+
     if (released) {
-        set_trackpad_auto_mouse_(false);
-        if (!trackpad.moved && timer_elapsed(trackpad.timer) <= TRACKPAD_TAP_TERM) {
-            if (trackpad.button_down) {
-                trackpad.tap_count++;
-            } else {
-                trackpad.tap_count   = 1;
-                trackpad.click       = true;
-                trackpad.click_timer = timer_read();
-            }
-            if (trackpad.tap_count > 3) trackpad.tap_count = 1;
-            trackpad.last_tap_timer = timer_read();
+        if (trackpad.tap_drag_pending) {
+            register_trackpad_tap_();
+            trackpad.tap_drag_pending = false;
+        } else if (trackpad.button_down) {
+            clear_trackpad_taps_();
+        } else if (!trackpad.moved && !trackpad_tap_term_expired_(trackpad.timer)) {
+            register_trackpad_tap_();
         } else {
-            trackpad.tap_count = 0;
+            clear_trackpad_taps_();
         }
         trackpad.button_down = false;
     }
+
+    update_trackpad_auto_mouse_();
 }
 
 static void apply_trackpad_buttons_(report_mouse_t *r) {
@@ -187,9 +273,8 @@ static void apply_trackpad_buttons_(report_mouse_t *r) {
     if (trackpad.button_down || trackpad.click) {
         r->buttons |= MOUSE_BTN1;
     }
-    if (trackpad.click && timer_elapsed(trackpad.click_timer) >= TRACKPAD_CLICK_TERM) {
-        trackpad.click = false;
-    }
+    update_trackpad_clicks_();
+    update_trackpad_auto_mouse_();
 }
 
 static void apply_scroll_(report_mouse_t *r) {
