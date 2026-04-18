@@ -40,17 +40,39 @@ bool is_mouse_record_kb(uint16_t keycode, keyrecord_t *record) {
 #    define SCROLL_ACCEL 0.05f   //< スクロール加速係数
 
 // Trackpad tap gestures:
-// - タップ成立: TRACKPAD_TAP_TERM以内、TRACKPAD_TAP_MOVE以内で離す。
-// - release補完: タッチ中の最後の有効データからTRACKPAD_RELEASE_TERMで離した扱い。
-// - タップ/ダブル/トリプル: タップ窓確定後にBTN1クリックをタップ数分送る。
-// - BTN1クリック列: 押下/解除/次クリックまでの各間隔はTRACKPAD_CLICK_TERM。
-// - ダブルタップホールド: 直前タップからTRACKPAD_TAP_TERM以内の次タッチではクリック送信を保留し、
-//   TRACKPAD_TAP_MOVE超えまたはTRACKPAD_TAP_TERM以上保持でBTN1ドラッグ。
-// - 直前タップなしのホールド/移動はBTN1なしのカーソル移動。
-// - タップ/複数タップ/ドラッグ候補中はカーソル移動を止める。
+// Requirements:
+// - 1回/2回/3回タップは、それぞれ同じ回数のBTN1クリックとして送信する。
+// - ダブルタップして2回目のタッチを保持した場合は、ダブルクリックを送らずにBTN1ドラッグ状態にする。
+// - タップ/複数タップ/ドラッグ候補の判定中は、意図しないカーソル移動を送信しない。
+// - 直前タップなしのホールド/移動は、BTN1を押さず通常のカーソル移動として扱う。
+// - スクロールモード中は、タップ/クリック/ドラッグ判定よりスクロール変換を優先する。
+// - 指を置いたままスクロールモードへ入り、そのままスクロールモードを抜けた場合は、
+//   同じタッチをタップ/ドラッグ候補へ戻さず、BTN1なしの通常カーソル移動として再開する。
+// - 左右分離構成では、トラックパッド側とUSB接続側が異なってもAutoMouseLayer保持を同期する。
+//
+// Specification:
+// - release補完: 有効なタッチデータが途切れてからTRACKPAD_RELEASE_TERM以上経過したら離した扱いにする。
+// - タップ成立: タッチ開始から離すまでの時間がTRACKPAD_TAP_TERM以下、かつ移動量が
+//   TRACKPAD_TAP_MOVE以下なら1タップとして保留する。この時点ではBTN1を送信しない。
+// - タップ確定: 保留タップがあり、指が離れていて、最後のタップ成立からTRACKPAD_TAP_TERMを
+//   超えたら、保留タップ数と同じ回数のBTN1クリック列を送信する。
+// - 複数タップ: 保留タップの確定前に次のタッチが開始された場合、そのタッチは複数タップ候補になる。
+//   そのタッチもタップ成立したら保留タップ数を増やす。3タップに達したら即クリック列を送信する。
+// - BTN1クリック列: BTN1押下、BTN1解除、次クリック開始の各間隔はTRACKPAD_CLICK_TERM以上にする。
+// - ダブルタップホールド: 保留タップの確定前に開始されたタッチがTRACKPAD_TAP_MOVEを超えて動く、
+//   またはTRACKPAD_TAP_TERM以上継続したら、保留タップを破棄してBTN1押下状態にする。
+//   この場合、ホールド前のタップクリックも2回目タップクリックも送信しない。
+// - ドラッグ終了: ダブルタップホールドでBTN1押下状態になった後、指が離れたらBTN1を解除する。
+// - ポインタ凍結: タップ判定中、複数タップ候補中、ドラッグ候補中はカーソル移動を0にする。
 // - 左USB時のみTRACKPAD_TOUCH_MARKERでAutoMouseLayer保持をsplit同期する。
-// - スクロールモード: x/yをh/vへ変換し、BTN1と判定中のタップ/クリック/ドラッグ状態を破棄する。
-//   AutoMouseLayer保持は継続し、スクロール解除時にscroll_accumをリセットする。
+// - スクロールモード突入: BTN1と判定中のタップ/クリック/ドラッグ状態を破棄する。
+// - スクロールモード中: x/yをh/vへ変換し、BTN1と判定中のタップ/クリック/ドラッグ状態を破棄し続ける。
+// - スクロールモード脱出: scroll_accumをリセットする。指が置かれている場合は、そのタッチを
+//   移動済みとして扱い、タップ/複数タップ/ドラッグ候補にはしない。
+//   AutoMouseLayer保持は継続する。
+// - 左右分離: USB接続側でない側がAutoMouseLayer保持中の場合は、TRACKPAD_TOUCH_MARKERを
+//   split pointing reportのh成分に入れてUSB接続側へ通知する。USB接続側はこのマーカーを
+//   スクロール入力として扱わず、AutoMouseLayer保持状態だけを更新してからhを0に戻す。
 #    define TRACKPAD_TAP_TERM 200
 #    define TRACKPAD_CLICK_TERM 20
 #    define TRACKPAD_TAP_MOVE 48
@@ -111,13 +133,13 @@ static inline int8_t accum_(float *a, float v) {
     return (int8_t)out;
 }
 
-static void update_trackpad_taps_(void);
-static bool trackpad_pointer_frozen_(void);
-static void freeze_pointer_(report_mouse_t *r);
-static void apply_trackpad_buttons_(report_mouse_t *r);
-static void mark_trackpad_auto_mouse_(report_mouse_t *r);
+static void           update_trackpad_taps_(void);
+static bool           trackpad_pointer_frozen_(void);
+static void           freeze_pointer_(report_mouse_t *r);
+static void           apply_trackpad_buttons_(report_mouse_t *r);
+static void           mark_trackpad_auto_mouse_(report_mouse_t *r);
 static report_mouse_t finish_trackpad_report_(report_mouse_t r);
-static void update_auto_mouse_from_trackpad_report_(report_mouse_t *r);
+static void           update_auto_mouse_from_trackpad_report_(report_mouse_t *r);
 
 #    if defined(POINTING_DEVICE_DRIVER_custom) && defined(POINTING_DEVICE_DRIVER_cirque_pinnacle_i2c)
 bool pointing_device_driver_init(void) {
@@ -137,7 +159,7 @@ report_mouse_t pointing_device_driver_get_report(report_mouse_t mouse_report) {
     }
 
     trackpad.data_timer = timer_read();
-    trackpad.down = touchData.touchDown;
+    trackpad.down       = touchData.touchDown;
     if (touchData.touchDown) {
         trackpad.x = touchData.xValue;
         trackpad.y = touchData.yValue;
@@ -176,6 +198,22 @@ static inline bool trackpad_tap_term_expired_(uint16_t timer) {
     return timer_elapsed(timer) > TRACKPAD_TAP_TERM;
 }
 
+static inline bool trackpad_tap_timeout_(uint16_t timer) {
+    return timer_elapsed(timer) >= TRACKPAD_TAP_TERM;
+}
+
+static inline bool trackpad_touch_started_(void) {
+    return trackpad.down && !trackpad.was_down;
+}
+
+static inline bool trackpad_touch_ended_(void) {
+    return trackpad.was_down && !trackpad.down;
+}
+
+static inline bool trackpad_touch_is_tap_(void) {
+    return !trackpad.moved && !trackpad_tap_term_expired_(trackpad.timer);
+}
+
 static inline void clear_trackpad_taps_(void) {
     trackpad.tap_count        = 0;
     trackpad.tap_drag_pending = false;
@@ -189,6 +227,13 @@ static inline void cancel_trackpad_clicks_(void) {
     trackpad.clicks_pending = 0;
 }
 
+static inline void cancel_trackpad_gestures_(void) {
+    cancel_trackpad_clicks_();
+    if (trackpad.down) {
+        trackpad.moved = true;
+    }
+}
+
 static inline void stop_trackpad_clicks_(void) {
     trackpad.click          = false;
     trackpad.click_gap      = false;
@@ -197,6 +242,10 @@ static inline void stop_trackpad_clicks_(void) {
 
 static inline bool trackpad_tap_window_active_(void) {
     return trackpad.tap_count && !trackpad_tap_term_expired_(trackpad.last_tap_timer);
+}
+
+static inline bool trackpad_tap_window_expired_(void) {
+    return trackpad.tap_count && trackpad_tap_term_expired_(trackpad.last_tap_timer);
 }
 
 static inline bool trackpad_click_idle_(void) {
@@ -252,57 +301,75 @@ static inline void register_trackpad_tap_(void) {
     }
 }
 
+static inline void flush_expired_trackpad_taps_(void) {
+    if (trackpad_tap_window_expired_() && (!trackpad.down || trackpad_touch_started_())) {
+        flush_trackpad_taps_();
+    }
+}
+
+static inline void begin_trackpad_touch_(void) {
+    bool tap_drag = trackpad_tap_window_active_();
+
+    trackpad.timer            = timer_read();
+    trackpad.start_x          = trackpad.x;
+    trackpad.start_y          = trackpad.y;
+    trackpad.moved            = false;
+    trackpad.button_down      = false;
+    trackpad.tap_drag_pending = tap_drag;
+
+    if (tap_drag) {
+        stop_trackpad_clicks_();
+    } else {
+        clear_trackpad_taps_();
+    }
+}
+
+static inline void update_trackpad_touch_motion_(void) {
+    if (trackpad.down && trackpad_tap_moved_()) {
+        trackpad.moved = true;
+    }
+}
+
+static inline bool trackpad_drag_should_start_(void) {
+    return trackpad.tap_drag_pending && trackpad.down && (trackpad.moved || trackpad_tap_timeout_(trackpad.timer));
+}
+
+static inline void start_trackpad_drag_(void) {
+    trackpad.button_down = true;
+    clear_trackpad_taps_();
+}
+
+static inline void end_trackpad_touch_(void) {
+    if (trackpad.tap_drag_pending) {
+        register_trackpad_tap_();
+        trackpad.tap_drag_pending = false;
+    } else if (trackpad.button_down) {
+        clear_trackpad_taps_();
+    } else if (trackpad_touch_is_tap_()) {
+        register_trackpad_tap_();
+    } else {
+        clear_trackpad_taps_();
+    }
+    trackpad.button_down = false;
+}
+
 static inline bool trackpad_pointer_frozen_(void) {
     if (!trackpad.down || trackpad.button_down || trackpad.moved) return false;
     return trackpad.tap_drag_pending || trackpad_tap_window_active_() || !trackpad_tap_term_expired_(trackpad.timer);
 }
 
 static void update_trackpad_taps_(void) {
-    bool pressed  = trackpad.down && !trackpad.was_down;
-    bool released = trackpad.was_down && !trackpad.down;
+    flush_expired_trackpad_taps_();
 
-    if (trackpad.tap_count && trackpad_tap_term_expired_(trackpad.last_tap_timer) && !trackpad.down) {
-        flush_trackpad_taps_();
+    if (trackpad_touch_started_()) {
+        begin_trackpad_touch_();
     }
-
-    if (pressed) {
-        bool multi_tap = trackpad_tap_window_active_();
-        bool tap_drag  = multi_tap;
-
-        trackpad.timer            = timer_read();
-        trackpad.start_x          = trackpad.x;
-        trackpad.start_y          = trackpad.y;
-        trackpad.moved            = false;
-        trackpad.button_down      = false;
-        trackpad.tap_drag_pending = tap_drag;
-        if (!multi_tap) {
-            clear_trackpad_taps_();
-        } else {
-            stop_trackpad_clicks_();
-        }
+    update_trackpad_touch_motion_();
+    if (trackpad_drag_should_start_()) {
+        start_trackpad_drag_();
     }
-
-    if (trackpad.down && trackpad_tap_moved_()) {
-        trackpad.moved = true;
-    }
-
-    if (trackpad.tap_drag_pending && trackpad.down && (trackpad.moved || timer_elapsed(trackpad.timer) >= TRACKPAD_TAP_TERM)) {
-        trackpad.button_down = true;
-        clear_trackpad_taps_();
-    }
-
-    if (released) {
-        if (trackpad.tap_drag_pending) {
-            register_trackpad_tap_();
-            trackpad.tap_drag_pending = false;
-        } else if (trackpad.button_down) {
-            clear_trackpad_taps_();
-        } else if (!trackpad.moved && !trackpad_tap_term_expired_(trackpad.timer)) {
-            register_trackpad_tap_();
-        } else {
-            clear_trackpad_taps_();
-        }
-        trackpad.button_down = false;
+    if (trackpad_touch_ended_()) {
+        end_trackpad_touch_();
     }
 
     update_trackpad_auto_mouse_();
@@ -365,7 +432,7 @@ report_mouse_t pointing_device_task_kb(report_mouse_t r) {
     if (scroll_mode) {
         apply_scroll_(&r);
         r.buttons &= ~MOUSE_BTN1;
-        cancel_trackpad_clicks_();
+        cancel_trackpad_gestures_();
         update_trackpad_auto_mouse_();
     } else {
         apply_pointer_(&r);
@@ -388,6 +455,7 @@ static void update_auto_mouse_from_trackpad_report_(report_mouse_t *r) {
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
     if (keycode == KG_POINTING_SCROLL) {
         scroll_mode = record->event.pressed;
+        cancel_trackpad_gestures_();
         if (!scroll_mode) scroll_accum_x = scroll_accum_y = 0;
     }
     return process_record_user(keycode, record);
