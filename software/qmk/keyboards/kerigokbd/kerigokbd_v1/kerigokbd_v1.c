@@ -42,9 +42,9 @@ bool is_mouse_record_kb(uint16_t keycode, keyrecord_t *record) {
 // Trackpad tap gestures:
 // - タップ成立: TRACKPAD_TAP_TERM以内、TRACKPAD_TAP_MOVE以内で離す。
 // - release補完: タッチ中の最後の有効データからTRACKPAD_RELEASE_TERMで離した扱い。
-// - タップ/ダブル/トリプル: 各タップ成立時にBTN1クリックを1回送る。
+// - タップ/ダブル/トリプル: タップ窓確定後にBTN1クリックをタップ数分送る。
 // - BTN1クリック列: 押下/解除/次クリックまでの各間隔はTRACKPAD_CLICK_TERM。
-// - ダブルタップホールド: 直前タップからTRACKPAD_TAP_TERM以内の次タッチを
+// - ダブルタップホールド: 直前タップからTRACKPAD_TAP_TERM以内の次タッチではクリック送信を保留し、
 //   TRACKPAD_TAP_MOVE超えまたはTRACKPAD_TAP_TERM以上保持でBTN1ドラッグ。
 // - 直前タップなしのホールド/移動はBTN1なしのカーソル移動。
 // - タップ/複数タップ/ドラッグ候補中はカーソル移動を止める。
@@ -189,6 +189,12 @@ static inline void cancel_trackpad_clicks_(void) {
     trackpad.clicks_pending = 0;
 }
 
+static inline void stop_trackpad_clicks_(void) {
+    trackpad.click          = false;
+    trackpad.click_gap      = false;
+    trackpad.clicks_pending = 0;
+}
+
 static inline bool trackpad_tap_window_active_(void) {
     return trackpad.tap_count && !trackpad_tap_term_expired_(trackpad.last_tap_timer);
 }
@@ -208,8 +214,14 @@ static inline void start_trackpad_clicks_(uint8_t count) {
     trackpad.click_timer    = timer_read();
 }
 
+static inline void flush_trackpad_taps_(void) {
+    uint8_t count = trackpad.tap_count;
+    clear_trackpad_taps_();
+    start_trackpad_clicks_(count);
+}
+
 static inline void update_trackpad_auto_mouse_(void) {
-    set_trackpad_auto_mouse_(trackpad.down || trackpad.tap_drag_pending || trackpad.button_down || !trackpad_click_idle_());
+    set_trackpad_auto_mouse_(trackpad.down || trackpad.tap_count || trackpad.tap_drag_pending || trackpad.button_down || !trackpad_click_idle_());
 }
 
 static inline void update_trackpad_clicks_(void) {
@@ -235,9 +247,8 @@ static inline void register_trackpad_tap_(void) {
     }
     trackpad.last_tap_timer = timer_read();
 
-    start_trackpad_clicks_(1);
     if (trackpad.tap_count >= 3) {
-        trackpad.tap_count = 0;
+        flush_trackpad_taps_();
     }
 }
 
@@ -251,7 +262,7 @@ static void update_trackpad_taps_(void) {
     bool released = trackpad.was_down && !trackpad.down;
 
     if (trackpad.tap_count && trackpad_tap_term_expired_(trackpad.last_tap_timer) && !trackpad.down) {
-        trackpad.tap_count = 0;
+        flush_trackpad_taps_();
     }
 
     if (pressed) {
@@ -266,6 +277,8 @@ static void update_trackpad_taps_(void) {
         trackpad.tap_drag_pending = tap_drag;
         if (!multi_tap) {
             clear_trackpad_taps_();
+        } else {
+            stop_trackpad_clicks_();
         }
     }
 
