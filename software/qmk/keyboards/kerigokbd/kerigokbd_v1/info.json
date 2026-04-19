@@ -45,7 +45,8 @@
             "protocol": "serial",
             "sync": {
                 "matrix_state": true,
-                "layer_state": true
+                "layer_state": true,
+                "activity": true
             },
             "watchdog": true
         },
