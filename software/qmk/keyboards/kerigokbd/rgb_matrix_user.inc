@@ -138,13 +138,13 @@ static inline rgb_t keyfunc_color_for_keycode(uint16_t keycode, const rgb_t *col
             return colors[KFI_RED];
         /* Mouse (Button Left) */
         case MS_BTN1:
-            return colors[KFI_BLUE];
+            return colors[KFI_SOFT_RED];
         /* Mouse (Button Right) */
         case MS_BTN2:
-            return colors[KFI_SOFT_RED];
+            return colors[KFI_BLUE];
         /* Mouse (Button 3/4/5) */
         case MS_BTN3 ... MS_BTN5:
-            return colors[KFI_ORANGE];
+            return colors[KFI_GREEN];
         /* Audio */
         case KC_MUTE ... KC_VOLD:
             return colors[KFI_BLUE];
@@ -157,7 +157,7 @@ static inline rgb_t keyfunc_color_for_keycode(uint16_t keycode, const rgb_t *col
             return colors[KFI_GREEN];
         /* KG */
         case KG_POINTING_SCROLL:
-            return colors[KFI_CYAN];
+            return colors[KFI_PURPLE];
         /* To Numpad Layer */
         case KG_TESC:
             return colors[KFI_ORANGE];

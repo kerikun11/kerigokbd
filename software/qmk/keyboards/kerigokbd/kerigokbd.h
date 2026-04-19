@@ -32,7 +32,7 @@ enum kerigokbd_layers {
 /* Central Extra Keys */
 #define KG_EXTL LT(KGL_TEMP, KC_PGUP) //< Central Extra Key (Top Left)
 #define KG_EXBL LT(KGL_CONF, KC_PGDN) //< Central Extra Key (Bottom Left)
-#define KG_EXTR LT(KGL_TEMP, KC_HOME) //< Central Extra Key (Top Right)
+#define KG_EXTR RWIN_T(KC_HOME)       //< Central Extra Key (Top Right)
 #define KG_EXBR LT(KGL_CONF, KC_END)  //< Central Extra Key (Bottom Right)
 
 /* Aliases */
