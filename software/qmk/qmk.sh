@@ -29,8 +29,14 @@ function register_qmk_keyboards() {
     done
 }
 
+## all buildable keyboards: dirs containing keyboard.json under KEYBOARDS_DIR
+mapfile -t ALL_KEYBOARDS < <(
+    find "$KEYBOARDS_DIR" -name "keyboard.json" -printf "%P\n" |
+        sed 's|/keyboard\.json$||' | sort
+)
+
 ## parse command-line options
-while getopts "b:m:csfldvort" opt; do
+while getopts "b:m:csfldvorta" opt; do
     case $opt in
     b) QMK_KEYBOARD=$OPTARG ;;
     m) QMK_KEYMAP=$OPTARG ;;
@@ -42,6 +48,7 @@ while getopts "b:m:csfldvort" opt; do
     o) flag_o=true ;; # corne
     r) flag_r=true ;; # keyballrp
     t) flag_t=true ;; # trackpad
+    a) flag_a=true ;; # build all keyboards
     *) echo "invalid option: $opt" ;;
     esac
 done
@@ -71,7 +78,12 @@ if declare -p flag_c &>/dev/null; then (
     set -x
     qmk clean
 ); fi
-if declare -p flag_f &>/dev/null; then (
+if declare -p flag_a &>/dev/null; then
+    for kb in "${ALL_KEYBOARDS[@]}"; do (
+        set -x
+        qmk compile -kb "$kb" -km "$QMK_KEYMAP"
+    ); done
+elif declare -p flag_f &>/dev/null; then (
     set -x
     qmk flash -kb "$QMK_KEYBOARD" -km "$QMK_KEYMAP"
 ); elif declare -p flag_l &>/dev/null; then (
