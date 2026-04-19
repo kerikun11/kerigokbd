@@ -52,7 +52,9 @@ jobs:
           sudo apt-get install -y gcc-arm-none-eabi
 
       - name: Install QMK CLI
-        run: pip3 install -r software/qmk/firmware/requirements.txt
+        run: |
+          pip3 install qmk -r software/qmk/firmware/requirements.txt
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
       - name: Register keyboards
         run: ./software/qmk/qmk.sh -s
