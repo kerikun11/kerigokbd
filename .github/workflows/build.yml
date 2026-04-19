@@ -3,42 +3,12 @@ name: Build QMK Firmware
 on:
   push:
     paths:
-      - 'software/qmk/keyboards/**'
-      - '.github/workflows/build.yml'
-  pull_request:
-    paths:
-      - 'software/qmk/keyboards/**'
+      - 'software/qmk/**'
       - '.github/workflows/build.yml'
 
 jobs:
-  create-release:
-    if: startsWith(github.ref, 'refs/tags/')
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Create release
-        run: gh release create '${{ github.ref_name }}' --repo '${{ github.repository }}' --generate-notes
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
   build:
-    needs: [create-release]
-    if: always() && !cancelled() && !failure()
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    strategy:
-      fail-fast: false
-      matrix:
-        keyboard:
-          - kerigokbd/examples/trackpad_cirque
-          - kerigokbd/kerigokbd_corne_v4
-          - kerigokbd/kerigokbd_v1/pcb_20241229
-          - kerigokbd/kerigokbd_v1/pcb_20250208
-          - kerigokbd/kerigokbd_v1/pcb_20260222
-          - kerigokbd/kerigokbd_v1/pcb_20260222_trackpad
-          - kerigokbd/keyball44rp
 
     steps:
       - name: Checkout
@@ -56,21 +26,5 @@ jobs:
           pip3 install qmk -r software/qmk/firmware/requirements.txt
           echo "$HOME/.local/bin" >> "$GITHUB_PATH"
 
-      - name: Register keyboards
-        run: ./software/qmk/qmk.sh -s
-
-      - name: Build ${{ matrix.keyboard }}
-        run: |
-          cd software/qmk/firmware
-          qmk compile -kb ${{ matrix.keyboard }} -km via
-
-      - name: Upload firmware to release
-        if: startsWith(github.ref, 'refs/tags/')
-        run: |
-          kb=$(echo '${{ matrix.keyboard }}' | tr '/' '_')
-          src="software/qmk/firmware/${kb}_via.uf2"
-          dst="${kb}_via-${{ github.ref_name }}.uf2"
-          cp "$src" "$dst"
-          gh release upload '${{ github.ref_name }}' "$dst" --clobber
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Build all keyboards
+        run: ./software/qmk/qmk.sh -a
