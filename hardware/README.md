@@ -4,10 +4,10 @@ KERIgoKBD のハードウェア設計データ。ここでは PCB、ケースな
 
 ## 対応表
 
-| 作品                                      | PCB                                         | ケース                                                          | ファームウェア                                                     | メモ                      |
-| :---------------------------------------- | :------------------------------------------ | :-------------------------------------------------------------- | :----------------------------------------------------------------- | :------------------------ |
-| [KERIgoKBD v1](./kerigokbd/kerigokbd_v1/) | [`pcb_20260222`](./kerigokbd/pcb_20260222/) | [`case_20260222`](./kerigokbd/case_20260222/)                   | [`kerigokbd_v1`](../software/qmk/keyboards/kerigokbd/kerigokbd_v1) | 標準構成                  |
-| [KERIgoKBD v2](./kerigokbd/kerigokbd_v2/) | [`pcb_20260222`](./kerigokbd/pcb_20260222/) | [`case_20260222_trackpad`](./kerigokbd/case_20260222_trackpad/) | [`kerigokbd_v2`](../software/qmk/keyboards/kerigokbd/kerigokbd_v2) | v1.2 PCB + トラックパッド |
+| 作品                                      | PCB                                         | ケース                                                          | ファームウェア                                                     | メモ                     |
+| :---------------------------------------- | :------------------------------------------ | :-------------------------------------------------------------- | :----------------------------------------------------------------- | :----------------------- |
+| [KERIgoKBD v1](./kerigokbd/kerigokbd_v1/) | [`pcb_20260222`](./kerigokbd/pcb_20260222/) | [`case_20260222`](./kerigokbd/case_20260222/)                   | [`kerigokbd_v1`](../software/qmk/keyboards/kerigokbd/kerigokbd_v1) | 標準構成                 |
+| [KERIgoKBD v2](./kerigokbd/kerigokbd_v2/) | [`pcb_20260222`](./kerigokbd/pcb_20260222/) | [`case_20260222_trackpad`](./kerigokbd/case_20260222_trackpad/) | [`kerigokbd_v2`](../software/qmk/keyboards/kerigokbd/kerigokbd_v2) | 右手にトラックパッド追加 |
 
 ## KERIgoKBD パーツ
 
@@ -21,11 +21,11 @@ KERIgoKBD のハードウェア設計データ。ここでは PCB、ケースな
 
 ### ケース
 
-| パーツ                                                          | 内容                                              |
-| :-------------------------------------------------------------- | :------------------------------------------------ |
-| [`case_20250208`](./kerigokbd/case_20250208/)                   | v1.1 世代のケース。                               |
-| [`case_20260222`](./kerigokbd/case_20260222/)                   | v1.2 PCB 向けケース。v1 は左右、v2 は左手で使用。 |
-| [`case_20260222_trackpad`](./kerigokbd/case_20260222_trackpad/) | v1.2 PCB + トラックパッド向け右手ケース。         |
+| パーツ                                                          | 内容                                      |
+| :-------------------------------------------------------------- | :---------------------------------------- |
+| [`case_20250208`](./kerigokbd/case_20250208/)                   | PCB v1.0 と v1.1 向けのケース。           |
+| [`case_20260222`](./kerigokbd/case_20260222/)                   | PCB v1.2 向けケース。                     |
+| [`case_20260222_trackpad`](./kerigokbd/case_20260222_trackpad/) | PCB v1.2 向け、トラックパッド対応ケース。 |
 
 ## その他
 
