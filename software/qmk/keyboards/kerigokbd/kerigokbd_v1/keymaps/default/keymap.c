@@ -44,12 +44,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, QK_BOOT,
                                XXXXXXX, XXXXXXX, KG_TNUM, KG_TESC, /**/ KG_TESC, KG_TFUN, XXXXXXX, XXXXXXX
   ),
-  [KGL_AM] = LAYOUT_split_6_7_7_4( /* Auto Mouse Layer (PointingDevice only) */
-    KC_TAB , XXXXXXX, XXXXXXX, MS_BTN3, XXXXXXX, XXXXXXX,          /**/          XXXXXXX, XXXXXXX, MS_BTN3, XXXXXXX, XXXXXXX, XXXXXXX,
-    KC_LCTL, XXXXXXX, MS_BTN1, KG_SCRL, MS_BTN2, XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, MS_BTN1, KG_SCRL, MS_BTN2, XXXXXXX, XXXXXXX,
-    KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, /**/ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-                               KC_LWIN, KC_LALT, MS_BTN1, KC_ESC , /**/ XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX
-  ),
 };
 #endif
 // clang-format on
@@ -59,6 +53,5 @@ void keyboard_post_init_user(void) {
     debug_enable   = true;
     debug_matrix   = true;
     debug_keyboard = true;
-    debug_mouse    = true;
 }
 #endif
