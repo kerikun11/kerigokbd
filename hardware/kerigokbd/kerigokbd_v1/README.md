@@ -6,6 +6,18 @@
 
 ![KERIgoKBD v1](./images/kerigokbd_v1.jpg)
 
+## 特徴
+
+- 肩への負担を和らげる **左右分離** キーボード
+- 手の形に合わせた **カラムスタッガード** の独自キー配置
+- 左右それぞれ24キー、合計48キーの **40%レイアウト**
+- レイヤ切り替えに使いやすい **親指キー** を左右に4個ずつ搭載
+- **ロープロファイルキースイッチ** による薄型・軽量設計
+- 全キー **RGB バックライト** でレイヤやキー種別を表示
+- **QMK Firmware / Remap** によるブラウザ上でのキーマップ編集に対応
+
+![KERIgoKBD v1 Top](./images/kerigokbd_v1_top.jpg)
+
 ## 構成
 
 | 項目                   | 使用パーツ                                                                                                               |
@@ -15,14 +27,6 @@
 | ファームウェア         | [`kerigokbd/kerigokbd_v1/pcb_20260222`](../../../software/qmk/keyboards/kerigokbd/kerigokbd_v1/pcb_20260222/)            |
 | Remap                  | [KERIgoKBD v1 - Remap](https://remap-keys.app/catalog/8pqWZfIyb0UqzhvSmsgh/keymap?id=RpLYgWmZ0A9D40j9Gvdv)               |
 | Keyboard Layout Editor | [KERIgoKBD v1 - Keyboard Layout Editor](https://www.keyboard-layout-editor.com/#/gists/e9041aa9a964c55f5b5cef199f9d24c8) |
-
-## PCB 履歴
-
-| PCB                                | 内容                                                                         |
-| :--------------------------------- | :--------------------------------------------------------------------------- |
-| [`pcb_20241229`](../pcb_20241229/) | v1.0 初版。I2Cピンアサインにミスあり。I2C不使用なら問題なし。                |
-| [`pcb_20250208`](../pcb_20250208/) | v1.1 I2Cピンアサインを修正。                                                 |
-| [`pcb_20260222`](../pcb_20260222/) | v1.2 小型化版。マイコンのピンアサインに変更はないが、TRSピンアサインを変更。 |
 
 ## スペック
 
@@ -36,17 +40,6 @@
 | 左右接続ケーブル | [3.5mm AUX Cable (White 3 Pole 10cm)](https://www.aliexpress.com/item/1005002484746676.html)                        |
 | USBケーブル      | [USLION Magnetic USB Type-C ケーブル](https://www.aliexpress.com/item/1005006136597761.html)                        |
 | 滑り止めシート   | [GRIPLUS ホワイト フリーカット](http://www.amazon.co.jp/dp/B08XHMGPWW/)                                             |
-
-## レイアウト
-
-- 左右分離
-- 左右それぞれ24キー、合計48キー
-- 数字キーのない40%レイアウト
-- 左右に4つずつの親指キー
-- 中央に2つずつの追加キー
-- 全キーに RGB バックライト LED
-
-![KERIgoKBD v1 Top](./images/kerigokbd_v1_top.jpg)
 
 ## ライセンス
 
