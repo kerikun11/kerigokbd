@@ -158,6 +158,8 @@ static inline rgb_t keyfunc_color_for_keycode(uint16_t keycode, const rgb_t *col
         /* KG */
         case KG_POINTING_SCROLL:
             return colors[KFI_PURPLE];
+        case KG_POINTING_ZOOM:
+            return colors[KFI_CYAN];
         /* To Numpad Layer */
         case KG_TESC:
             return colors[KFI_ORANGE];
