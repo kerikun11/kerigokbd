@@ -1,4 +1,4 @@
-# rules.mk for KERIgoKBD v1
+# rules.mk for KERIgoKBD v2
 
 # Pointing Device (https://docs.qmk.fm/features/pointing_device#cirque-trackpad)
 POINTING_DEVICE_DRIVER = custom

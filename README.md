@@ -2,56 +2,55 @@
 
 けりの自作キーボードの設計データ。
 
+![KERIgoKBD v1](./hardware/kerigokbd/kerigokbd_v1/images/kerigokbd_v1.jpg)
+
 ```tree
 kerigokbd/
 ├── hardware/
-│   └── kerigokbd_v1/               # PCB Design, Case Model
+│   ├── kerigokbd/                # KERIgoKBD common PCB/case parts
+│   └── README.md                 # Hardware parts and compatibility table
 ├── software/
 │   └── qmk/
-│       ├── firmware/               # QMK Firmware for VIA (git-submodule)
-│       ├── keyboards/              # Keyboard Entries of QMK Firmware
-│       │   └── kerigokbd/
-│       │       ├── kerigokbd_v1/
-│       │       ├── kerigokbd_corne_v4/
-│       │       ├── keyball44rp/
-│       │       └── readme.md
-│       ├── qmk.sh                  # Build Script
-│       └── README.md               # Build Manual
+│       ├── firmware/             # QMK Firmware for VIA (git submodule)
+│       ├── keyboards/            # Keyboard entries for QMK Firmware
+│       ├── qmk.sh                # Build script
+│       └── README.md             # Build manual
 ├── .clang-format
 ├── .gitmodules
 └── README.md
 ```
 
-## 対応キーボード一覧
+## 作品一覧
 
-このリポジトリで扱っているキーボード一覧。
+ハードウェア部品とファームウェアの対応は [`hardware/README.md`](./hardware/README.md) に記載。
 
-### KERIgoKBD v1
+| 作品                                                 | コメント                                                            |
+| :--------------------------------------------------- | :------------------------------------------------------------------ |
+| [KERIgoKBD v1](./hardware/kerigokbd/kerigokbd_v1/)   | はじめての自作エルゴノミックキーボード。                            |
+| [KERIgoKBD v2](./hardware/kerigokbd/kerigokbd_v2/)   | KERIgoKBD v1 にトラックパッドを追加した構成。         |
+| [KERIgoKBD Corne v4](./hardware/kerigokbd_corne_v4/) | Corne V4 Chocolate のケースとファームウェアをカスタマイズしたもの。 |
+| Keyball44 RP2040                                     | Keyball44 のマイコンボードを RP2040 Pro Micro に差し替えたもの。    |
+
+## KERIgoKBD v1
 
 [けり](https://github.com/kerikun11)のはじめての自作キーボード。
 
-- Hardware: [KERIgoKBD v1 Design](./hardware/kerigokbd_v1/)
-- Firmware: [KERIgoKBD v1 Firmware](./software/qmk/keyboards/kerigokbd/kerigokbd_v1/)
-- Remap: [KERIgoKBD v1 - Remap](https://remap-keys.app/catalog/8pqWZfIyb0UqzhvSmsgh/keymap?id=RpLYgWmZ0A9D40j9Gvdv)
-- Keyboard Layout Editor: [KERIgoKBD v1 - Keyboard Layout Editor](https://www.keyboard-layout-editor.com/#/gists/e9041aa9a964c55f5b5cef199f9d24c8)
-- Case Model: [KERIgoKBD v1 Case - Free 3D Print Model - MakerWorld](https://makerworld.com/en/models/979242-kerigokbd-v1-case#profileId-2735533)
+![KERIgoKBD v1](./hardware/kerigokbd/kerigokbd_v1/images/kerigokbd_v1_top.jpg)
 
-![KERIgoKBD v1](./hardware/kerigokbd_v1/v1.0.0_pcb_20241229/images/kerigokbd_v1.jpg)
+## KERIgoKBD v2
 
-### KERIgoKBD Corne v4
+KERIgoKBD v1.2 PCB に Cirque トラックパッドを追加した構成。
+
+![KERIgoKBD v2](./hardware/kerigokbd/kerigokbd_v2/images/kerigokbd_v2_top.jpg)
+
+## KERIgoKBD Corne v4
 
 [foostan](https://github.com/foostan)さんの[Corne V4 Chocolate](https://github.com/foostan/crkbd)のケースとファームウェアをカスタマイズしたもの。
 
-- Hardware: https://github.com/foostan/crkbd
-- Firmware: [KERIgoKBD Corne V4](./software/qmk/keyboards/kerigokbd/kerigokbd_corne_v4/)
-
 ![KERIgoKBD Corne V4](./software/qmk/keyboards/kerigokbd/kerigokbd_corne_v4/images/kerigokbd_corne_v4.jpg)
 
-### Keyball44 RP2040
+## Keyball44 RP2040
 
-[Yowkees](https://github.com/Yowkees)さんの[Keyball44](https://github.com/Yowkees/keyball)のマイコンボードを`RP2040 Pro Micro`に差し替えたもの。
-
-- Hardware: https://github.com/Yowkees/keyball
-- Firmware: [Keyball44 RP2040](./software/qmk/keyboards/kerigokbd/keyball44rp/)
+[Yowkees](https://github.com/Yowkees)さんの[Keyball44](https://github.com/Yowkees/keyball)のマイコンボードを `RP2040 Pro Micro` に差し替えたもの。
 
 ![Keyball44rp](./software/qmk/keyboards/kerigokbd/keyball44rp/images/keyball44rp.jpg)

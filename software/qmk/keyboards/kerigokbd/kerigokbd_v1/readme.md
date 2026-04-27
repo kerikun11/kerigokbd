@@ -2,10 +2,10 @@
 
 KERI's Ergonomic Keyboard Version 1
 
-![KERIgoKBD v1](../../../../../hardware/kerigokbd_v1/v1.0.0_pcb_20241229/images/kerigokbd_v1.jpg)
+![KERIgoKBD v1](../../../../../hardware/kerigokbd/kerigokbd_v1/images/kerigokbd_v1.jpg)
 
 * Keyboard Maintainer: [kerikun11](https://github.com/kerikun11)
-* Hardware Supported: [KERIgoKBD v1](../../../../../hardware/kerigokbd_v1/)
+* Hardware Supported: [KERIgoKBD v1](../../../../../hardware/kerigokbd/kerigokbd_v1/)
 * Hardware Availability: Not For Sale
 
 Make example for this keyboard (after setting up your build environment):

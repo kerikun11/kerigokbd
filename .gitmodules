@@ -1,12 +1,12 @@
 [submodule "software/qmk/firmware"]
 	path = software/qmk/firmware
 	url = https://github.com/qmk/qmk_firmware.git
-[submodule "hardware/kerigokbd_v1/v1.0.0_pcb_20241229/pcb/kbd"]
-	path = hardware/kerigokbd_v1/v1.0.0_pcb_20241229/pcb/kbd
+[submodule "hardware/kerigokbd/pcb_20241229/kbd"]
+	path = hardware/kerigokbd/pcb_20241229/kbd
 	url = https://github.com/kerikun11/kicad-kbd.git
-[submodule "hardware/kerigokbd_v1/v1.1.0_pcb_20250208/pcb/kbd"]
-	path = hardware/kerigokbd_v1/v1.1.0_pcb_20250208/pcb/kbd
+[submodule "hardware/kerigokbd/pcb_20250208/kbd"]
+	path = hardware/kerigokbd/pcb_20250208/kbd
 	url = https://github.com/kerikun11/kicad-kbd.git
-[submodule "hardware/kerigokbd_v1/v1.2.0_pcb_20260222/pcb/kbd"]
-	path = hardware/kerigokbd_v1/v1.2.0_pcb_20260222/pcb/kbd
+[submodule "hardware/kerigokbd/pcb_20260222/kbd"]
+	path = hardware/kerigokbd/pcb_20260222/kbd
 	url = https://github.com/kerikun11/kicad-kbd.git

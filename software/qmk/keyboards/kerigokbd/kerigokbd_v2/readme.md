@@ -1,33 +1,20 @@
-# KERIgoKBD
+# KERIgoKBD v2
 
-KERI's Ergonomic Keyboard
+KERI's Ergonomic Keyboard Version 2 with a Cirque trackpad.
+
+![KERIgoKBD v2](../../../../../hardware/kerigokbd/kerigokbd_v2/images/kerigokbd_v2_top.jpg)
 
 * Keyboard Maintainer: [kerikun11](https://github.com/kerikun11)
-* Hardware Supported:
-  * [KERIgoKBD v1](../../../../hardware/kerigokbd/kerigokbd_v1/)
-  * [KERIgoKBD v2](../../../../hardware/kerigokbd/kerigokbd_v2/)
-  * [Corne V4 Chocolate](https://github.com/foostan/crkbd)
-  * [Keyball44](https://github.com/Yowkees/keyball) with RP2040 Pro Micro
+* Hardware Supported: [KERIgoKBD v2](../../../../../hardware/kerigokbd/kerigokbd_v2/)
+* Hardware Availability: Not For Sale
 
 Make example for this keyboard (after setting up your build environment):
 
-    make kerigokbd/kerigokbd_v1/pcb_20260222:default
-
     make kerigokbd/kerigokbd_v2/pcb_20260222:default
-
-    make kerigokbd/kerigokbd_corne_v4:default
-
-    make kerigokbd/keyball44rp:default
 
 Flashing example for this keyboard:
 
-    make kerigokbd/kerigokbd_v1/pcb_20260222:default:flash
-
     make kerigokbd/kerigokbd_v2/pcb_20260222:default:flash
-
-    make kerigokbd/kerigokbd_corne_v4:default:flash
-
-    make kerigokbd/keyball44rp:default:flash
 
 See the [build environment setup](https://docs.qmk.fm/#/getting_started_build_tools) and the [make instructions](https://docs.qmk.fm/#/getting_started_make_guide) for more information. Brand new to QMK? Start with our [Complete Newbs Guide](https://docs.qmk.fm/#/newbs).
 
