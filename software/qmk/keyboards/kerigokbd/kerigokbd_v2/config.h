@@ -1,6 +1,6 @@
 // Copyright 2025 KERI's Lab
 // SPDX-License-Identifier: GPL-2.0-or-later
-// config.h for KERIgoKBD v2 pcb_20260222
+// config.h for KERIgoKBD v2
 
 #pragma once
 

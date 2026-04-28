@@ -1,19 +1,5 @@
 {
-    "features": {
-        "pointing_device": true
-    },
     "usb": {
         "device_version": "2.0.0"
-    },
-    "split": {
-        "handedness": {
-            "pin": "GP25"
-        },
-        "serial": {
-            "pin": "GP29"
-        }
-    },
-    "ws2812": {
-        "pin": "GP0"
     }
 }

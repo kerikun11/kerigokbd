@@ -16,6 +16,7 @@
         "console": true,
         "mousekey": true,
         "extrakey": true,
+        "pointing_device": true,
         "rgb_matrix": true,
         "nkro": true
     },
@@ -50,7 +51,11 @@
             "watchdog": true
         },
         "serial": {
-            "driver": "vendor"
+            "driver": "vendor",
+            "pin": "GP29"
+        },
+        "handedness": {
+            "pin": "GP25"
         }
     },
     "layouts": {
@@ -111,7 +116,8 @@
         }
     },
     "ws2812": {
-        "driver": "vendor"
+        "driver": "vendor",
+        "pin": "GP0"
     },
     "rgb_matrix": {
         "driver": "ws2812",
