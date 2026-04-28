@@ -130,7 +130,7 @@ static inline rgb_t keyfunc_color_for_keycode(uint16_t keycode, const rgb_t *col
         /* Arrow */
         case KC_RIGHT ... KC_UP:
             return colors[KFI_ORANGE];
-        /* Numpad */
+        /* Keypad */
         case KC_P1 ... KC_P0:
             return colors[KFI_MAGENTA];
         /* Bootloader */
@@ -154,13 +154,13 @@ static inline rgb_t keyfunc_color_for_keycode(uint16_t keycode, const rgb_t *col
             return colors[KFI_BLUE];
         /* Alt+Num */
         case A(KC_1)... A(KC_0):
-            return colors[KFI_GREEN];
+            return colors[KFI_ORANGE];
         /* KG */
         case KG_POINTING_SCROLL:
             return colors[KFI_PURPLE];
         case KG_POINTING_ZOOM:
             return colors[KFI_CYAN];
-        /* To Numpad Layer */
+        /* To Keypad Layer */
         case KG_TESC:
             return colors[KFI_ORANGE];
         /* To Main Layer */

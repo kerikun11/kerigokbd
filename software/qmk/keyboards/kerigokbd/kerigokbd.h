@@ -27,7 +27,7 @@ enum kerigokbd_layers {
 #define KG_SPC KC_SPC
 #define KG_FUN MO(KGL_FUN)
 #define KG_RWIN RWIN_T(JP_HENK)
-#define KG_R4 KC_RCTL
+#define KG_R4 KC_RSFT
 
 /* Central Extra Keys */
 #define KG_EXTL LT(KGL_TEMP, KC_PGUP) //< Central Extra Key (Top Left)
