@@ -136,6 +136,9 @@ static inline rgb_t keyfunc_color_for_keycode(uint16_t keycode, const rgb_t *col
         /* Bootloader */
         case QK_BOOTLOADER:
             return colors[KFI_RED];
+        /* System Sleep */
+        case KC_SYSTEM_SLEEP:
+            return colors[KFI_RED];
         /* Mouse (Button Left) */
         case MS_BTN1:
             return colors[KFI_SOFT_RED];
