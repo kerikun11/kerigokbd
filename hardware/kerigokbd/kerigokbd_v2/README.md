@@ -6,7 +6,7 @@
 
 KERIgoKBD v1.2 PCB を使用し、右手側に Cirque トラックパッドを追加した構成。
 
-![KERIgoKBD v2](./images/kerigokbd_v2.jpg)
+![KERIgoKBD v2](./images/kerigokbd_v2_light.jpg)
 
 ## 特徴
 

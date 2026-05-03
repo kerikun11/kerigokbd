@@ -2,20 +2,19 @@
 
 けりの自作キーボードの設計データ。
 
-![KERIgoKBD v1](./hardware/kerigokbd/kerigokbd_v1/images/kerigokbd_v1.jpg)
+![KERIgoKBD v2](./hardware/kerigokbd/kerigokbd_v2/images/kerigokbd_v2_light.jpg)
 
 ```tree
 kerigokbd/
 ├── hardware/
-│   ├── kerigokbd/                # KERIgoKBD common PCB/case parts
-│   └── README.md                 # Hardware parts and compatibility table
+│   ├── kerigokbd/      # KERIgoKBD common PCB/case parts
+│   └── README.md       # Hardware parts and compatibility table
 ├── software/
 │   └── qmk/
-│       ├── firmware/             # QMK Firmware for VIA (git submodule)
-│       ├── keyboards/            # Keyboard entries for QMK Firmware
-│       ├── qmk.sh                # Build script
-│       └── README.md             # Build manual
-├── .clang-format
+│       ├── firmware/   # QMK Firmware for VIA (git submodule)
+│       ├── keyboards/  # Keyboard entries for QMK Firmware
+│       ├── qmk.sh      # build script
+│       └── README.md   # build manual
 ├── .gitmodules
 └── README.md
 ```
@@ -27,7 +26,7 @@ kerigokbd/
 | 作品                                                 | コメント                                                            |
 | :--------------------------------------------------- | :------------------------------------------------------------------ |
 | [KERIgoKBD v1](./hardware/kerigokbd/kerigokbd_v1/)   | はじめての自作エルゴノミックキーボード。                            |
-| [KERIgoKBD v2](./hardware/kerigokbd/kerigokbd_v2/)   | KERIgoKBD v1 にトラックパッドを追加した構成。         |
+| [KERIgoKBD v2](./hardware/kerigokbd/kerigokbd_v2/)   | KERIgoKBD v1 にトラックパッドを追加した構成。                       |
 | [KERIgoKBD Corne v4](./hardware/kerigokbd_corne_v4/) | Corne V4 Chocolate のケースとファームウェアをカスタマイズしたもの。 |
 | Keyball44 RP2040                                     | Keyball44 のマイコンボードを RP2040 Pro Micro に差し替えたもの。    |
 
@@ -39,7 +38,7 @@ kerigokbd/
 
 ## KERIgoKBD v2
 
-KERIgoKBD v1.2 PCB に Cirque トラックパッドを追加した構成。
+KERIgoKBD v1 の右手側にトラックパッドを追加した構成。
 
 ![KERIgoKBD v2](./hardware/kerigokbd/kerigokbd_v2/images/kerigokbd_v2_top.jpg)
 
