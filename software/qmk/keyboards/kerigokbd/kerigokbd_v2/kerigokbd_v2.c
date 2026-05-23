@@ -85,7 +85,7 @@ bool is_mouse_record_kb(uint16_t keycode, keyrecord_t *record) {
 #    define SCROLL_ACCEL 0.05f   //< スクロール加速係数
 #    define ZOOM_DIVISOR SCROLL_DIVISOR
 
-#    define TRACKPAD_TAP_TERM 200
+#    define TRACKPAD_TAP_TERM 100
 #    define TRACKPAD_CLICK_TERM 20
 #    define TRACKPAD_TAP_MOVE 48
 #    define TRACKPAD_RELEASE_TERM 30
@@ -116,7 +116,7 @@ static bool             scroll_mode  = false;
 static bool             zoom_mode    = false;
 static float            move_accum_x = 0, move_accum_y = 0;
 static float            scroll_accum_x = 0, scroll_accum_y = 0;
-static float            zoom_accum_y = 0;
+static float            zoom_accum_y                      = 0;
 static float            smooth_speed                      = 0.0f;
 static bool             trackpad_auto_mouse_report_active = false;
 static trackpad_state_t trackpad                          = {0};
@@ -448,7 +448,7 @@ static void apply_pointer_(report_mouse_t *r) {
     r->x           = accum_(&move_accum_x, (float)r->x * scale);
     r->y           = accum_(&move_accum_y, (float)r->y * scale);
     scroll_accum_x = scroll_accum_y = 0.0f;
-    zoom_accum_y                   = 0.0f;
+    zoom_accum_y                    = 0.0f;
 }
 
 report_mouse_t pointing_device_task_kb(report_mouse_t r) {
@@ -509,11 +509,11 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
 
 layer_state_t layer_state_set_kb(layer_state_t state) {
     if (get_highest_layer(state) != AUTO_MOUSE_DEFAULT_LAYER) {
-        scroll_mode  = false;
+        scroll_mode = false;
         set_zoom_mode_(false);
         move_accum_x = move_accum_y = 0;
         scroll_accum_x = scroll_accum_y = 0;
-        zoom_accum_y                   = 0;
+        zoom_accum_y                    = 0;
         smooth_speed                    = 0.0f;
         report_mouse_t r                = {0};
         update_auto_mouse_from_trackpad_report_(&r);
