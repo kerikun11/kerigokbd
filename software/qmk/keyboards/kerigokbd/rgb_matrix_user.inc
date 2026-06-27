@@ -148,6 +148,9 @@ static inline rgb_t keyfunc_color_for_keycode(uint16_t keycode, const rgb_t *col
         /* Mouse (Button 3/4/5) */
         case MS_BTN3 ... MS_BTN5:
             return colors[KFI_GREEN];
+        /* Mouse (Move/Wheel) */
+        case KG_MSL ... KG_MWLR:
+            return colors[KFI_PURPLE];
         /* Audio */
         case KC_MUTE ... KC_VOLD:
             return colors[KFI_BLUE];

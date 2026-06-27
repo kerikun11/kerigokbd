@@ -44,11 +44,28 @@ enum kerigokbd_layers {
 
 /* Custom Keycodes */
 enum kerigokbd_keycodes {
-    // full name
+    // Pointing Device Keycodes
     KG_POINTING_SCROLL = QK_KB_1,
     KG_POINTING_ZOOM   = QK_KB_2,
+    // Mouse keycodes that do not enter AutoMouseLayer.
+    KG_MOUSE_LEFT        = QK_KB_3,
+    KG_MOUSE_DOWN        = QK_KB_4,
+    KG_MOUSE_UP          = QK_KB_5,
+    KG_MOUSE_RIGHT       = QK_KB_6,
+    KG_MOUSE_WHEEL_LEFT  = QK_KB_7,
+    KG_MOUSE_WHEEL_DOWN  = QK_KB_8,
+    KG_MOUSE_WHEEL_UP    = QK_KB_9,
+    KG_MOUSE_WHEEL_RIGHT = QK_KB_10,
 
     // aliases
     KG_SCRL = KG_POINTING_SCROLL,
     KG_ZOOM = KG_POINTING_ZOOM,
+    KG_MSL  = KG_MOUSE_LEFT,
+    KG_MSD  = KG_MOUSE_DOWN,
+    KG_MSU  = KG_MOUSE_UP,
+    KG_MSR  = KG_MOUSE_RIGHT,
+    KG_MWLL = KG_MOUSE_WHEEL_LEFT,
+    KG_MWLD = KG_MOUSE_WHEEL_DOWN,
+    KG_MWLU = KG_MOUSE_WHEEL_UP,
+    KG_MWLR = KG_MOUSE_WHEEL_RIGHT,
 };

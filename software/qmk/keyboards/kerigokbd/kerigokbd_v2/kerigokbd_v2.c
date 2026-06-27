@@ -155,6 +155,7 @@ static void           mark_trackpad_auto_mouse_(report_mouse_t *r);
 static report_mouse_t finish_trackpad_report_(report_mouse_t r);
 static void           update_auto_mouse_from_trackpad_report_(report_mouse_t *r);
 static void           set_zoom_mode_(bool active);
+static uint16_t       untracked_mouse_keycode_(uint16_t keycode);
 
 #    if defined(POINTING_DEVICE_DRIVER_custom) && defined(POINTING_DEVICE_DRIVER_cirque_pinnacle_i2c)
 bool pointing_device_driver_init(void) {
@@ -443,6 +444,11 @@ static void apply_zoom_(report_mouse_t *r) {
 
 static void apply_pointer_(report_mouse_t *r) {
     float raw_speed = (float)(abs(r->x) + abs(r->y));
+    if (r->x == 0 && r->y == 0 && smooth_speed == 0.0f) {
+        scroll_accum_x = scroll_accum_y = 0.0f;
+        zoom_accum_y                    = 0.0f;
+        return;
+    }
     smooth_speed += SPEED_SMOOTH_ALPHA * (raw_speed - smooth_speed);
     float scale    = POINTER_SCALE_MIN + POINTER_ACCEL * sqrtf(smooth_speed);
     r->x           = accum_(&move_accum_x, (float)r->x * scale);
@@ -494,7 +500,40 @@ static void set_zoom_mode_(bool active) {
     send_keyboard_report();
 }
 
+static uint16_t untracked_mouse_keycode_(uint16_t keycode) {
+    // Route these through mousekey manually so movement/wheel keys do not enter AutoMouseLayer.
+    switch (keycode) {
+        case KG_MOUSE_LEFT:
+            return MS_LEFT;
+        case KG_MOUSE_DOWN:
+            return MS_DOWN;
+        case KG_MOUSE_UP:
+            return MS_UP;
+        case KG_MOUSE_RIGHT:
+            return MS_RGHT;
+        case KG_MOUSE_WHEEL_LEFT:
+            return MS_WHLL;
+        case KG_MOUSE_WHEEL_DOWN:
+            return MS_WHLD;
+        case KG_MOUSE_WHEEL_UP:
+            return MS_WHLU;
+        case KG_MOUSE_WHEEL_RIGHT:
+            return MS_WHLR;
+    }
+    return KC_NO;
+}
+
 bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+    uint16_t mouse_keycode = untracked_mouse_keycode_(keycode);
+    if (mouse_keycode != KC_NO) {
+        if (record->event.pressed) {
+            mousekey_on((uint8_t)mouse_keycode);
+        } else {
+            mousekey_off((uint8_t)mouse_keycode);
+        }
+        mousekey_send();
+        return false;
+    }
     if (keycode == KG_POINTING_SCROLL) {
         scroll_mode = record->event.pressed;
         cancel_trackpad_gestures_();
