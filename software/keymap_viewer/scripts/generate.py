@@ -14,10 +14,14 @@ KEYMAP_PATH = KEYBOARD_ROOT / "kerigokbd_v2/keymaps/default/keymap.c"
 INFO_PATH = KEYBOARD_ROOT / "kerigokbd_v2/info.json"
 VIA_PATH = KEYBOARD_ROOT / "kerigokbd_v2/keymaps/via/via.json"
 DEFINITIONS_PATH = KEYBOARD_ROOT / "kerigokbd.h"
-OUTPUT_PATH = Path(__file__).resolve(
-).parents[1] / "public/generated/keymap-data.js"
+OUTPUT_PATH = Path(__file__).resolve().parents[1] / "public/generated/keymap-data.js"
 
 VISIBLE_LAYERS = ("KGL_MAIN", "KGL_NUM", "KGL_FUN", "KGL_AM")
+OUTPUT_LAYERS = (
+    ("nums", "KGL_NUM"),
+    ("func", "KGL_FUN"),
+    ("autoMouse", "KGL_AM"),
+)
 TRACKPAD_REPLACED_MATRIXES = ((7, 4), (7, 3))
 TRACKPAD_GEOMETRY = {"x": 10.125, "y": 3.15, "width": 1.75, "height": 1.75}
 LAYOUT_VERSION = "v2026.09.12a"
@@ -91,6 +95,9 @@ MAIN_SHIFT_LABELS = {
     "JP_DOT": ">",
     "JP_SLSH": "?",
 }
+
+TRANSPARENT_KEYCODES = frozenset(("_______", "KC_TRNS"))
+DISABLED_KEYCODES = frozenset(("XXXXXXX", "KC_NO"))
 
 
 def strip_comments(text: str) -> str:
@@ -172,6 +179,8 @@ def parse_via_layout(rows: list[list[object]]) -> dict[tuple[int, int], dict[str
             if not isinstance(item, str) or not re.fullmatch(r"\d+,\d+", item):
                 raise ValueError(f"Unsupported VIA layout key: {item!r}")
             matrix = tuple(int(value) for value in item.split(","))
+            if matrix in geometries:
+                raise ValueError(f"Duplicate matrix in VIA layout: {matrix}")
             geometries[matrix] = {
                 "x": cursor_x,
                 "y": cursor_y,
@@ -216,9 +225,7 @@ def parse_call(expression: str) -> tuple[str, list[str]] | None:
 
 def label_for(expression: str, definitions: dict[str, str]) -> str:
     source = expression.strip()
-    if source in ("_______", "KC_TRNS"):
-        return ""
-    if source in ("XXXXXXX", "KC_NO"):
+    if source in TRANSPARENT_KEYCODES | DISABLED_KEYCODES:
         return ""
     if source in KEY_LABELS:
         return KEY_LABELS[source]
@@ -283,9 +290,9 @@ def layer_label(
 
 
 def key_state(expression: str) -> str:
-    if expression in ("_______", "KC_TRNS"):
+    if expression in TRANSPARENT_KEYCODES:
         return "transparent"
-    if expression in ("XXXXXXX", "KC_NO"):
+    if expression in DISABLED_KEYCODES:
         return "disabled"
     return "assigned"
 
@@ -307,70 +314,115 @@ def main_shift_label(expression: str, definitions: dict[str, str]) -> str:
     return MAIN_SHIFT_LABELS.get(resolve(expression, definitions), "")
 
 
-def main() -> None:
-    info = json.loads(INFO_PATH.read_text(encoding="utf-8"))
-    via = json.loads(VIA_PATH.read_text(encoding="utf-8"))
-    keymap_source = KEYMAP_PATH.read_text(encoding="utf-8")
-    definitions = parse_definitions(
-        DEFINITIONS_PATH.read_text(encoding="utf-8"))
-    layers = parse_layers(keymap_source)
-
-    layout_name = next(iter(info["layouts"]))
-    positions = info["layouts"][layout_name]["layout"]
-    geometries = parse_via_layout(via["layouts"]["keymap"])
+def validate_sources(
+    positions: list[dict[str, object]],
+    geometries: dict[tuple[int, int], dict[str, float]],
+    layers: dict[str, list[str]],
+) -> None:
     missing_layers = [layer for layer in VISIBLE_LAYERS if layer not in layers]
     if missing_layers:
         raise ValueError(f"Missing layers: {', '.join(missing_layers)}")
+
     for layer in VISIBLE_LAYERS:
         if len(layers[layer]) != len(positions):
             raise ValueError(
                 f"{layer} has {len(layers[layer])} keys; layout has {len(positions)} positions"
             )
 
+    position_matrices = [tuple(position["matrix"]) for position in positions]
+    if len(position_matrices) != len(set(position_matrices)):
+        raise ValueError("Duplicate matrix in info.json layout")
+    missing_geometry = set(position_matrices) - geometries.keys()
+    if missing_geometry:
+        missing = ", ".join(map(str, sorted(missing_geometry)))
+        raise ValueError(f"Matrices missing from VIA layout: {missing}")
+    unused_geometry = geometries.keys() - set(position_matrices)
+    if unused_geometry:
+        unused = ", ".join(map(str, sorted(unused_geometry)))
+        raise ValueError(f"Matrices missing from info.json layout: {unused}")
+
+
+def build_layer_entry(
+    output_name: str,
+    source: str,
+    definitions: dict[str, str],
+    main_entry: dict[str, str],
+) -> dict[str, str]:
+    label = (
+        auto_mouse_label(
+            source,
+            definitions,
+            main_entry["label"],
+            main_entry["hold"],
+        )
+        if output_name == "autoMouse"
+        else layer_label(output_name, source, definitions, main_entry["label"])
+    )
+    return {
+        "source": source,
+        "expanded": resolve(source, definitions),
+        "label": label,
+        "state": key_state(source),
+    }
+
+
+def build_key(
+    index: int,
+    position: dict[str, object],
+    geometry: dict[str, float],
+    layers: dict[str, list[str]],
+    definitions: dict[str, str],
+) -> dict[str, object]:
+    main_source = layers["KGL_MAIN"][index]
+    main_entry = {
+        "source": main_source,
+        "expanded": resolve(main_source, definitions),
+        "label": label_for(main_source, definitions),
+        "shift": main_shift_label(main_source, definitions),
+        "hold": hold_label(main_source, definitions),
+        "state": key_state(main_source),
+    }
+    key: dict[str, object] = {
+        "index": index,
+        "matrix": position["matrix"],
+        **geometry,
+        "main": main_entry,
+    }
+    for output_name, layer_name in OUTPUT_LAYERS:
+        key[output_name] = build_layer_entry(
+            output_name,
+            layers[layer_name][index],
+            definitions,
+            main_entry,
+        )
+    return key
+
+
+def build_payload(
+    info: dict[str, object],
+    via: dict[str, object],
+    layers: dict[str, list[str]],
+    definitions: dict[str, str],
+) -> dict[str, object]:
+    layout_name = next(iter(info["layouts"]))
+    positions = info["layouts"][layout_name]["layout"]
+    geometries = parse_via_layout(via["layouts"]["keymap"])
+    validate_sources(positions, geometries, layers)
+
     keys = []
     for index, position in enumerate(positions):
         matrix = tuple(position["matrix"])
-        if matrix not in geometries:
-            raise ValueError(f"Matrix {matrix} is missing from VIA layout")
-        geometry = geometries[matrix]
-        main_source = layers["KGL_MAIN"][index]
-        key = {
-            "index": index,
-            "matrix": position["matrix"],
-            **geometry,
-            "main": {
-                "source": main_source,
-                "expanded": resolve(main_source, definitions),
-                "label": label_for(main_source, definitions),
-                "shift": main_shift_label(main_source, definitions),
-                "hold": hold_label(main_source, definitions),
-                "state": key_state(main_source),
-            },
-        }
-        for output_name, layer_name in (
-            ("nums", "KGL_NUM"),
-            ("func", "KGL_FUN"),
-            ("autoMouse", "KGL_AM"),
-        ):
-            source = layers[layer_name][index]
-            key[output_name] = {
-                "source": source,
-                "expanded": resolve(source, definitions),
-                "label": auto_mouse_label(
-                    source,
-                    definitions,
-                    key["main"]["label"],
-                    key["main"]["hold"],
-                )
-                if output_name == "autoMouse"
-                else layer_label(
-                    output_name, source, definitions, key["main"]["label"]
-                ),
-                "state": key_state(source),
-            }
-        keys.append(key)
+        keys.append(
+            build_key(
+                index,
+                position,
+                geometries[matrix],
+                layers,
+                definitions,
+            )
+        )
 
-    result = {
+    return {
         "keyboard": info["keyboard_name"],
         "layoutVersion": LAYOUT_VERSION,
         "layout": layout_name,
@@ -382,12 +434,28 @@ def main() -> None:
         },
         "keys": keys,
     }
+
+
+def write_payload(payload: dict[str, object]) -> None:
     OUTPUT_PATH.parent.mkdir(parents=True, exist_ok=True)
-    payload = json.dumps(result, ensure_ascii=False, indent=2)
+    serialized = json.dumps(payload, ensure_ascii=False, indent=2)
     OUTPUT_PATH.write_text(
-        f"window.KEYMAP_DATA = {payload};\n", encoding="utf-8")
+        f"window.KEYMAP_DATA = {serialized};\n",
+        encoding="utf-8",
+    )
+
+
+def main() -> None:
+    info = json.loads(INFO_PATH.read_text(encoding="utf-8"))
+    via = json.loads(VIA_PATH.read_text(encoding="utf-8"))
+    definitions = parse_definitions(DEFINITIONS_PATH.read_text(encoding="utf-8"))
+    layers = parse_layers(KEYMAP_PATH.read_text(encoding="utf-8"))
+    payload = build_payload(info, via, layers, definitions)
+    write_payload(payload)
     print(
-        f"Generated {OUTPUT_PATH.relative_to(REPOSITORY_ROOT)} ({len(keys)} keys)")
+        f"Generated {OUTPUT_PATH.relative_to(REPOSITORY_ROOT)} "
+        f"({len(payload['keys'])} keys)"
+    )
 
 
 if __name__ == "__main__":

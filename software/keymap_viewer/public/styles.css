@@ -16,6 +16,9 @@
   --aux-font-size: clamp(9px, .95vw, 13px);
   --aux-single-font-size: clamp(10px, 1.08vw, 15px);
   --aux-compact-font-size: clamp(8px, .66vw, 8.5px);
+  --panel-border: 1px solid var(--rule);
+  --key-shadow: 0 3px 7px rgb(45 43 34 / 8%);
+  --mouse-label-y: 60%;
   --shadow: 0 18px 50px rgb(50 47 36 / 10%);
 }
 
@@ -35,8 +38,12 @@ main {
   padding: 24px 0 28px;
 }
 
-h2 { margin: 0; line-height: 1; letter-spacing: -.035em; }
-h2 { font-size: clamp(21px, 2.6vw, 27px); }
+h1 {
+  margin: 0;
+  font-size: clamp(21px, 2.6vw, 27px);
+  line-height: 1;
+  letter-spacing: -.035em;
+}
 
 .copy-button {
   display: inline-flex;
@@ -152,8 +159,6 @@ h2 { font-size: clamp(21px, 2.6vw, 27px); }
 .legend-layer-fn b { color: var(--func); }
 .legend-layer-mouse b { color: var(--auto-mouse); }
 
-.legend-auto-section { display: block; }
-
 .legend-auto-section[hidden] { display: none; }
 
 .legend-auto-columns {
@@ -174,7 +179,7 @@ h2 { font-size: clamp(21px, 2.6vw, 27px); }
   border-bottom-width: 3px;
   border-radius: 9px;
   background: var(--key);
-  box-shadow: 0 3px 7px rgb(45 43 34 / 8%);
+  box-shadow: var(--key-shadow);
   color: var(--ink);
   font-weight: 750;
 }
@@ -256,7 +261,7 @@ h2 { font-size: clamp(21px, 2.6vw, 27px); }
 }
 
 .keyboard-card {
-  border: 1px solid rgb(85 82 70 / 13%);
+  border: var(--panel-border);
   border-radius: 24px;
   background: var(--card);
   box-shadow: var(--shadow);
@@ -272,7 +277,7 @@ h2 { font-size: clamp(21px, 2.6vw, 27px); }
   justify-content: space-between;
   gap: 18px;
   margin-top: 14px;
-  border: 1px solid rgb(85 82 70 / 13%);
+  border: var(--panel-border);
   border-radius: 18px;
   background: var(--card);
   box-shadow: 0 8px 24px rgb(50 47 36 / 8%);
@@ -352,7 +357,7 @@ h2 { font-size: clamp(21px, 2.6vw, 27px); }
   border-bottom-width: 3px;
   border-radius: 9px;
   background: linear-gradient(145deg, #fff 0%, var(--key) 62%, #f2f0e8 100%);
-  box-shadow: 0 3px 7px rgb(45 43 34 / 8%);
+  box-shadow: var(--key-shadow);
   color: var(--ink);
   overflow: hidden;
   transform: rotate(var(--rotation, 0deg));
@@ -451,7 +456,7 @@ h2 { font-size: clamp(21px, 2.6vw, 27px); }
 
 .key-auto-mouse {
   position: absolute;
-  top: 60%;
+  top: var(--mouse-label-y);
   bottom: auto;
   left: 50%;
   z-index: 1;
@@ -468,7 +473,6 @@ h2 { font-size: clamp(21px, 2.6vw, 27px); }
 
 .keyboard.show-auto-mouse .key-auto-mouse:not(:empty) { display: inline-flex; }
 .key-auto-mouse .operation-icon { width: 1.35em; height: 1.35em; }
-.key-auto-mouse.click-operation .operation-icon { width: 1.35em; height: 1.35em; }
 
 .keyboard.show-auto-mouse .key.has-auto-mouse .key-nums,
 .keyboard.show-auto-mouse .key.has-auto-mouse .key-func { max-width: 35%; }
@@ -506,7 +510,7 @@ h2 { font-size: clamp(21px, 2.6vw, 27px); }
   aspect-ratio: 1;
   border-radius: 50%;
   background: var(--key);
-  box-shadow: 0 3px 7px rgb(45 43 34 / 8%);
+  box-shadow: var(--key-shadow);
   color: #777a73;
   overflow: hidden;
 }
@@ -537,8 +541,6 @@ h2 { font-size: clamp(21px, 2.6vw, 27px); }
   font-size: var(--aux-font-size);
 }
 
-.trackpad-main .touch-wave { opacity: .72; }
-
 .trackpad-main span {
   font-size: 12px;
   font-weight: 700;
@@ -562,7 +564,7 @@ h2 { font-size: clamp(21px, 2.6vw, 27px); }
 @media print {
   body { background: white; }
   main { width: 100%; padding: 0; }
-  .copy-button, .copy-status { display: none; }
+  .control-pane { display: none; }
   .keyboard-card { border: 0; box-shadow: none; padding: 0; }
   .key { print-color-adjust: exact; }
 }

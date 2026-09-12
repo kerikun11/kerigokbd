@@ -100,6 +100,18 @@ class GenerateTest(unittest.TestCase):
         self.assertEqual(geometries[(3, 6)]["rotation"], 20)
         self.assertEqual(geometries[(7, 6)]["rotation"], -20)
 
+    def test_via_layout_rejects_duplicate_matrix(self):
+        with self.assertRaisesRegex(ValueError, "Duplicate matrix"):
+            generate.parse_via_layout([["0,0", "0,0"]])
+
+    def test_source_validation_rejects_matrix_mismatch(self):
+        positions = [{"matrix": [0, 0]}]
+        geometries = {(0, 1): {}}
+        layers = {layer: ["KC_A"] for layer in generate.VISIBLE_LAYERS}
+
+        with self.assertRaisesRegex(ValueError, "missing from VIA"):
+            generate.validate_sources(positions, geometries, layers)
+
     def test_info_layout_matches_via_layout(self):
         info = generate.json.loads(generate.INFO_PATH.read_text(encoding="utf-8"))
         via = generate.json.loads(generate.VIA_PATH.read_text(encoding="utf-8"))
@@ -135,6 +147,21 @@ class GenerateTest(unittest.TestCase):
         geometry = generate.TRACKPAD_GEOMETRY
         self.assertEqual(geometry["width"], geometry["height"])
         self.assertEqual(geometry["x"] + geometry["width"] / 2, 11)
+
+    def test_build_payload_contains_only_quick_reference_layers(self):
+        info = generate.json.loads(generate.INFO_PATH.read_text(encoding="utf-8"))
+        via = generate.json.loads(generate.VIA_PATH.read_text(encoding="utf-8"))
+        payload = generate.build_payload(info, via, self.layers, self.definitions)
+
+        self.assertEqual(len(payload["keys"]), 48)
+        self.assertEqual(
+            set(payload["keys"][0]),
+            {
+                "index", "matrix", "x", "y", "width", "height",
+                "rotation", "rotationX", "rotationY", "main", "nums",
+                "func", "autoMouse",
+            },
+        )
 
 
 if __name__ == "__main__":

@@ -1,21 +1,68 @@
 (() => {
   "use strict";
 
+  const VIEWER_CONFIG = Object.freeze({
+    layoutColumns: 15,
+    layoutRows: 5,
+    mouseLabelY: 0.6,
+    keyGapXPercent: 0.55,
+    keyGapYPercent: 0.7,
+    pngPadding: 18,
+    pngScale: 2,
+  });
+  const PNG_TYPOGRAPHY = Object.freeze({
+    main: 20,
+    mainCompact: 16,
+    auxiliary: 13,
+    auxiliarySingle: 15,
+    auxiliaryCompact: 8.5,
+  });
+  const LARGE_VIEW_BOX_ICONS = new Set(["backspace", "delete", "move", "scroll", "zoom"]);
+  const CLICK_ICONS = Object.freeze({
+    "1": "mouse-left",
+    "2": "mouse-right",
+    "3": "mouse-middle",
+  });
+  const CLICK_MODES = Object.freeze({
+    "1": "left",
+    "2": "right",
+    "3": "middle",
+  });
+  const CLICK_PATTERN = /^M([123])$/;
+  const POINTER_PATTERN = /^M([⬅⬇⬆➡])$/;
+  const WHEEL_PATTERN = /^W([⬅⬇⬆➡])$/;
+  const HORIZONTAL_ARROWS = new Set(["⬅", "➡"]);
+
+  const requiredElement = (selector) => {
+    const element = document.querySelector(selector);
+    if (!element) throw new Error(`Required element is missing: ${selector}`);
+    return element;
+  };
+
   const data = window.KEYMAP_DATA;
   if (!data) {
-    document.querySelector("main").innerHTML = "<p>キーマップデータを読み込めませんでした。</p>";
+    requiredElement("main").innerHTML = "<p>キーマップデータを読み込めませんでした。</p>";
     return;
   }
 
-  const keyboard = document.querySelector("#keyboard");
-  const copyButton = document.querySelector("#copy-png");
-  const copyStatus = document.querySelector("#copy-status");
-  const autoMouseToggle = document.querySelector("#toggle-auto-mouse");
-  const autoMouseGuide = document.querySelector(".guide-auto-mouse");
-  const autoMouseLegend = document.querySelector(".legend-auto-section");
-  const unitX = 100 / 15;
-  const layoutRows = 5;
-  const unitY = 100 / layoutRows;
+  const elements = Object.freeze({
+    keyboard: requiredElement("#keyboard"),
+    keyboardName: requiredElement("#keyboard-name"),
+    layoutVersion: requiredElement("#layout-version"),
+    mouseToggle: requiredElement("#toggle-auto-mouse"),
+    mouseGuide: requiredElement(".guide-auto-mouse"),
+    mouseLegend: requiredElement(".legend-auto-section"),
+    copyButton: requiredElement("#copy-png"),
+    copyStatus: requiredElement("#copy-status"),
+  });
+  const keyboard = elements.keyboard;
+  const autoMouseToggle = elements.mouseToggle;
+  const unitX = 100 / VIEWER_CONFIG.layoutColumns;
+  const unitY = 100 / VIEWER_CONFIG.layoutRows;
+  document.documentElement.style.setProperty(
+    "--mouse-label-y",
+    `${VIEWER_CONFIG.mouseLabelY * 100}%`,
+  );
 
   const rotatePoint = (x, y, originX, originY, degrees) => {
     const radians = degrees * Math.PI / 180;
@@ -30,54 +77,58 @@
   const matrixId = (matrix) => matrix.join(",");
   const trackpadKeys = new Set(data.trackpad.replaces.map(matrixId));
   const isCompactMainLabel = (label) => label !== "Backspace" && label.length > 1;
+  const pngAuxiliaryFontSize = (label, forceStandard = false) => {
+    if (forceStandard) return PNG_TYPOGRAPHY.auxiliary;
+    if (label.length > 4) return PNG_TYPOGRAPHY.auxiliaryCompact;
+    if (label.length === 1) return PNG_TYPOGRAPHY.auxiliarySingle;
+    return PNG_TYPOGRAPHY.auxiliary;
+  };
 
-  document.querySelector("#keyboard-name").textContent = data.keyboard;
-  document.querySelector("#layout-version").textContent = `Layout ${data.layoutVersion}`;
+  elements.keyboardName.textContent = data.keyboard;
+  elements.layoutVersion.textContent = `Layout ${data.layoutVersion}`;
 
-  const icon = (name) => {
+  const createIcon = (name) => {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
     svg.classList.add("operation-icon");
-    svg.setAttribute("viewBox", ["backspace", "delete", "scroll", "zoom", "move"].includes(name)
-      ? "0 0 24 24"
-      : "0 0 16 16");
+    svg.setAttribute("viewBox", LARGE_VIEW_BOX_ICONS.has(name) ? "0 0 24 24" : "0 0 16 16");
     svg.setAttribute("aria-hidden", "true");
     use.setAttribute("href", `#icon-${name}`);
     svg.append(use);
     return svg;
   };
 
-  const text = (className, value) => {
+  const createKeyLabel = (className, value) => {
     const span = document.createElement("span");
     span.className = className;
-    const mouseClick = value.match(/^M([123])$/);
-    const mouseOperation = value.match(/^M([⬅⬇⬆➡])$/);
-    const wheelOperation = value.match(/^W([⬅⬇⬆➡])$/);
+    const mouseClick = value.match(CLICK_PATTERN);
+    const mouseOperation = value.match(POINTER_PATTERN);
+    const wheelOperation = value.match(WHEEL_PATTERN);
+
     if (value === "Backspace") {
       span.classList.add("icon-only");
-      span.append(icon("backspace"));
+      span.append(createIcon("backspace"));
     } else if (value === "Scroll") {
       span.classList.add("icon-only");
-      span.append(icon("scroll"));
+      span.append(createIcon("scroll"));
     } else if (value === "Zoom") {
       span.classList.add("icon-only");
-      span.append(icon("zoom"));
+      span.append(createIcon("zoom"));
     } else if (mouseClick) {
-      const clickIcons = { "1": "mouse-left", "2": "mouse-right", "3": "mouse-middle" };
       span.classList.add("click-operation");
-      span.append(icon(clickIcons[mouseClick[1]]));
+      span.append(createIcon(CLICK_ICONS[mouseClick[1]]));
     } else if (mouseOperation) {
       span.classList.add("pointer-operation");
-      if (mouseOperation[1] === "⬅" || mouseOperation[1] === "➡") {
+      if (HORIZONTAL_ARROWS.has(mouseOperation[1])) {
         span.classList.add("horizontal-pointer-operation");
       }
-      span.append(icon("mouse"), mouseOperation[1]);
+      span.append(createIcon("mouse"), mouseOperation[1]);
     } else if (wheelOperation) {
       span.classList.add("pointer-operation");
-      if (wheelOperation[1] === "⬅" || wheelOperation[1] === "➡") {
+      if (HORIZONTAL_ARROWS.has(wheelOperation[1])) {
         span.classList.add("horizontal-pointer-operation");
       }
-      span.append(icon("wheel"), wheelOperation[1]);
+      span.append(createIcon("wheel"), wheelOperation[1]);
     } else if (value === "Alt+PrSc") {
       span.classList.add("stacked-operation");
       span.append("Alt+", document.createElement("br"), "PrSc");
@@ -87,81 +138,96 @@
     return span;
   };
 
-  const autoMouseContent = (layer) => {
-    if (!layer.label) return text("key-auto-mouse", "");
+  const createMouseLabel = (layer) => {
+    if (!layer.label) return createKeyLabel("key-auto-mouse", "");
     if (layer.expanded === "KC_BSPC" || layer.expanded === "KC_DEL") {
       const span = document.createElement("span");
       span.className = "key-auto-mouse icon-only";
-      span.append(icon(layer.expanded === "KC_BSPC" ? "backspace" : "delete"));
+      span.append(createIcon(layer.expanded === "KC_BSPC" ? "backspace" : "delete"));
       return span;
     }
-    return text("key-auto-mouse", layer.label);
+    return createKeyLabel("key-auto-mouse", layer.label);
   };
 
-  data.keys.forEach((key) => {
-    if (trackpadKeys.has(matrixId(key.matrix))) return;
+  const keyClassNames = (key) => {
+    const classNames = ["key", key.main.state];
+    if (key.main.hold) classNames.push("has-hold");
+    if (key.autoMouse.label) classNames.push("has-auto-mouse");
+    if (isCompactMainLabel(key.main.label)) classNames.push("compact-main-label");
+    if (key.nums.label === "Alt+PrSc") classNames.push("stacked-nums-label");
+    else if (key.nums.label.length > 4) classNames.push("long-nums-label");
+    if (key.func.label.length > 4) classNames.push("long-func-label");
+    if (key.nums.label.length === 1) classNames.push("single-nums-label");
+    if (key.func.label.length === 1) classNames.push("single-func-label");
+    if (key.main.hold.length > 6) classNames.push("long-hold-label");
+    return classNames.join(" ");
+  };
+
+  const createKeyElement = (key) => {
     const position = rotatePoint(key.x, key.y, key.rotationX, key.rotationY, key.rotation);
     const keyElement = document.createElement("div");
-    keyElement.className = `key ${key.main.state}`;
-    if (key.main.hold) keyElement.classList.add("has-hold");
-    if (key.autoMouse.label) keyElement.classList.add("has-auto-mouse");
+    keyElement.className = keyClassNames(key);
     keyElement.style.left = `${position.x * unitX}%`;
     keyElement.style.top = `${position.y * unitY}%`;
-    keyElement.style.width = `${key.width * unitX - .55}%`;
-    keyElement.style.height = `${key.height * unitY - .7}%`;
+    keyElement.style.width = `${key.width * unitX - VIEWER_CONFIG.keyGapXPercent}%`;
+    keyElement.style.height = `${key.height * unitY - VIEWER_CONFIG.keyGapYPercent}%`;
     keyElement.style.setProperty("--rotation", `${key.rotation}deg`);
-    keyElement.setAttribute("aria-label", [key.main.label, key.main.shift, key.nums.label, key.autoMouse.label, key.func.label, key.main.hold].filter(Boolean).join(", "));
-    if (isCompactMainLabel(key.main.label)) {
-      keyElement.classList.add("compact-main-label");
-    }
-    if (key.nums.label === "Alt+PrSc") keyElement.classList.add("stacked-nums-label");
-    else if (key.nums.label.length > 4) keyElement.classList.add("long-nums-label");
-    if (key.func.label.length > 4) keyElement.classList.add("long-func-label");
-    if (key.nums.label.length === 1) keyElement.classList.add("single-nums-label");
-    if (key.func.label.length === 1) keyElement.classList.add("single-func-label");
-    if (key.main.hold.length > 6) keyElement.classList.add("long-hold-label");
+    const accessibleLabels = [
+      key.main.label,
+      key.main.shift,
+      key.nums.label,
+      key.autoMouse.label,
+      key.func.label,
+      key.main.hold,
+    ].filter(Boolean);
+    keyElement.setAttribute("aria-label", accessibleLabels.join(", "));
     keyElement.append(
-      text("key-main", key.main.label),
-      text("key-main-shift", key.main.shift),
-      text("key-nums", key.nums.label),
-      autoMouseContent(key.autoMouse),
-      text("key-func", key.func.label),
+      createKeyLabel("key-main", key.main.label),
+      createKeyLabel("key-main-shift", key.main.shift),
+      createKeyLabel("key-nums", key.nums.label),
+      createMouseLabel(key.autoMouse),
+      createKeyLabel("key-func", key.func.label),
     );
     if (key.main.hold) {
-      const hold = text("key-hold", key.main.hold);
+      const hold = createKeyLabel("key-hold", key.main.hold);
       if (key.main.hold === "Num") hold.classList.add("hold-nums");
       if (key.main.hold === "Fn") hold.classList.add("hold-func");
       keyElement.append(hold);
     }
-    keyboard.append(keyElement);
-  });
+    return keyElement;
+  };
 
-  const trackpad = document.createElement("div");
-  trackpad.className = "trackpad";
-  trackpad.setAttribute("aria-label", "Trackpad");
-  trackpad.style.left = `${data.trackpad.x * unitX}%`;
-  trackpad.style.top = `${data.trackpad.y * unitY}%`;
-  trackpad.style.width = `${data.trackpad.width * unitX - .55}%`;
-  trackpad.innerHTML = `
-    <div class="trackpad-main">
-      <svg class="operation-icon" viewBox="0 0 16 16" aria-hidden="true"><use href="#icon-mouse-left"></use></svg>
-      <span>Trackpad</span>
-    </div>
-    <span class="trackpad-hold">Mouse</span>`;
-  keyboard.append(trackpad);
+  const createTrackpadElement = () => {
+    const trackpad = document.createElement("div");
+    const trackpadMain = document.createElement("div");
+    const trackpadName = document.createElement("span");
+    const trackpadHold = document.createElement("span");
+    trackpad.className = "trackpad";
+    trackpad.setAttribute("aria-label", "Trackpad, Mouse");
+    trackpad.style.left = `${data.trackpad.x * unitX}%`;
+    trackpad.style.top = `${data.trackpad.y * unitY}%`;
+    trackpad.style.width = `${data.trackpad.width * unitX - VIEWER_CONFIG.keyGapXPercent}%`;
+    trackpadMain.className = "trackpad-main";
+    trackpadName.textContent = "Trackpad";
+    trackpadHold.className = "trackpad-hold";
+    trackpadHold.textContent = "Mouse";
+    trackpadMain.append(createIcon("mouse-left"), trackpadName);
+    trackpad.append(trackpadMain, trackpadHold);
+    return trackpad;
+  };
 
-  document.querySelectorAll(".operation-icon").forEach((svg) => {
-    const href = svg.querySelector("use")?.getAttribute("href") || "";
-      const usesLargeViewBox = ["backspace", "delete", "scroll", "zoom", "move"]
-      .some((name) => href === `#icon-${name}`);
-    svg.setAttribute("viewBox", usesLargeViewBox ? "0 0 24 24" : "0 0 16 16");
-  });
+  const fragment = document.createDocumentFragment();
+  data.keys
+    .filter((key) => !trackpadKeys.has(matrixId(key.matrix)))
+    .forEach((key) => fragment.append(createKeyElement(key)));
+  fragment.append(createTrackpadElement());
+  keyboard.replaceChildren(fragment);
 
   const setAutoMouseVisibility = (visible) => {
     keyboard.classList.toggle("show-auto-mouse", visible);
     keyboard.setAttribute("data-auto-mouse-visible", String(visible));
-    autoMouseGuide.hidden = !visible;
-    autoMouseLegend.hidden = !visible;
+    elements.mouseGuide.hidden = !visible;
+    elements.mouseLegend.hidden = !visible;
   };
   setAutoMouseVisibility(autoMouseToggle.checked);
   autoMouseToggle.addEventListener("change", () => {
@@ -169,10 +235,10 @@
   });
 
   const syncLegendKeySize = () => {
-    const guide = document.querySelector(".legend-key-guide");
+    const guide = requiredElement(".legend-key-guide");
     const referenceKey = [...keyboard.querySelectorAll(".key")]
       .find((key) => key.style.getPropertyValue("--rotation") === "0deg");
-    if (!guide || !referenceKey) return;
+    if (!referenceKey) return;
     const referenceBounds = referenceKey.getBoundingClientRect();
     guide.style.width = `${referenceBounds.width}px`;
     guide.style.height = `${referenceBounds.height}px`;
@@ -186,10 +252,10 @@
     const keyboardBounds = keyboard.getBoundingClientRect();
     const bounds = card.getBoundingClientRect();
     const cardWidth = Math.max(bounds.width, card.scrollWidth);
-    const padding = 18;
+    const padding = VIEWER_CONFIG.pngPadding;
     const width = Math.ceil(cardWidth + padding * 2);
     const height = Math.ceil(bounds.height + padding * 2);
-    const scale = 2;
+    const scale = VIEWER_CONFIG.pngScale;
     const canvas = document.createElement("canvas");
     canvas.width = width * scale;
     canvas.height = height * scale;
@@ -205,6 +271,7 @@
       key: color("--key"), border: color("--key-border"),
       rule: color("--rule"),
     };
+    const holdColors = { Num: colors.nums, Fn: colors.func };
     const fontFamily = getComputedStyle(document.body).fontFamily;
     const cardX = padding;
     const cardY = padding;
@@ -316,10 +383,9 @@
     };
     const drawAutoMouseValue = (layer, centerX, centerY) => {
       const value = layer.label;
-      const click = value.match(/^M([123])$/);
+      const click = value.match(CLICK_PATTERN);
       if (click) {
-        const clickModes = { "1": "left", "2": "right", "3": "middle" };
-        drawMouse(centerX, centerY, clickModes[click[1]], colors.autoMouse);
+        drawMouse(centerX, centerY, CLICK_MODES[click[1]], colors.autoMouse);
         return;
       }
       if (value === "Scroll") {
@@ -338,23 +404,22 @@
         drawDelete(centerX, centerY, colors.autoMouse, .65);
         return;
       }
-      context.font = `800 13px ${fontFamily}`;
+      context.font = `800 ${PNG_TYPOGRAPHY.auxiliary}px ${fontFamily}`;
       context.fillStyle = colors.autoMouse;
       context.textAlign = "center";
       context.textBaseline = "middle";
       context.fillText(value, centerX, centerY);
     };
     const drawOperation = (value, x, y, align, fontSize) => {
-      const click = value.match(/^M([123])$/);
+      const click = value.match(CLICK_PATTERN);
       const operation = value.match(/^([MW])([⬅⬇⬆➡])$/);
       context.font = `750 ${fontSize}px ${fontFamily}`;
       context.textBaseline = "bottom";
       context.fillStyle = colors.func;
       context.textAlign = "left";
       if (click) {
-        const clickModes = { "1": "left", "2": "right", "3": "middle" };
         const start = align === "right" ? x - 12 : align === "center" ? x - 6 : x;
-        drawMouse(start + 5, y - fontSize / 2, clickModes[click[1]]);
+        drawMouse(start + 5, y - fontSize / 2, CLICK_MODES[click[1]]);
         return;
       }
       if (!operation) {
@@ -441,15 +506,17 @@
 
     const keyboardX = cardX + keyboardBounds.left - bounds.left;
     const keyboardY = cardY + keyboardBounds.top - bounds.top;
-    const keyUnitX = keyboardBounds.width / 15;
-    const keyUnitY = keyboardBounds.height / layoutRows;
+    const keyUnitX = keyboardBounds.width / VIEWER_CONFIG.layoutColumns;
+    const keyUnitY = keyboardBounds.height / VIEWER_CONFIG.layoutRows;
     data.keys.forEach((key) => {
       if (trackpadKeys.has(matrixId(key.matrix))) return;
       const position = rotatePoint(key.x, key.y, key.rotationX, key.rotationY, key.rotation);
       const x = keyboardX + position.x * keyUnitX;
       const y = keyboardY + position.y * keyUnitY;
-      const keyWidth = key.width * keyUnitX - keyboardBounds.width * .0055;
-      const keyHeight = key.height * keyUnitY - keyboardBounds.height * .007;
+      const keyWidth = key.width * keyUnitX
+        - keyboardBounds.width * VIEWER_CONFIG.keyGapXPercent / 100;
+      const keyHeight = key.height * keyUnitY
+        - keyboardBounds.height * VIEWER_CONFIG.keyGapYPercent / 100;
       context.save();
       context.translate(x, y);
       context.rotate(key.rotation * Math.PI / 180);
@@ -467,7 +534,9 @@
       context.lineWidth = 1;
       context.stroke();
 
-      const mainSize = isCompactMainLabel(key.main.label) ? 16 : 20;
+      const mainSize = isCompactMainLabel(key.main.label)
+        ? PNG_TYPOGRAPHY.mainCompact
+        : PNG_TYPOGRAPHY.main;
       if (key.main.label === "Backspace") {
         drawBackspace(keyWidth / 2, 21);
       } else {
@@ -486,8 +555,9 @@
       }
 
       const auxiliaryY = keyHeight - (key.main.hold ? 18 : 6);
-      const numsSize = key.nums.label === "Alt+PrSc" ? 13 : key.nums.label.length > 4 ? 8.5 : key.nums.label.length === 1 ? 15 : 13;
-      const funcSize = key.nums.label === "Alt+PrSc" ? 13 : key.func.label.length > 4 ? 8.5 : key.func.label.length === 1 ? 15 : 13;
+      const hasStackedNums = key.nums.label === "Alt+PrSc";
+      const numsSize = pngAuxiliaryFontSize(key.nums.label, hasStackedNums);
+      const funcSize = pngAuxiliaryFontSize(key.func.label, hasStackedNums);
       const numsX = key.nums.label === "Alt+PrSc" ? 4 : 5;
       const funcX = keyWidth - (key.nums.label === "Alt+PrSc" ? 3 : 5);
       context.fillStyle = colors.nums;
@@ -502,11 +572,11 @@
       }
       drawOperation(key.func.label, funcX, auxiliaryY, "right", funcSize);
       if (autoMouseToggle.checked && key.autoMouse.label) {
-        drawAutoMouseValue(key.autoMouse, keyWidth / 2, keyHeight * .6);
+        drawAutoMouseValue(key.autoMouse, keyWidth / 2, keyHeight * VIEWER_CONFIG.mouseLabelY);
       }
 
       if (key.main.hold) {
-        const holdColor = key.main.hold === "Num" ? colors.nums : key.main.hold === "Fn" ? colors.func : colors.hold;
+        const holdColor = holdColors[key.main.hold] ?? colors.hold;
         context.beginPath();
         context.moveTo(5, keyHeight - 15);
         context.lineTo(keyWidth - 5, keyHeight - 15);
@@ -715,21 +785,21 @@
     });
   };
 
-  copyButton.addEventListener("click", async () => {
-    copyButton.disabled = true;
-    copyStatus.textContent = "PNGを生成しています…";
+  elements.copyButton.addEventListener("click", async () => {
+    elements.copyButton.disabled = true;
+    elements.copyStatus.textContent = "PNGを生成しています…";
     try {
       if (!navigator.clipboard || typeof ClipboardItem === "undefined") {
         throw new Error("Clipboard API is unavailable");
       }
       const png = await renderCardToPng();
       await navigator.clipboard.write([new ClipboardItem({ "image/png": png })]);
-      copyStatus.textContent = "PNGをクリップボードにコピーしました。";
+      elements.copyStatus.textContent = "PNGをクリップボードにコピーしました。";
     } catch (error) {
       console.error(error);
-      copyStatus.textContent = "コピーできませんでした。Chromeなどの対応ブラウザで開いてください。";
+      elements.copyStatus.textContent = "コピーできませんでした。Chromeなどの対応ブラウザで開いてください。";
     } finally {
-      copyButton.disabled = false;
+      elements.copyButton.disabled = false;
     }
   });
 
