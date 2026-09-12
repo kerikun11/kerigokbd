@@ -14,14 +14,14 @@
 ```sh
 ## clone this repository with submodules
 git clone --recursive https://github.com/kerikun11/kerigokbd.git
-cd kerigokbd/software
+cd kerigokbd/software/qmk
 ```
 
 下記コマンドでQMK Firmwareの `keyboards` ディレクトリ内へカスタムキーボードへのリンクを作成する。
 
 ```sh
 ## setup only
-./qmk/qmk.sh -s
+./qmk.sh -s
 ```
 
 ## ビルドと書き込み
@@ -29,7 +29,7 @@ cd kerigokbd/software
 QMKファームウェアのディレクトリでqmkコマンドを実行する。
 
 ```sh
-cd ./qmk/firmware
+cd ./firmware
 ## setup
 qmk setup
 ## clean
@@ -46,9 +46,9 @@ qmk flash -kb kerigokbd/kerigokbd_v2/pcb_20260222 -km via
 
 ```sh
 ## compile
-./qmk/qmk.sh
+./qmk.sh
 ## compile and flash
-./qmk/qmk.sh -f
+./qmk.sh -f
 ## clean, compile, and flash
-./qmk/qmk.sh -c -f
+./qmk.sh -c -f
 ```
