@@ -17,18 +17,18 @@ DEFINITIONS_PATH = KEYBOARD_ROOT / "kerigokbd.h"
 OUTPUT_PATH = Path(__file__).resolve(
 ).parents[1] / "public/generated/keymap-data.js"
 
-VISIBLE_LAYERS = ("KGL_MAIN", "KGL_NUM", "KGL_FUN")
+VISIBLE_LAYERS = ("KGL_MAIN", "KGL_NUM", "KGL_FUN", "KGL_AM")
 TRACKPAD_REPLACED_MATRIXES = ((7, 4), (7, 3))
 TRACKPAD_GEOMETRY = {"x": 10.125, "y": 3.15, "width": 1.75, "height": 1.75}
 LAYOUT_VERSION = "v2026.09.12a"
 LAYER_LABELS = {
     "KGL_MAIN": "Main",
-    "KGL_NUM": "Nums",
-    "KGL_FUN": "Func",
+    "KGL_NUM": "Num",
+    "KGL_FUN": "Fn",
     "KGL_ESC": "Tenkey",
     "KGL_TEMP": "Temporary",
     "KGL_CONF": "Config",
-    "KGL_AM": "Auto Mouse",
+    "KGL_AM": "Mouse",
 }
 
 KEY_LABELS = {
@@ -70,6 +70,26 @@ MODIFIER_LABELS = {
     "LCTL": "Ctrl", "RCTL": "Ctrl", "LSFT": "Shift", "RSFT": "Shift",
     "LALT": "Alt", "RALT": "Alt", "LGUI": "Win", "RGUI": "Win",
     "LWIN": "Win", "RWIN": "Win",
+}
+
+AUTO_MOUSE_LABELS = {
+    "KC_TAB": "⇥",
+    "KC_LCTL": "⌃",
+    "KC_RCTL": "⌃",
+    "KC_LSFT": "⇧",
+    "KC_RSFT": "⇧",
+    "KC_LWIN": "⊞",
+    "KC_RWIN": "⊞",
+    "KC_LALT": "⌥",
+    "KC_RALT": "⌥",
+    "KC_ENT": "↵",
+    "KC_ESC": "⎋",
+}
+
+MAIN_SHIFT_LABELS = {
+    "JP_COMM": "<",
+    "JP_DOT": ">",
+    "JP_SLSH": "?",
 }
 
 
@@ -270,6 +290,23 @@ def key_state(expression: str) -> str:
     return "assigned"
 
 
+def auto_mouse_label(
+    expression: str,
+    definitions: dict[str, str],
+    main_label: str = "",
+    main_hold: str = "",
+) -> str:
+    resolved = resolve(expression, definitions)
+    label = label_for(expression, definitions)
+    if label and label in {main_label, main_hold}:
+        return ""
+    return AUTO_MOUSE_LABELS.get(resolved, label)
+
+
+def main_shift_label(expression: str, definitions: dict[str, str]) -> str:
+    return MAIN_SHIFT_LABELS.get(resolve(expression, definitions), "")
+
+
 def main() -> None:
     info = json.loads(INFO_PATH.read_text(encoding="utf-8"))
     via = json.loads(VIA_PATH.read_text(encoding="utf-8"))
@@ -305,16 +342,28 @@ def main() -> None:
                 "source": main_source,
                 "expanded": resolve(main_source, definitions),
                 "label": label_for(main_source, definitions),
+                "shift": main_shift_label(main_source, definitions),
                 "hold": hold_label(main_source, definitions),
                 "state": key_state(main_source),
             },
         }
-        for output_name, layer_name in (("nums", "KGL_NUM"), ("func", "KGL_FUN")):
+        for output_name, layer_name in (
+            ("nums", "KGL_NUM"),
+            ("func", "KGL_FUN"),
+            ("autoMouse", "KGL_AM"),
+        ):
             source = layers[layer_name][index]
             key[output_name] = {
                 "source": source,
                 "expanded": resolve(source, definitions),
-                "label": layer_label(
+                "label": auto_mouse_label(
+                    source,
+                    definitions,
+                    key["main"]["label"],
+                    key["main"]["hold"],
+                )
+                if output_name == "autoMouse"
+                else layer_label(
                     output_name, source, definitions, key["main"]["label"]
                 ),
                 "state": key_state(source),

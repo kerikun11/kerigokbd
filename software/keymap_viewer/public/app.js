@@ -10,6 +10,9 @@
   const keyboard = document.querySelector("#keyboard");
   const copyButton = document.querySelector("#copy-png");
   const copyStatus = document.querySelector("#copy-status");
+  const autoMouseToggle = document.querySelector("#toggle-auto-mouse");
+  const autoMouseGuide = document.querySelector(".guide-auto-mouse");
+  const autoMouseLegend = document.querySelector(".legend-auto-section");
   const unitX = 100 / 15;
   const layoutRows = 5;
   const unitY = 100 / layoutRows;
@@ -35,6 +38,9 @@
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
     svg.classList.add("operation-icon");
+    svg.setAttribute("viewBox", ["backspace", "delete", "scroll", "zoom", "move"].includes(name)
+      ? "0 0 24 24"
+      : "0 0 16 16");
     svg.setAttribute("aria-hidden", "true");
     use.setAttribute("href", `#icon-${name}`);
     svg.append(use);
@@ -50,13 +56,27 @@
     if (value === "Backspace") {
       span.classList.add("icon-only");
       span.append(icon("backspace"));
+    } else if (value === "Scroll") {
+      span.classList.add("icon-only");
+      span.append(icon("scroll"));
+    } else if (value === "Zoom") {
+      span.classList.add("icon-only");
+      span.append(icon("zoom"));
     } else if (mouseClick) {
       const clickIcons = { "1": "mouse-left", "2": "mouse-right", "3": "mouse-middle" };
       span.classList.add("click-operation");
       span.append(icon(clickIcons[mouseClick[1]]));
     } else if (mouseOperation) {
+      span.classList.add("pointer-operation");
+      if (mouseOperation[1] === "⬅" || mouseOperation[1] === "➡") {
+        span.classList.add("horizontal-pointer-operation");
+      }
       span.append(icon("mouse"), mouseOperation[1]);
     } else if (wheelOperation) {
+      span.classList.add("pointer-operation");
+      if (wheelOperation[1] === "⬅" || wheelOperation[1] === "➡") {
+        span.classList.add("horizontal-pointer-operation");
+      }
       span.append(icon("wheel"), wheelOperation[1]);
     } else if (value === "Alt+PrSc") {
       span.classList.add("stacked-operation");
@@ -67,18 +87,30 @@
     return span;
   };
 
+  const autoMouseContent = (layer) => {
+    if (!layer.label) return text("key-auto-mouse", "");
+    if (layer.expanded === "KC_BSPC" || layer.expanded === "KC_DEL") {
+      const span = document.createElement("span");
+      span.className = "key-auto-mouse icon-only";
+      span.append(icon(layer.expanded === "KC_BSPC" ? "backspace" : "delete"));
+      return span;
+    }
+    return text("key-auto-mouse", layer.label);
+  };
+
   data.keys.forEach((key) => {
     if (trackpadKeys.has(matrixId(key.matrix))) return;
     const position = rotatePoint(key.x, key.y, key.rotationX, key.rotationY, key.rotation);
     const keyElement = document.createElement("div");
     keyElement.className = `key ${key.main.state}`;
     if (key.main.hold) keyElement.classList.add("has-hold");
+    if (key.autoMouse.label) keyElement.classList.add("has-auto-mouse");
     keyElement.style.left = `${position.x * unitX}%`;
     keyElement.style.top = `${position.y * unitY}%`;
     keyElement.style.width = `${key.width * unitX - .55}%`;
     keyElement.style.height = `${key.height * unitY - .7}%`;
     keyElement.style.setProperty("--rotation", `${key.rotation}deg`);
-    keyElement.setAttribute("aria-label", [key.main.label, key.nums.label, key.func.label, key.main.hold].filter(Boolean).join(", "));
+    keyElement.setAttribute("aria-label", [key.main.label, key.main.shift, key.nums.label, key.autoMouse.label, key.func.label, key.main.hold].filter(Boolean).join(", "));
     if (isCompactMainLabel(key.main.label)) {
       keyElement.classList.add("compact-main-label");
     }
@@ -90,13 +122,15 @@
     if (key.main.hold.length > 6) keyElement.classList.add("long-hold-label");
     keyElement.append(
       text("key-main", key.main.label),
+      text("key-main-shift", key.main.shift),
       text("key-nums", key.nums.label),
+      autoMouseContent(key.autoMouse),
       text("key-func", key.func.label),
     );
     if (key.main.hold) {
       const hold = text("key-hold", key.main.hold);
-      if (key.main.hold === "Nums") hold.classList.add("hold-nums");
-      if (key.main.hold === "Func") hold.classList.add("hold-func");
+      if (key.main.hold === "Num") hold.classList.add("hold-nums");
+      if (key.main.hold === "Fn") hold.classList.add("hold-func");
       keyElement.append(hold);
     }
     keyboard.append(keyElement);
@@ -110,14 +144,29 @@
   trackpad.style.width = `${data.trackpad.width * unitX - .55}%`;
   trackpad.innerHTML = `
     <div class="trackpad-main">
-      <svg viewBox="0 0 32 32" aria-hidden="true">
-        <path d="M11 17V9.5a2 2 0 0 1 4 0V15m0-5.5a2 2 0 0 1 4 0V15m0-3.5a2 2 0 0 1 4 0V16m0-2.5a2 2 0 0 1 4 0V20c0 5-3.7 9-9 9h-1.5a9 9 0 0 1-7.6-4.2L5.6 20a2.1 2.1 0 0 1 3.2-2.7L11 19"></path>
-        <path class="touch-wave" d="M8 10a6 6 0 0 1 4-5.6M6 13A9 9 0 0 1 12 2"></path>
-      </svg>
+      <svg class="operation-icon" viewBox="0 0 16 16" aria-hidden="true"><use href="#icon-mouse-left"></use></svg>
       <span>Trackpad</span>
     </div>
-    <span class="trackpad-hold">Auto Mouse</span>`;
+    <span class="trackpad-hold">Mouse</span>`;
   keyboard.append(trackpad);
+
+  document.querySelectorAll(".operation-icon").forEach((svg) => {
+    const href = svg.querySelector("use")?.getAttribute("href") || "";
+      const usesLargeViewBox = ["backspace", "delete", "scroll", "zoom", "move"]
+      .some((name) => href === `#icon-${name}`);
+    svg.setAttribute("viewBox", usesLargeViewBox ? "0 0 24 24" : "0 0 16 16");
+  });
+
+  const setAutoMouseVisibility = (visible) => {
+    keyboard.classList.toggle("show-auto-mouse", visible);
+    keyboard.setAttribute("data-auto-mouse-visible", String(visible));
+    autoMouseGuide.hidden = !visible;
+    autoMouseLegend.hidden = !visible;
+  };
+  setAutoMouseVisibility(autoMouseToggle.checked);
+  autoMouseToggle.addEventListener("change", () => {
+    setAutoMouseVisibility(autoMouseToggle.checked);
+  });
 
   const syncLegendKeySize = () => {
     const guide = document.querySelector(".legend-key-guide");
@@ -137,7 +186,7 @@
     const keyboardBounds = keyboard.getBoundingClientRect();
     const bounds = card.getBoundingClientRect();
     const cardWidth = Math.max(bounds.width, card.scrollWidth);
-    const padding = 34;
+    const padding = 18;
     const width = Math.ceil(cardWidth + padding * 2);
     const height = Math.ceil(bounds.height + padding * 2);
     const scale = 2;
@@ -152,7 +201,8 @@
     const colors = {
       page: color("--page"), card: color("--card"), ink: color("--ink"),
       muted: color("--muted"), nums: color("--nums"), func: color("--func"),
-      hold: color("--hold"), key: color("--key"), border: color("--key-border"),
+      autoMouse: color("--auto-mouse"), hold: color("--hold"),
+      key: color("--key"), border: color("--key-border"),
       rule: color("--rule"),
     };
     const fontFamily = getComputedStyle(document.body).fontFamily;
@@ -163,11 +213,12 @@
       context.beginPath();
       context.roundRect(x, y, w, h, radius);
     };
-    const drawMouse = (x, y, mode = "pointer") => {
+    const drawMouse = (x, y, mode = "pointer", drawColor = colors.func, iconScale = 1) => {
       context.save();
       context.translate(x, y);
+      context.scale(iconScale, iconScale);
       context.lineWidth = 1.2;
-      context.strokeStyle = colors.func;
+      context.strokeStyle = drawColor;
       if (mode === "left" || mode === "right") {
         context.beginPath();
         if (mode === "left") {
@@ -182,13 +233,19 @@
           context.lineTo(0, 0);
         }
         context.closePath();
-        context.fillStyle = colors.func;
+        context.fillStyle = drawColor;
         context.fill();
       }
       roundedRectangle(-5, -7, 10, 14, 5);
       context.stroke();
+      if (mode === "middle") {
+        context.beginPath();
+        context.moveTo(-4.5, 0);
+        context.lineTo(4.5, 0);
+        context.stroke();
+      }
       if (mode === "wheel" || mode === "middle") {
-        context.fillStyle = colors.func;
+        context.fillStyle = drawColor;
         roundedRectangle(-1.6, -5.6, 3.2, 5.6, 1.6);
         context.fill();
       } else {
@@ -200,6 +257,92 @@
         context.stroke();
       }
       context.restore();
+    };
+    const drawScrollIcon = (centerX, centerY, size = 12) => {
+      context.save();
+      context.translate(centerX - size / 2, centerY - size / 2);
+      context.scale(size / 24, size / 24);
+      context.strokeStyle = colors.autoMouse;
+      context.lineWidth = 1.8;
+      context.lineCap = "round";
+      context.lineJoin = "round";
+      context.beginPath();
+      [[7, 5, 14, 5], [7, 9, 12, 9], [7, 13, 14, 13], [7, 17, 12, 17],
+       [18, 4, 18, 20], [15, 17, 18, 20], [18, 20, 21, 17],
+       [15, 7, 18, 4], [18, 4, 21, 7]].forEach(([x1, y1, x2, y2]) => {
+        context.moveTo(x1, y1);
+        context.lineTo(x2, y2);
+      });
+      context.stroke();
+      context.restore();
+    };
+    const drawMoveIcon = (centerX, centerY, size = 18) => {
+      context.save();
+      context.translate(centerX - size / 2, centerY - size / 2);
+      context.scale(size / 24, size / 24);
+      context.fillStyle = colors.func;
+      const polygon = (points) => {
+        context.beginPath();
+        context.moveTo(points[0][0], points[0][1]);
+        points.slice(1).forEach(([x, y]) => context.lineTo(x, y));
+        context.closePath();
+        context.fill();
+      };
+      polygon([
+        [12, 1], [17, 6], [14, 6], [14, 10], [18, 10], [18, 7],
+        [23, 12], [18, 17], [18, 14], [14, 14], [14, 18], [17, 18],
+        [12, 23], [7, 18], [10, 18], [10, 14], [6, 14], [6, 17],
+        [1, 12], [6, 7], [6, 10], [10, 10], [10, 6], [7, 6],
+      ]);
+      context.restore();
+    };
+    const drawZoomIcon = (centerX, centerY, size = 12) => {
+      context.save();
+      context.translate(centerX - size / 2, centerY - size / 2);
+      context.scale(size / 24, size / 24);
+      context.strokeStyle = colors.autoMouse;
+      context.lineWidth = 1.8;
+      context.lineCap = "round";
+      context.beginPath();
+      context.arc(10, 10, 6, 0, Math.PI * 2);
+      context.moveTo(14.5, 14.5);
+      context.lineTo(19.5, 19.5);
+      context.moveTo(10, 7);
+      context.lineTo(10, 13);
+      context.moveTo(7, 10);
+      context.lineTo(13, 10);
+      context.stroke();
+      context.restore();
+    };
+    const drawAutoMouseValue = (layer, centerX, centerY) => {
+      const value = layer.label;
+      const click = value.match(/^M([123])$/);
+      if (click) {
+        const clickModes = { "1": "left", "2": "right", "3": "middle" };
+        drawMouse(centerX, centerY, clickModes[click[1]], colors.autoMouse);
+        return;
+      }
+      if (value === "Scroll") {
+        drawScrollIcon(centerX, centerY, 17);
+        return;
+      }
+      if (value === "Zoom") {
+        drawZoomIcon(centerX, centerY, 17);
+        return;
+      }
+      if (layer.expanded === "KC_BSPC") {
+        drawBackspace(centerX, centerY, colors.autoMouse, .65);
+        return;
+      }
+      if (layer.expanded === "KC_DEL") {
+        drawDelete(centerX, centerY, colors.autoMouse, .65);
+        return;
+      }
+      context.font = `800 13px ${fontFamily}`;
+      context.fillStyle = colors.autoMouse;
+      context.textAlign = "center";
+      context.textBaseline = "middle";
+      context.fillText(value, centerX, centerY);
     };
     const drawOperation = (value, x, y, align, fontSize) => {
       const click = value.match(/^M([123])$/);
@@ -220,17 +363,19 @@
         return;
       }
       const suffixWidth = context.measureText(operation[2]).width;
-      const totalWidth = 12 + suffixWidth;
+      const iconAdvance = operation[2] === "⬅" || operation[2] === "➡" ? 10 : 9;
+      const totalWidth = iconAdvance + suffixWidth;
       let start = x;
       if (align === "right") start -= totalWidth;
       if (align === "center") start -= totalWidth / 2;
       drawMouse(start + 5, y - fontSize / 2, operation[1] === "W" ? "wheel" : "pointer");
-      context.fillText(operation[2], start + 12, y);
+      context.fillText(operation[2], start + iconAdvance, y);
     };
-    const drawBackspace = (centerX, centerY) => {
+    const drawBackspace = (centerX, centerY, strokeColor = colors.ink, iconScale = 1) => {
       context.save();
       context.translate(centerX, centerY);
-      context.strokeStyle = colors.ink;
+      context.scale(iconScale, iconScale);
+      context.strokeStyle = strokeColor;
       context.lineWidth = 1.6;
       context.beginPath();
       context.moveTo(-10, 0);
@@ -246,29 +391,32 @@
       context.stroke();
       context.restore();
     };
-    const drawTrackpadIcon = (centerX, centerY, size = 30) => {
-      const hand = new Path2D("M11 17V9.5a2 2 0 0 1 4 0V15m0-5.5a2 2 0 0 1 4 0V15m0-3.5a2 2 0 0 1 4 0V16m0-2.5a2 2 0 0 1 4 0V20c0 5-3.7 9-9 9h-1.5a9 9 0 0 1-7.6-4.2L5.6 20a2.1 2.1 0 0 1 3.2-2.7L11 19");
-      const touchWave = new Path2D("M8 10a6 6 0 0 1 4-5.6M6 13A9 9 0 0 1 12 2");
+    const drawDelete = (centerX, centerY, strokeColor = colors.ink, iconScale = 1) => {
       context.save();
-      context.translate(centerX - size / 2, centerY - size / 2);
-      context.scale(size / 32, size / 32);
-      context.fillStyle = "transparent";
-      context.strokeStyle = "#777a73";
-      context.lineWidth = 1.65;
-      context.lineCap = "round";
-      context.lineJoin = "round";
-      context.stroke(hand);
-      context.globalAlpha = .72;
-      context.stroke(touchWave);
+      context.translate(centerX, centerY);
+      context.scale(iconScale, iconScale);
+      context.strokeStyle = strokeColor;
+      context.lineWidth = 1.6;
+      context.beginPath();
+      context.moveTo(-9, -6);
+      context.lineTo(5, -6);
+      context.lineTo(10, 0);
+      context.lineTo(5, 6);
+      context.lineTo(-9, 6);
+      context.closePath();
+      context.moveTo(-5, -3);
+      context.lineTo(1, 3);
+      context.moveTo(1, -3);
+      context.lineTo(-5, 3);
+      context.stroke();
       context.restore();
     };
-
     context.fillStyle = colors.page;
     context.fillRect(0, 0, width, height);
     context.save();
     context.shadowColor = "rgba(50,47,36,.13)";
-    context.shadowBlur = 32;
-    context.shadowOffsetY = 14;
+    context.shadowBlur = 20;
+    context.shadowOffsetY = 8;
     roundedRectangle(cardX, cardY, cardWidth, bounds.height, 24);
     context.fillStyle = colors.card;
     context.fill();
@@ -329,6 +477,13 @@
         context.textBaseline = "top";
         context.fillText(key.main.label, keyWidth / 2, 8);
       }
+      if (key.main.shift) {
+        context.font = `750 ${mainSize}px ${fontFamily}`;
+        context.fillStyle = colors.ink;
+        context.textAlign = "right";
+        context.textBaseline = "top";
+        context.fillText(key.main.shift, keyWidth - 7, 8);
+      }
 
       const auxiliaryY = keyHeight - (key.main.hold ? 18 : 6);
       const numsSize = key.nums.label === "Alt+PrSc" ? 13 : key.nums.label.length > 4 ? 8.5 : key.nums.label.length === 1 ? 15 : 13;
@@ -346,16 +501,19 @@
         context.fillText(key.nums.label, numsX, auxiliaryY);
       }
       drawOperation(key.func.label, funcX, auxiliaryY, "right", funcSize);
+      if (autoMouseToggle.checked && key.autoMouse.label) {
+        drawAutoMouseValue(key.autoMouse, keyWidth / 2, keyHeight * .6);
+      }
 
       if (key.main.hold) {
-        const holdColor = key.main.hold === "Nums" ? colors.nums : key.main.hold === "Func" ? colors.func : colors.hold;
+        const holdColor = key.main.hold === "Num" ? colors.nums : key.main.hold === "Fn" ? colors.func : colors.hold;
         context.beginPath();
         context.moveTo(5, keyHeight - 15);
         context.lineTo(keyWidth - 5, keyHeight - 15);
         context.strokeStyle = colors.ink;
         context.lineWidth = .7;
         context.stroke();
-        context.font = `800 ${key.main.hold.length > 6 ? 8.5 : 13}px ${fontFamily}`;
+        context.font = `500 ${key.main.hold.length > 6 ? 8.5 : 13}px ${fontFamily}`;
         context.fillStyle = holdColor;
         context.textAlign = "center";
         context.textBaseline = "bottom";
@@ -381,17 +539,23 @@
     context.fillStyle = "#777a73";
     context.textAlign = "center";
     context.textBaseline = "middle";
-    drawTrackpadIcon(trackpadX + diameter / 2, trackpadY + diameter * .39);
+    drawMouse(
+      trackpadX + diameter / 2,
+      trackpadY + diameter * .39,
+      "left",
+      colors.autoMouse,
+      1,
+    );
     context.font = `700 12px ${fontFamily}`;
     context.fillText("Trackpad", trackpadX + diameter / 2, trackpadY + diameter * .58);
     context.beginPath();
-    context.moveTo(trackpadX + diameter * .15, trackpadY + diameter * .82);
-    context.lineTo(trackpadX + diameter * .85, trackpadY + diameter * .82);
+    context.moveTo(trackpadX + diameter * .15, trackpadY + diameter * .79);
+    context.lineTo(trackpadX + diameter * .85, trackpadY + diameter * .79);
     context.strokeStyle = colors.ink;
     context.stroke();
-    context.font = `800 8.5px ${fontFamily}`;
-    context.fillStyle = colors.hold;
-    context.fillText("Auto Mouse", trackpadX + diameter / 2, trackpadY + diameter * .9);
+    context.font = `500 13px ${fontFamily}`;
+    context.fillStyle = colors.autoMouse;
+    context.fillText("Mouse", trackpadX + diameter / 2, trackpadY + diameter * .87);
     context.restore();
 
     const legend = document.querySelector(".legend").getBoundingClientRect();
@@ -417,44 +581,63 @@
     context.strokeStyle = colors.border;
     context.lineWidth = 1;
     context.stroke();
-    context.font = `750 9px ${fontFamily}`;
+    context.font = `750 10px ${fontFamily}`;
+    context.textBaseline = "top";
+    context.textAlign = "center";
+    context.fillStyle = colors.ink;
+    context.fillText("Main", guideX + guideBounds.width / 2, guideY + 7);
     context.textBaseline = "bottom";
     context.textAlign = "left";
     context.fillStyle = colors.nums;
-    context.fillText("Nums", guideX + 5, guideY + guideBounds.height - 18);
+    context.fillText("Num", guideX + 5, guideY + guideBounds.height - 18);
+    if (autoMouseToggle.checked) {
+      context.textAlign = "center";
+      context.fillStyle = colors.autoMouse;
+      context.fillText("Mouse", guideX + guideBounds.width / 2, guideY + guideBounds.height - 31);
+    }
     context.textAlign = "right";
     context.fillStyle = colors.func;
-    context.fillText("Func", guideX + guideBounds.width - 5, guideY + guideBounds.height - 18);
+    context.fillText("Fn", guideX + guideBounds.width - 5, guideY + guideBounds.height - 18);
     context.beginPath();
     context.moveTo(guideX + 5, guideY + guideBounds.height - 12);
     context.lineTo(guideX + guideBounds.width - 5, guideY + guideBounds.height - 12);
     context.strokeStyle = colors.ink;
     context.stroke();
-    context.font = `800 9px ${fontFamily}`;
+    context.font = `500 10px ${fontFamily}`;
     context.fillStyle = colors.hold;
     context.textAlign = "center";
-    context.fillText("長押し", guideX + guideBounds.width / 2, guideY + guideBounds.height - 2);
+    context.fillText("Hold", guideX + guideBounds.width / 2, guideY + guideBounds.height - 2);
 
-    const drawLegendColumn = (selector, modes, hasArrowLabel) => {
+    [...document.querySelectorAll(".legend-layer-descriptions > span")].forEach((row) => {
+      [row.querySelector("b"), row.querySelector("small")].forEach((element) => {
+        const elementBounds = element.getBoundingClientRect();
+        const elementStyle = getComputedStyle(element);
+        context.font = `${elementStyle.fontWeight} ${elementStyle.fontSize} ${fontFamily}`;
+        context.fillStyle = elementStyle.color;
+        context.textAlign = "left";
+        context.textBaseline = "top";
+        context.fillText(
+          element.textContent,
+          cardX + elementBounds.left - bounds.left,
+          cardY + elementBounds.top - bounds.top,
+        );
+      });
+    });
+
+    const drawLegendColumn = (selector, modes, hasArrowLabel, drawColor = colors.func) => {
       const rows = [...document.querySelector(selector).children];
       rows.forEach((row, index) => {
         const iconBounds = row.querySelector("svg").getBoundingClientRect();
         const iconX = cardX + iconBounds.left + iconBounds.width / 2 - bounds.left;
         const iconY = cardY + iconBounds.top + iconBounds.height / 2 - bounds.top;
-        drawMouse(iconX, iconY, modes[index]);
+        drawMouse(iconX, iconY, modes[index], drawColor);
 
         if (hasArrowLabel) {
-          const bold = row.querySelector("b");
-          const boldBounds = bold.getBoundingClientRect();
-          const boldStyle = getComputedStyle(bold);
-          context.font = `${boldStyle.fontWeight} ${boldStyle.fontSize} ${fontFamily}`;
-          context.fillStyle = colors.func;
-          context.textAlign = "left";
-          context.textBaseline = "top";
-          context.fillText(
-            "矢印",
-            cardX + iconBounds.right + 2 - bounds.left,
-            cardY + boldBounds.top - bounds.top,
+          const moveBounds = row.querySelector(".move-icon").getBoundingClientRect();
+          drawMoveIcon(
+            cardX + moveBounds.left + moveBounds.width / 2 - bounds.left,
+            cardY + moveBounds.top + moveBounds.height / 2 - bounds.top,
+            moveBounds.width,
           );
         }
 
@@ -474,6 +657,34 @@
     };
     drawLegendColumn(".legend-clicks", ["left", "right", "middle"], false);
     drawLegendColumn(".legend-mouse", ["pointer", "wheel"], true);
+    if (autoMouseToggle.checked) {
+      drawLegendColumn(
+        ".legend-auto-clicks",
+        ["left", "right", "middle"],
+        false,
+        colors.autoMouse,
+      );
+      [...document.querySelector(".legend-auto-actions").children].forEach((row, index) => {
+        const iconBounds = row.querySelector("svg").getBoundingClientRect();
+        const iconX = cardX + iconBounds.left + iconBounds.width / 2 - bounds.left;
+        const iconY = cardY + iconBounds.top + iconBounds.height / 2 - bounds.top;
+        if (index === 0) drawScrollIcon(iconX, iconY, 18);
+        else drawZoomIcon(iconX, iconY, 18);
+
+        const description = row.querySelector("small");
+        const descriptionBounds = description.getBoundingClientRect();
+        const descriptionStyle = getComputedStyle(description);
+        context.font = `${descriptionStyle.fontWeight} ${descriptionStyle.fontSize} ${fontFamily}`;
+        context.fillStyle = colors.muted;
+        context.textAlign = "left";
+        context.textBaseline = "top";
+        context.fillText(
+          description.textContent,
+          cardX + descriptionBounds.left - bounds.left,
+          cardY + descriptionBounds.top - bounds.top,
+        );
+      });
+    }
 
     const footerDivider = document.querySelector(".footer-divider").getBoundingClientRect();
     const footerDividerY = cardY + footerDivider.top - bounds.top + footerDivider.height / 2;

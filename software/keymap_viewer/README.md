@@ -16,6 +16,8 @@ python3 software/keymap_viewer/scripts/generate.py
 python3 -m http.server 8000 --bind 127.0.0.1 --directory software/keymap_viewer/public
 ```
 
-表示対象はMain、Nums、Func。Mainはキー中央、Numsは左下、Funcは右下、長押し時の割り当ては下端に表示。
+表示対象はMain、Num、Fn、Mouse。Mainはキー上部中央、Numは左下、Mouseは中央、Fnは右下、長押し時の割り当ては下端に表示。Mouseは下部ペインで表示を切り替え。
 
-画面右上の「PNGをコピー」ボタンで、レイアウト部分を2倍解像度のPNG画像としてクリップボードへコピー。Clipboard API対応のChromeなどで利用可能。
+`,`、`.`、`/`には、Shift時の`<`、`>`、`?`をMainの右側に併記。
+
+下部ペインの「PNGをコピー」ボタンで、レイアウト部分を2倍解像度のPNG画像としてクリップボードへコピー。Clipboard API対応のChromeなどで利用可能。

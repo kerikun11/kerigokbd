@@ -28,7 +28,8 @@ class GenerateTest(unittest.TestCase):
     def test_layer_tap_labels(self):
         self.assertEqual(generate.label_for("KG_ESC", self.definitions), "Esc")
         self.assertEqual(generate.hold_label("KG_ESC", self.definitions), "")
-        self.assertEqual(generate.hold_label("MO(KGL_NUM)", self.definitions), "Nums")
+        self.assertEqual(generate.hold_label("MO(KGL_NUM)", self.definitions), "Num")
+        self.assertEqual(generate.hold_label("MO(KGL_AM)", self.definitions), "Mouse")
 
     def test_layers_outside_quick_reference_are_hidden(self):
         for expression in ("KG_ESC", "KG_TEMP", "KG_EXBL", "KG_EXBR"):
@@ -43,6 +44,38 @@ class GenerateTest(unittest.TestCase):
         self.assertEqual(generate.label_for("KC_RGHT", self.definitions), "➡")
         self.assertEqual(generate.label_for("KG_MSL", self.definitions), "M⬅")
         self.assertEqual(generate.label_for("KG_MWLU", self.definitions), "W⬆")
+
+    def test_auto_mouse_uses_compact_key_symbols(self):
+        self.assertEqual(generate.auto_mouse_label("KC_TAB", self.definitions), "⇥")
+        self.assertEqual(generate.auto_mouse_label("KC_ENT", self.definitions), "↵")
+        self.assertEqual(generate.auto_mouse_label("MS_BTN1", self.definitions), "M1")
+        self.assertEqual(generate.auto_mouse_label("KG_ZOOM", self.definitions), "Zoom")
+        self.assertEqual(
+            generate.auto_mouse_label("KC_TAB", self.definitions, "Tab"),
+            "",
+        )
+        self.assertEqual(
+            generate.auto_mouse_label("KC_LWIN", self.definitions, "変換", "Win"),
+            "",
+        )
+        self.assertEqual(
+            generate.auto_mouse_label("KC_LALT", self.definitions, "無変換", "Alt"),
+            "",
+        )
+        self.assertEqual(
+            generate.auto_mouse_label("KC_BSPC", self.definitions, "Backspace"),
+            "",
+        )
+        self.assertEqual(
+            generate.auto_mouse_label("KC_DEL", self.definitions, "Delete"),
+            "",
+        )
+
+    def test_main_shift_labels(self):
+        self.assertEqual(generate.main_shift_label("JP_COMM", self.definitions), "<")
+        self.assertEqual(generate.main_shift_label("JP_DOT", self.definitions), ">")
+        self.assertEqual(generate.main_shift_label("JP_SLSH", self.definitions), "?")
+        self.assertEqual(generate.main_shift_label("KC_A", self.definitions), "")
 
     def test_duplicate_func_label_is_hidden(self):
         self.assertEqual(
