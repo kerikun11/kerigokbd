@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KERIgoKBD v2のキーマップ早見表">
+    <title>Keymap Viewer</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main>
+      <header class="page-header">
+        <button id="copy-png" class="copy-button" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="8" y="8" width="11" height="11" rx="2"></rect>
+            <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path>
+          </svg>
+          <span>PNGをコピー</span>
+        </button>
+      </header>
+      <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
+
+      <section class="keyboard-card" aria-labelledby="keyboard-name">
+        <div class="section-heading">
+          <div>
+            <h2 id="keyboard-name">KERIgoKBD</h2>
+            <p id="layout-version" class="layout-version"></p>
+          </div>
+        </div>
+        <div id="keyboard" class="keyboard" role="group" aria-label="キーボードレイアウト"></div>
+        <section class="legend" aria-label="表示とマウス操作の凡例">
+          <h3 class="legend-title">凡例</h3>
+          <div class="legend-key-guide" aria-label="Numsは左下、Funcは右下、長押しは下端">
+            <span class="guide-nums">Nums</span>
+            <span class="guide-func">Func</span>
+            <span class="guide-hold">長押し</span>
+          </div>
+          <div class="legend-column legend-clicks" aria-label="クリック操作">
+            <span><b><svg class="operation-icon" aria-hidden="true"><use href="#icon-mouse-left"></use></svg></b><small>左クリック</small></span>
+            <span><b><svg class="operation-icon" aria-hidden="true"><use href="#icon-mouse-right"></use></svg></b><small>右クリック</small></span>
+            <span><b><svg class="operation-icon" aria-hidden="true"><use href="#icon-mouse-middle"></use></svg></b><small>中クリック</small></span>
+          </div>
+          <div class="legend-column legend-mouse" aria-label="マウス操作">
+            <span><b><svg class="operation-icon" aria-hidden="true"><use href="#icon-mouse"></use></svg>矢印</b><small>ポインター移動</small></span>
+            <span><b><svg class="operation-icon" aria-hidden="true"><use href="#icon-wheel"></use></svg>矢印</b><small>ホイール</small></span>
+          </div>
+        </section>
+        <hr class="footer-divider">
+        <p class="copyright">©2026 KERI's Lab</p>
+      </section>
+    </main>
+    <svg class="svg-definitions" aria-hidden="true">
+      <defs>
+        <symbol id="icon-mouse" viewBox="0 0 16 16">
+          <rect x="3" y="1.25" width="10" height="13.5" rx="5"></rect>
+          <path d="M8 1.5v5M3.5 6.5h9"></path>
+        </symbol>
+        <symbol id="icon-mouse-left" viewBox="0 0 16 16">
+          <path class="click-mark" style="fill:currentColor;stroke:none" d="M8 1.25a5 5 0 0 0-5 5v.25h5Z"></path>
+          <rect x="3" y="1.25" width="10" height="13.5" rx="5"></rect>
+          <path d="M8 1.5v5M3.5 6.5h9"></path>
+        </symbol>
+        <symbol id="icon-mouse-right" viewBox="0 0 16 16">
+          <path class="click-mark" style="fill:currentColor;stroke:none" d="M8 1.25a5 5 0 0 1 5 5v.25H8Z"></path>
+          <rect x="3" y="1.25" width="10" height="13.5" rx="5"></rect>
+          <path d="M8 1.5v5M3.5 6.5h9"></path>
+        </symbol>
+        <symbol id="icon-mouse-middle" viewBox="0 0 16 16">
+          <rect x="3" y="1.25" width="10" height="13.5" rx="5"></rect>
+          <rect class="click-mark" style="fill:currentColor;stroke:none" x="6.4" y="2.4" width="3.2" height="5.4" rx="1.6"></rect>
+        </symbol>
+        <symbol id="icon-wheel" viewBox="0 0 16 16">
+          <rect x="3" y="1.25" width="10" height="13.5" rx="5"></rect>
+          <rect class="wheel-mark" x="6.75" y="3" width="2.5" height="4.5" rx="1.25"></rect>
+        </symbol>
+        <symbol id="icon-backspace" viewBox="0 0 24 24">
+          <path d="M20 5.5H9.2L3 12l6.2 6.5H20a1.5 1.5 0 0 0 1.5-1.5V7A1.5 1.5 0 0 0 20 5.5Z"></path>
+          <path d="m11 9 6 6m0-6-6 6"></path>
+        </symbol>
+      </defs>
+    </svg>
+    <script src="generated/keymap-data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
