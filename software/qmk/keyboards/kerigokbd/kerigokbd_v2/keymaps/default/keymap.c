@@ -21,7 +21,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                _______, _______, _______, _______, /**/ _______, _______, XXXXXXX, XXXXXXX
   ),
   [KGL_FUN] = LAYOUT_split_6_7_7_4( /* Functions and Navigation Layer */
-    _______, KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  ,          /**/          KG_MWLL, KG_MWLD, KG_MWLU, KG_MWLR, KC_F10 , _______,
+    _______, KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  ,          /**/          KG_MWLL, KG_MWLD, KG_MWLU, KG_MWLR, MS_BTN2, _______,
     _______, JP_LPRN, JP_LCBR, JP_RCBR, JP_LBRC ,JP_RBRC, KC_F11 , /**/ MS_BTN3, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, JP_RPRN, _______,
     KC_LSFT, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , KC_F12 , /**/ MS_BTN2, KG_MSL , KG_MSD , KG_MSU , KG_MSR , MS_BTN1, _______,
                                _______, _______, _______, _______, /**/ _______, _______, XXXXXXX, XXXXXXX
