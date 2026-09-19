@@ -219,7 +219,7 @@ h1 {
   font-size: 10px;
   transform: translateX(-50%);
 }
-.guide-auto-mouse[hidden] { display: none; }
+.guide-auto-mouse[hidden], .legend-layer-mouse[hidden] { display: none; }
 .guide-func { right: 5px; color: var(--func); }
 .guide-hold {
   right: 5px;
@@ -305,6 +305,25 @@ h1 {
   display: flex;
   align-items: center;
 }
+
+.keyboard-selector {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.keyboard-selector select {
+  padding: 8px 10px;
+  border: 1px solid var(--key-border);
+  border-radius: 8px;
+  background: var(--key);
+  color: var(--ink);
+  font: inherit;
+}
+
+.layer-toggle:has(input:disabled) { opacity: .5; cursor: default; }
 
 .layer-toggle {
   gap: 10px;

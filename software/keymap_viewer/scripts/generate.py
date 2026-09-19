@@ -51,6 +51,8 @@ KEY_LABELS = {
     "KC_PPLS": "+", "KC_PENT": "Enter", "KC_PAST": "×",
     "KC_P1": "1", "KC_P2": "2", "KC_P3": "3", "KC_PDOT": ".",
     "KC_P0": "0", "QK_BOOT": "Boot",
+    "MS_LEFT": "M⬅", "MS_DOWN": "M⬇", "MS_UP": "M⬆", "MS_RGHT": "M➡",
+    "MS_WHLL": "W⬅", "MS_WHLD": "W⬇", "MS_WHLU": "W⬆", "MS_WHLR": "W➡",
     "MS_BTN1": "M1", "MS_BTN2": "M2", "MS_BTN3": "M3",
     "RM_TOGG": "RGB", "RM_NEXT": "RGB Next", "RM_PREV": "RGB Prev",
     "RM_HUEU": "Hue +", "RM_HUED": "Hue −", "RM_SATU": "Sat +",
@@ -319,12 +321,13 @@ def validate_sources(
     positions: list[dict[str, object]],
     geometries: dict[tuple[int, int], dict[str, float]],
     layers: dict[str, list[str]],
+    required_layers: tuple[str, ...] = VISIBLE_LAYERS,
 ) -> None:
-    missing_layers = [layer for layer in VISIBLE_LAYERS if layer not in layers]
+    missing_layers = [layer for layer in required_layers if layer not in layers]
     if missing_layers:
         raise ValueError(f"Missing layers: {', '.join(missing_layers)}")
 
-    for layer in VISIBLE_LAYERS:
+    for layer in required_layers:
         if len(layers[layer]) != len(positions):
             raise ValueError(
                 f"{layer} has {len(layers[layer])} keys; layout has {len(positions)} positions"
@@ -392,14 +395,14 @@ def build_key(
     for output_name, layer_name in OUTPUT_LAYERS:
         key[output_name] = build_layer_entry(
             output_name,
-            layers[layer_name][index],
+            layers[layer_name][index] if layer_name in layers else "XXXXXXX",
             definitions,
             main_entry,
         )
     return key
 
 
-def layout_version() -> str:
+def layout_version(keymap_path: Path = KEYMAP_PATH) -> str:
     """Use committed keymap history, with daily revisions counted in JST."""
     def git(*args: str) -> str:
         return subprocess.check_output(
@@ -410,7 +413,7 @@ def layout_version() -> str:
         raise ValueError("Layout version requires full Git history (fetch-depth: 0).")
     history = git(
         "log", "--follow", "--format=%cI", "--",
-        str(KEYMAP_PATH.relative_to(REPOSITORY_ROOT)),
+        str(keymap_path.relative_to(REPOSITORY_ROOT)),
     )
     if not history:
         raise ValueError("No committed history found for keymap.c.")
@@ -431,11 +434,14 @@ def build_payload(
     via: dict[str, object],
     layers: dict[str, list[str]],
     definitions: dict[str, str],
+    keyboard_id: str = "kerigokbd_v2",
 ) -> dict[str, object]:
+    keyboard_root = KEYBOARD_ROOT / keyboard_id
+    has_trackpad = keyboard_id == "kerigokbd_v2"
     layout_name = next(iter(info["layouts"]))
     positions = info["layouts"][layout_name]["layout"]
     geometries = parse_via_layout(via["layouts"]["keymap"])
-    validate_sources(positions, geometries, layers)
+    validate_sources(positions, geometries, layers, VISIBLE_LAYERS if has_trackpad else VISIBLE_LAYERS[:3])
 
     keys = []
     for index, position in enumerate(positions):
@@ -451,15 +457,16 @@ def build_payload(
         )
 
     return {
+        "id": keyboard_id,
         "keyboard": info["keyboard_name"],
-        "layoutVersion": layout_version(),
+        "layoutVersion": layout_version(keyboard_root / "keymaps/default/keymap.c"),
         "layout": layout_name,
-        "source": str(KEYMAP_PATH.relative_to(REPOSITORY_ROOT)),
-        "geometrySource": str(VIA_PATH.relative_to(REPOSITORY_ROOT)),
+        "source": str((keyboard_root / "keymaps/default/keymap.c").relative_to(REPOSITORY_ROOT)),
+        "geometrySource": str((keyboard_root / "keymaps/via/via.json").relative_to(REPOSITORY_ROOT)),
         "trackpad": {
             **TRACKPAD_GEOMETRY,
             "replaces": [list(matrix) for matrix in TRACKPAD_REPLACED_MATRIXES],
-        },
+        } if has_trackpad else None,
         "keys": keys,
     }
 
@@ -473,17 +480,21 @@ def write_payload(payload: dict[str, object]) -> None:
     )
 
 
-def main() -> None:
-    info = json.loads(INFO_PATH.read_text(encoding="utf-8"))
-    via = json.loads(VIA_PATH.read_text(encoding="utf-8"))
+def build_keyboard(keyboard_id: str) -> dict[str, object]:
+    if keyboard_id not in ("kerigokbd_v2", "kerigokbd_v1"):
+        raise ValueError(f"Unsupported keyboard: {keyboard_id}")
+    root = KEYBOARD_ROOT / keyboard_id
+    info = json.loads((root / "info.json").read_text(encoding="utf-8"))
+    via = json.loads((root / "keymaps/via/via.json").read_text(encoding="utf-8"))
     definitions = parse_definitions(DEFINITIONS_PATH.read_text(encoding="utf-8"))
-    layers = parse_layers(KEYMAP_PATH.read_text(encoding="utf-8"))
-    payload = build_payload(info, via, layers, definitions)
-    write_payload(payload)
-    print(
-        f"Generated {OUTPUT_PATH.relative_to(REPOSITORY_ROOT)} "
-        f"({len(payload['keys'])} keys)"
-    )
+    layers = parse_layers((root / "keymaps/default/keymap.c").read_text(encoding="utf-8"))
+    return build_payload(info, via, layers, definitions, keyboard_id)
+
+
+def main() -> None:
+    keyboards = {name: build_keyboard(name) for name in ("kerigokbd_v2", "kerigokbd_v1")}
+    write_payload({"keyboards": keyboards})
+    print(f"Generated {OUTPUT_PATH.relative_to(REPOSITORY_ROOT)} ({len(keyboards)} keyboards)")
 
 
 if __name__ == "__main__":

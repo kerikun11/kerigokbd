@@ -1,6 +1,6 @@
 # KERIgoKBD Keymap Viewer
 
-KERIgoKBD v2の`keymap.c`を、一枚の早見表として表示する静的Webアプリ。物理キー配置は`keymaps/via/via.json`から取得。
+KERIgoKBD v1・v2の`keymap.c`を、一枚の早見表として表示する静的Webアプリ。物理キー配置は`keymaps/via/via.json`から取得。
 
 ## Structure
 
@@ -21,7 +21,7 @@ python3 software/keymap_viewer/scripts/generate.py
 
 生成時に、表示対象レイヤの不足、キー数の不一致、VIAと`info.json`のmatrix不整合を検出。
 
-`Layout vYYYY.MM.DDa`は、v2の`keymaps/default/keymap.c`のGit履歴から自動生成。
+`Layout vYYYY.MM.DDa`は、選択したキーボードの`keymaps/default/keymap.c`のGit履歴から自動生成。
 最新の変更コミットのコミッター日時を日本時間で日付に変換し、その日の変更コミット数に応じて`a`、`b`、…、`z`、`aa`と付与する。
 例えば同日に2回更新すると`Layout v2026.09.12b`となる。コメントのみの変更も1回に数える。
 Viewerや他のファイルだけの変更、再生成・再デプロイでは変わらない。未コミットの編集は番号に反映されない。
@@ -35,7 +35,9 @@ Viewerや他のファイルだけの変更、再生成・再デプロイでは�
 python3 -m http.server 8000 --bind 127.0.0.1 --directory software/keymap_viewer/public
 ```
 
-表示対象はMain、Num、Fn、Mouse。Mainはキー上部中央、Numは左下、Mouseは中央、Fnは右下、長押し時の割り当ては下端に表示。Mouseは下部ペインで表示を切り替え。
+設定ペインの「キーボード」でv1・v2を選択。初期表示はv2。v1は48キーすべてを表示し、トラックパッドと専用MouseレイヤがないためMouse切り替えは無効になる。PNGの内容とファイル名も選択したキーボードに合わせる。
+
+表示対象はMain、Num、Fn、Mouse（v2のみ）。Mainはキー上部中央、Numは左下、Mouseは中央、Fnは右下、長押し時の割り当ては下端に表示。Mouseは下部ペインで表示を切り替え。
 
 `,`、`.`、`/`には、Shift時の`<`、`>`、`?`をMainの右側に併記。
 

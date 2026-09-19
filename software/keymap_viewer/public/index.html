@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="KERIgoKBD v2のキーマップ早見表">
+  <meta name="description" content="KERIgoKBD v1・v2のキーマップ早見表">
   <meta name="theme-color" content="#fbfaf6">
-  <title>KERIgoKBD v2 Keymap Viewer</title>
+  <title>KERIgoKBD Keymap Viewer</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -88,6 +88,13 @@
     </section>
     <section class="control-pane" aria-labelledby="settings-title">
       <h2 id="settings-title" class="settings-title">設定</h2>
+      <label class="keyboard-selector" for="keyboard-select">
+        <span>キーボード</span>
+        <select id="keyboard-select">
+          <option value="kerigokbd_v2">KERIgoKBD v2</option>
+          <option value="kerigokbd_v1">KERIgoKBD v1</option>
+        </select>
+      </label>
       <label class="layer-toggle" for="toggle-auto-mouse">
         <input id="toggle-auto-mouse" type="checkbox" checked>
         <span class="toggle-track" aria-hidden="true"><span></span></span>

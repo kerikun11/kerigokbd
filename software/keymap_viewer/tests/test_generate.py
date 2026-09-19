@@ -45,6 +45,34 @@ class LayoutVersionTest(unittest.TestCase):
                 generate.layout_version()
 
 
+class KeyboardSelectionTest(unittest.TestCase):
+    def test_v1_preserves_all_thumb_keys_without_trackpad(self):
+        payload = generate.build_keyboard("kerigokbd_v1")
+        self.assertEqual(payload["keyboard"], "KERIgoKBD v1")
+        self.assertIsNone(payload["trackpad"])
+        self.assertEqual(len(payload["keys"]), 48)
+        self.assertTrue(all(key["autoMouse"]["label"] == "" for key in payload["keys"]))
+        thumbs = [key for key in payload["keys"] if key["matrix"] in ([7, 4], [7, 3])]
+        self.assertEqual(len(thumbs), 2)
+        self.assertTrue(all(key["main"]["label"] for key in thumbs))
+
+    def test_each_keyboard_uses_its_own_version_and_sources(self):
+        for keyboard_id in ("kerigokbd_v1", "kerigokbd_v2"):
+            with self.subTest(keyboard=keyboard_id):
+                with patch.object(generate, "layout_version", return_value="v2026.09.19a") as version:
+                    payload = generate.build_keyboard(keyboard_id)
+                version.assert_called_once_with(generate.KEYBOARD_ROOT / keyboard_id / "keymaps/default/keymap.c")
+                self.assertIn(keyboard_id, payload["source"])
+                self.assertIn(keyboard_id, payload["geometrySource"])
+                self.assertEqual(payload["layoutVersion"], "v2026.09.19a")
+                self.assertEqual(payload["trackpad"] is not None, keyboard_id == "kerigokbd_v2")
+
+    def test_v1_mouse_key_labels(self):
+        payload = generate.build_keyboard("kerigokbd_v1")
+        labels = {key["func"]["label"] for key in payload["keys"]}
+        self.assertTrue({"M⬅", "M⬇", "M⬆", "M➡"} <= labels)
+
+
 class GenerateTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):

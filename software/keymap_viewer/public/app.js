@@ -39,7 +39,7 @@
     return element;
   };
 
-  const data = window.KEYMAP_DATA;
+  let data = window.KEYMAP_DATA?.keyboards?.kerigokbd_v2;
   if (!data) {
     requiredElement("main").innerHTML = "<p>キーマップデータを読み込めませんでした。</p>";
     return;
@@ -47,6 +47,7 @@
 
   const elements = Object.freeze({
     keyboard: requiredElement("#keyboard"),
+    keyboardSelect: requiredElement("#keyboard-select"),
     keyboardName: requiredElement("#keyboard-name"),
     layoutVersion: requiredElement("#layout-version"),
     mouseToggle: requiredElement("#toggle-auto-mouse"),
@@ -76,7 +77,7 @@
   };
 
   const matrixId = (matrix) => matrix.join(",");
-  const trackpadKeys = new Set(data.trackpad.replaces.map(matrixId));
+  let trackpadKeys = new Set();
   const isCompactMainLabel = (label) => label !== "Backspace" && label.length > 1;
   const pngAuxiliaryFontSize = (label, forceStandard = false) => {
     if (forceStandard) return PNG_TYPOGRAPHY.auxiliary;
@@ -217,14 +218,23 @@
     return trackpad;
   };
 
-  const fragment = document.createDocumentFragment();
-  data.keys
-    .filter((key) => !trackpadKeys.has(matrixId(key.matrix)))
-    .forEach((key) => fragment.append(createKeyElement(key)));
-  fragment.append(createTrackpadElement());
-  keyboard.replaceChildren(fragment);
+  const renderKeyboard = () => {
+    trackpadKeys = new Set(data.trackpad?.replaces.map(matrixId) ?? []);
+    elements.keyboardName.textContent = data.keyboard;
+    elements.layoutVersion.textContent = `Layout ${data.layoutVersion}`;
+    const fragment = document.createDocumentFragment();
+    data.keys
+      .filter((key) => !trackpadKeys.has(matrixId(key.matrix)))
+      .forEach((key) => fragment.append(createKeyElement(key)));
+    if (data.trackpad) fragment.append(createTrackpadElement());
+    keyboard.replaceChildren(fragment);
+    autoMouseToggle.disabled = !data.trackpad;
+  };
+  renderKeyboard();
 
   const setAutoMouseVisibility = (visible) => {
+    visible = visible && Boolean(data.trackpad);
+    document.querySelector(".legend-layer-mouse").hidden = !data.trackpad;
     keyboard.classList.toggle("show-auto-mouse", visible);
     keyboard.setAttribute("data-auto-mouse-visible", String(visible));
     elements.mouseGuide.hidden = !visible;
@@ -246,6 +256,13 @@
   };
   syncLegendKeySize();
   window.addEventListener("resize", syncLegendKeySize);
+  elements.keyboardSelect.addEventListener("change", () => {
+    data = window.KEYMAP_DATA.keyboards[elements.keyboardSelect.value];
+    renderKeyboard();
+    setAutoMouseVisibility(autoMouseToggle.checked);
+    syncLegendKeySize();
+    elements.copyStatus.textContent = "";
+  });
 
   const renderCardToPng = async () => {
     syncLegendKeySize();
@@ -572,7 +589,7 @@
         context.fillText(key.nums.label, numsX, auxiliaryY);
       }
       drawOperation(key.func.label, funcX, auxiliaryY, "right", funcSize);
-      if (autoMouseToggle.checked && key.autoMouse.label) {
+      if (data.trackpad && autoMouseToggle.checked && key.autoMouse.label) {
         drawAutoMouseValue(key.autoMouse, keyWidth / 2, keyHeight * VIEWER_CONFIG.mouseLabelY);
       }
 
@@ -593,41 +610,43 @@
       context.restore();
     });
 
-    const trackpadX = keyboardX + data.trackpad.x * keyUnitX;
-    const trackpadY = keyboardY + data.trackpad.y * keyUnitY;
-    const diameter = data.trackpad.width * keyUnitX - keyboardBounds.width * .0055;
-    context.save();
-    context.shadowColor = "rgba(45,43,34,.13)";
-    context.shadowBlur = 7;
-    context.shadowOffsetY = 3;
-    context.beginPath();
-    context.arc(trackpadX + diameter / 2, trackpadY + diameter / 2, diameter / 2, 0, Math.PI * 2);
-    context.fillStyle = colors.key;
-    context.fill();
-    context.shadowColor = "transparent";
-    context.strokeStyle = colors.border;
-    context.stroke();
-    context.fillStyle = "#777a73";
-    context.textAlign = "center";
-    context.textBaseline = "middle";
-    drawMouse(
-      trackpadX + diameter / 2,
-      trackpadY + diameter * .39,
-      "left",
-      colors.autoMouse,
-      1,
-    );
-    context.font = `700 12px ${fontFamily}`;
-    context.fillText("Trackpad", trackpadX + diameter / 2, trackpadY + diameter * .58);
-    context.beginPath();
-    context.moveTo(trackpadX + diameter * .15, trackpadY + diameter * .79);
-    context.lineTo(trackpadX + diameter * .85, trackpadY + diameter * .79);
-    context.strokeStyle = colors.ink;
-    context.stroke();
-    context.font = `500 13px ${fontFamily}`;
-    context.fillStyle = colors.autoMouse;
-    context.fillText("Mouse", trackpadX + diameter / 2, trackpadY + diameter * .87);
-    context.restore();
+    if (data.trackpad) {
+      const trackpadX = keyboardX + data.trackpad.x * keyUnitX;
+      const trackpadY = keyboardY + data.trackpad.y * keyUnitY;
+      const diameter = data.trackpad.width * keyUnitX - keyboardBounds.width * .0055;
+      context.save();
+      context.shadowColor = "rgba(45,43,34,.13)";
+      context.shadowBlur = 7;
+      context.shadowOffsetY = 3;
+      context.beginPath();
+      context.arc(trackpadX + diameter / 2, trackpadY + diameter / 2, diameter / 2, 0, Math.PI * 2);
+      context.fillStyle = colors.key;
+      context.fill();
+      context.shadowColor = "transparent";
+      context.strokeStyle = colors.border;
+      context.stroke();
+      context.fillStyle = "#777a73";
+      context.textAlign = "center";
+      context.textBaseline = "middle";
+      drawMouse(
+        trackpadX + diameter / 2,
+        trackpadY + diameter * .39,
+        "left",
+        colors.autoMouse,
+        1,
+      );
+      context.font = `700 12px ${fontFamily}`;
+      context.fillText("Trackpad", trackpadX + diameter / 2, trackpadY + diameter * .58);
+      context.beginPath();
+      context.moveTo(trackpadX + diameter * .15, trackpadY + diameter * .79);
+      context.lineTo(trackpadX + diameter * .85, trackpadY + diameter * .79);
+      context.strokeStyle = colors.ink;
+      context.stroke();
+      context.font = `500 13px ${fontFamily}`;
+      context.fillStyle = colors.autoMouse;
+      context.fillText("Mouse", trackpadX + diameter / 2, trackpadY + diameter * .87);
+      context.restore();
+    }
 
     const legend = document.querySelector(".legend").getBoundingClientRect();
     const legendY = cardY + legend.top - bounds.top;
@@ -661,7 +680,7 @@
     context.textAlign = "left";
     context.fillStyle = colors.nums;
     context.fillText("Num", guideX + 5, guideY + guideBounds.height - 18);
-    if (autoMouseToggle.checked) {
+    if (data.trackpad && autoMouseToggle.checked) {
       context.textAlign = "center";
       context.fillStyle = colors.autoMouse;
       context.fillText("Mouse", guideX + guideBounds.width / 2, guideY + guideBounds.height - 31);
@@ -680,6 +699,7 @@
     context.fillText("Hold", guideX + guideBounds.width / 2, guideY + guideBounds.height - 2);
 
     [...document.querySelectorAll(".legend-layer-descriptions > span")].forEach((row) => {
+      if (row.hidden) return;
       [row.querySelector("b"), row.querySelector("small")].forEach((element) => {
         const elementBounds = element.getBoundingClientRect();
         const elementStyle = getComputedStyle(element);
@@ -728,7 +748,7 @@
     };
     drawLegendColumn(".legend-clicks", ["left", "right", "middle"], false);
     drawLegendColumn(".legend-mouse", ["pointer", "wheel"], true);
-    if (autoMouseToggle.checked) {
+    if (data.trackpad && autoMouseToggle.checked) {
       drawLegendColumn(
         ".legend-auto-clicks",
         ["left", "right", "middle"],
@@ -787,6 +807,7 @@
   };
 
   elements.copyButton.addEventListener("click", async () => {
+    elements.keyboardSelect.disabled = true;
     elements.copyButton.disabled = true;
     elements.downloadButton.disabled = true;
     elements.copyStatus.textContent = "PNGを生成しています…";
@@ -801,12 +822,14 @@
       console.error(error);
       elements.copyStatus.textContent = "コピーできませんでした。Chromeなどの対応ブラウザで開いてください。";
     } finally {
+      elements.keyboardSelect.disabled = false;
       elements.copyButton.disabled = false;
       elements.downloadButton.disabled = false;
     }
   });
 
   elements.downloadButton.addEventListener("click", async () => {
+    elements.keyboardSelect.disabled = true;
     elements.copyButton.disabled = true;
     elements.downloadButton.disabled = true;
     elements.copyStatus.textContent = "PNGを生成しています…";
@@ -815,7 +838,7 @@
       const url = URL.createObjectURL(png);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `kerigokbd_v2_keymap_${data.layoutVersion}.png`;
+      link.download = `${data.id}_keymap_${data.layoutVersion}.png`;
       document.body.append(link);
       try {
         link.click();
@@ -828,6 +851,7 @@
       console.error(error);
       elements.copyStatus.textContent = "PNGをダウンロードできませんでした。もう一度お試しください。";
     } finally {
+      elements.keyboardSelect.disabled = false;
       elements.copyButton.disabled = false;
       elements.downloadButton.disabled = false;
     }
