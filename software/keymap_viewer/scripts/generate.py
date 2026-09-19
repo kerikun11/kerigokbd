@@ -5,6 +5,8 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 
@@ -24,7 +26,6 @@ OUTPUT_LAYERS = (
 )
 TRACKPAD_REPLACED_MATRIXES = ((7, 4), (7, 3))
 TRACKPAD_GEOMETRY = {"x": 10.125, "y": 3.15, "width": 1.75, "height": 1.75}
-LAYOUT_VERSION = "v2026.09.12a"
 LAYER_LABELS = {
     "KGL_MAIN": "Main",
     "KGL_NUM": "Num",
@@ -398,6 +399,33 @@ def build_key(
     return key
 
 
+def layout_version() -> str:
+    """Use committed keymap history, with daily revisions counted in JST."""
+    def git(*args: str) -> str:
+        return subprocess.check_output(
+            ["git", "-C", str(REPOSITORY_ROOT), *args], text=True
+        ).strip()
+
+    if git("rev-parse", "--is-shallow-repository") == "true":
+        raise ValueError("Layout version requires full Git history (fetch-depth: 0).")
+    history = git(
+        "log", "--follow", "--format=%cI", "--",
+        str(KEYMAP_PATH.relative_to(REPOSITORY_ROOT)),
+    )
+    if not history:
+        raise ValueError("No committed history found for keymap.c.")
+    jst = timezone(timedelta(hours=9))
+    dates = [datetime.fromisoformat(line).astimezone(jst).date()
+             for line in history.splitlines()]
+    latest = dates[0]
+    revision = dates.count(latest)
+    suffix = ""
+    while revision:
+        revision, remainder = divmod(revision - 1, 26)
+        suffix = chr(ord("a") + remainder) + suffix
+    return f"v{latest:%Y.%m.%d}{suffix}"
+
+
 def build_payload(
     info: dict[str, object],
     via: dict[str, object],
@@ -424,7 +452,7 @@ def build_payload(
 
     return {
         "keyboard": info["keyboard_name"],
-        "layoutVersion": LAYOUT_VERSION,
+        "layoutVersion": layout_version(),
         "layout": layout_name,
         "source": str(KEYMAP_PATH.relative_to(REPOSITORY_ROOT)),
         "geometrySource": str(VIA_PATH.relative_to(REPOSITORY_ROOT)),

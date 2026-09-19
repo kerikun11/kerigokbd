@@ -1,12 +1,48 @@
 import sys
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 
 SCRIPT_DIRECTORY = Path(__file__).resolve().parents[1] / "scripts"
 sys.path.insert(0, str(SCRIPT_DIRECTORY))
 
 import generate  # noqa: E402
+
+
+class LayoutVersionTest(unittest.TestCase):
+    def version_for(self, timestamps):
+        with patch.object(generate.subprocess, "check_output", side_effect=[
+            "false\n", "\n".join(timestamps),
+        ]):
+            return generate.layout_version()
+
+    def test_first_update_of_new_day(self):
+        self.assertEqual(self.version_for([
+            "2026-09-13T00:00:00+09:00", "2026-09-12T23:59:59+09:00",
+        ]), "v2026.09.13a")
+
+    def test_same_day_updates_use_japan_time(self):
+        self.assertEqual(self.version_for([
+            "2026-09-12T16:00:00+00:00", "2026-09-13T00:00:00+09:00",
+            "2026-09-12T14:59:59+00:00",
+        ]), "v2026.09.13b")
+
+    def test_suffix_after_z(self):
+        for count, suffix in [(26, "z"), (27, "aa"), (52, "az"), (53, "ba")]:
+            with self.subTest(count=count):
+                self.assertEqual(self.version_for([
+                    "2026-09-12T12:00:00+09:00",
+                ] * count), f"v2026.09.12{suffix}")
+
+    def test_missing_history_fails(self):
+        with self.assertRaisesRegex(ValueError, "No committed history"):
+            self.version_for([])
+
+    def test_shallow_history_fails(self):
+        with patch.object(generate.subprocess, "check_output", return_value="true\n"):
+            with self.assertRaisesRegex(ValueError, "full Git history"):
+                generate.layout_version()
 
 
 class GenerateTest(unittest.TestCase):

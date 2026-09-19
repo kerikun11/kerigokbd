@@ -21,6 +21,12 @@ python3 software/keymap_viewer/scripts/generate.py
 
 生成時に、表示対象レイヤの不足、キー数の不一致、VIAと`info.json`のmatrix不整合を検出。
 
+`Layout vYYYY.MM.DDa`は、v2の`keymaps/default/keymap.c`のGit履歴から自動生成。
+最新の変更コミットのコミッター日時を日本時間で日付に変換し、その日の変更コミット数に応じて`a`、`b`、…、`z`、`aa`と付与する。
+例えば同日に2回更新すると`Layout v2026.09.12b`となる。コメントのみの変更も1回に数える。
+Viewerや他のファイルだけの変更、再生成・再デプロイでは変わらない。未コミットの編集は番号に反映されない。
+生成にはGitの完全な履歴が必要で、GitHub Pagesのcheckoutも`fetch-depth: 0`を使用する。
+
 ## Preview
 
 リポジトリルートで次を実行し、`http://127.0.0.1:8000/`を開く。
