@@ -557,6 +557,9 @@
         : PNG_TYPOGRAPHY.main;
       if (key.main.label === "Backspace") {
         drawBackspace(keyWidth / 2, 21);
+      } else if (CLICK_PATTERN.test(key.main.label)) {
+        const click = key.main.label.match(CLICK_PATTERN);
+        drawMouse(keyWidth / 2, 8 + mainSize / 2, CLICK_MODES[click[1]], colors.ink, mainSize / 16);
       } else {
         context.font = `750 ${mainSize}px ${fontFamily}`;
         context.fillStyle = colors.ink;
