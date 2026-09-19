@@ -53,6 +53,7 @@
     mouseGuide: requiredElement(".guide-auto-mouse"),
     mouseLegend: requiredElement(".legend-auto-section"),
     copyButton: requiredElement("#copy-png"),
+    downloadButton: requiredElement("#download-png"),
     copyStatus: requiredElement("#copy-status"),
   });
   const keyboard = elements.keyboard;
@@ -787,6 +788,7 @@
 
   elements.copyButton.addEventListener("click", async () => {
     elements.copyButton.disabled = true;
+    elements.downloadButton.disabled = true;
     elements.copyStatus.textContent = "PNGを生成しています…";
     try {
       if (!navigator.clipboard || typeof ClipboardItem === "undefined") {
@@ -800,6 +802,34 @@
       elements.copyStatus.textContent = "コピーできませんでした。Chromeなどの対応ブラウザで開いてください。";
     } finally {
       elements.copyButton.disabled = false;
+      elements.downloadButton.disabled = false;
+    }
+  });
+
+  elements.downloadButton.addEventListener("click", async () => {
+    elements.copyButton.disabled = true;
+    elements.downloadButton.disabled = true;
+    elements.copyStatus.textContent = "PNGを生成しています…";
+    try {
+      const png = await renderCardToPng();
+      const url = URL.createObjectURL(png);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `kerigokbd_v2_keymap_${data.layoutVersion}.png`;
+      document.body.append(link);
+      try {
+        link.click();
+      } finally {
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 60000);
+      }
+      elements.copyStatus.textContent = "PNGのダウンロードを開始しました。";
+    } catch (error) {
+      console.error(error);
+      elements.copyStatus.textContent = "PNGをダウンロードできませんでした。もう一度お試しください。";
+    } finally {
+      elements.copyButton.disabled = false;
+      elements.downloadButton.disabled = false;
     }
   });
 

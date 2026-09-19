@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="KERIgoKBD v2のキーマップ早見表">
   <meta name="theme-color" content="#fbfaf6">
-  <title>Keymap Viewer</title>
+  <title>KERIgoKBD v2 Keymap Viewer</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -86,7 +86,8 @@
       <hr class="footer-divider">
       <footer class="copyright">©2026 KERI's Lab</footer>
     </section>
-    <section class="control-pane" aria-label="表示と画像出力">
+    <section class="control-pane" aria-labelledby="settings-title">
+      <h2 id="settings-title" class="settings-title">設定</h2>
       <label class="layer-toggle" for="toggle-auto-mouse">
         <input id="toggle-auto-mouse" type="checkbox" checked>
         <span class="toggle-track" aria-hidden="true"><span></span></span>
@@ -101,8 +102,17 @@
           </svg>
           <span>PNGをコピー</span>
         </button>
+        <button id="download-png" class="copy-button" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"></path>
+          </svg>
+          <span>PNGをダウンロード</span>
+        </button>
       </div>
     </section>
+    <footer class="source-footer">
+      <a href="https://github.com/kerikun11/keryboard/tree/main/software/keymap_viewer">ソースコードをGitHubで見る</a>
+    </footer>
   </main>
   <svg class="svg-definitions" aria-hidden="true">
     <defs>

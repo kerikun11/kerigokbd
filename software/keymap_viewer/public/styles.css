@@ -38,6 +38,19 @@ main {
   padding: 24px 0 28px;
 }
 
+.source-footer {
+  margin-top: 16px;
+  text-align: right;
+  font-size: 13px;
+}
+
+.source-footer a {
+  color: var(--muted);
+  text-underline-offset: 3px;
+}
+
+.source-footer a:hover { color: var(--ink); }
+
 h1 {
   margin: 0;
   font-size: clamp(21px, 2.6vw, 27px);
@@ -267,6 +280,7 @@ h1 {
 
 .control-pane {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 18px;
@@ -276,6 +290,14 @@ h1 {
   background: var(--card);
   box-shadow: 0 8px 24px rgb(50 47 36 / 8%);
   padding: 12px 14px 12px 18px;
+}
+
+.settings-title {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
 }
 
 .layer-toggle,
@@ -558,7 +580,7 @@ h1 {
 @media print {
   body { background: white; }
   main { width: 100%; padding: 0; }
-  .control-pane { display: none; }
+  .control-pane, .source-footer { display: none; }
   .keyboard-card { border: 0; box-shadow: none; padding: 0; }
   .key { print-color-adjust: exact; }
 }

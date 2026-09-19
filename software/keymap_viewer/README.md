@@ -41,6 +41,8 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory software/keymap_viewer/
 
 下部ペインの「PNGをコピー」ボタンで、レイアウト部分を2倍解像度のPNG画像としてクリップボードへコピー。Clipboard API対応のChromeなどで利用可能。
 
+「PNGをダウンロード」ボタンでは同じ画像をファイルとして保存。ファイル名にはレイアウトバージョンを含む。
+
 ## Test
 
 ```sh
