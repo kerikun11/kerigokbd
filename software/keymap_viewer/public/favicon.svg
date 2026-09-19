@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="KERIgoKBD right-hand keyboard">
+  <style>
+    :root { color-scheme: light; }
+    .surface { fill: #fff; stroke: #2a2a2a; }
+    .key-shape { fill: #f5f5f5; stroke: #2a2a2a; }
+    .brand-text { fill: #000; }
+    .divider { stroke: #ebebeb; }
+    .accent-fill { fill: #0000ff; }
+  </style>
+  <rect class="surface" x="1" y="1" width="62" height="62" rx="5" stroke-width="2"/>
+
+  <!-- VIA coordinates scaled at 7.6 px per 1u. All switches are square. -->
+  <g class="key-shape" transform="translate(-55 12) scale(7.6)" stroke-width=".13">
+    <!-- Top row: Y U I O P Backspace -->
+    <rect x="9" y=".25" width=".9" height=".9" rx=".16"/>
+    <rect x="10" y=".125" width=".9" height=".9" rx=".16"/>
+    <rect x="11" y="0" width=".9" height=".9" rx=".16"/>
+    <rect x="12" y=".125" width=".9" height=".9" rx=".16"/>
+    <rect x="13" y=".3125" width=".9" height=".9" rx=".16"/>
+    <rect x="14" y=".5" width=".9" height=".9" rx=".16"/>
+
+    <!-- Home H J K L Minus Enter -->
+    <rect x="8" y="1.375" width=".9" height=".9" rx=".16"/>
+    <rect x="9" y="1.25" width=".9" height=".9" rx=".16"/>
+    <rect x="10" y="1.125" width=".9" height=".9" rx=".16"/>
+    <rect x="11" y="1" width=".9" height=".9" rx=".16"/>
+    <rect x="12" y="1.125" width=".9" height=".9" rx=".16"/>
+    <rect x="13" y="1.3125" width=".9" height=".9" rx=".16"/>
+    <rect x="14" y="1.5" width=".9" height=".9" rx=".16"/>
+
+    <!-- End N M Comma Dot Slash Delete -->
+    <rect x="8" y="2.375" width=".9" height=".9" rx=".16"/>
+    <rect x="9" y="2.25" width=".9" height=".9" rx=".16"/>
+    <rect x="10" y="2.125" width=".9" height=".9" rx=".16"/>
+    <rect x="11" y="2" width=".9" height=".9" rx=".16"/>
+    <rect x="12" y="2.125" width=".9" height=".9" rx=".16"/>
+    <rect x="13" y="2.3125" width=".9" height=".9" rx=".16"/>
+    <rect x="14" y="2.5" width=".9" height=".9" rx=".16"/>
+
+    <!-- Right thumb keys: Space (-20°) and Fn (-10°) -->
+    <rect x="8.36" y="2.79" width=".9" height=".9" rx=".16" transform="rotate(-20 11 5)"/>
+    <rect x="9.16" y="3.09" width=".9" height=".9" rx=".16" transform="rotate(-10 11 5)"/>
+
+    <!-- Trackpad: 1.67u rendered diameter, centered at x=10.96u -->
+    <circle cx="10.96" cy="3.985" r=".835" stroke-width=".16"/>
+  </g>
+  <path class="divider" d="M7 51.5h50" fill="none" stroke-width="1"/>
+  <text class="brand-text" x="32" y="59" font-family="'Open Sans', Helvetica, Arial, sans-serif" font-size="5.2" font-weight="700" letter-spacing="-.12" text-anchor="middle">KERIgoKBD <tspan class="accent-fill">v2</tspan></text>
+</svg>

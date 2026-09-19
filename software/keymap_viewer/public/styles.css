@@ -231,12 +231,6 @@ h1 {
   stroke-linejoin: round;
 }
 
-.operation-icon .wheel-mark,
-.operation-icon .click-mark {
-  fill: currentColor;
-  stroke: none;
-}
-
 .svg-definitions {
   position: absolute;
   width: 0;

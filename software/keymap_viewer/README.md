@@ -6,6 +6,7 @@ KERIgoKBD v2の`keymap.c`を、一枚の早見表として表示する静的Web�
 
 - `scripts/generate.py`: QMKソースとVIAレイアウトの解析・検証
 - `public/index.html`: Viewerの構造とSVGアイコン定義
+- `public/favicon.svg`: 右手側キーボードをモチーフにしたページアイコン
 - `public/styles.css`: 画面・印刷レイアウト
 - `public/app.js`: キー描画、Mouseレイヤ切り替え、PNG生成
 - `tests/test_generate.py`: パーサー、ラベル、配置、生成データのテスト
