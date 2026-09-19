@@ -26,6 +26,16 @@ OUTPUT_LAYERS = (
 )
 TRACKPAD_REPLACED_MATRIXES = ((7, 4), (7, 3))
 TRACKPAD_GEOMETRY = {"x": 10.125, "y": 3.15, "width": 1.75, "height": 1.75}
+KEYBOARD_CONFIGS = {
+    "kerigokbd_v2": {
+        "layers": VISIBLE_LAYERS,
+        "trackpad": {
+            **TRACKPAD_GEOMETRY,
+            "replaces": [list(matrix) for matrix in TRACKPAD_REPLACED_MATRIXES],
+        },
+    },
+    "kerigokbd_v1": {"layers": VISIBLE_LAYERS[:3], "trackpad": None},
+}
 LAYER_LABELS = {
     "KGL_MAIN": "Main",
     "KGL_NUM": "Num",
@@ -437,36 +447,27 @@ def build_payload(
     keyboard_id: str = "kerigokbd_v2",
 ) -> dict[str, object]:
     keyboard_root = KEYBOARD_ROOT / keyboard_id
-    has_trackpad = keyboard_id == "kerigokbd_v2"
+    config = KEYBOARD_CONFIGS[keyboard_id]
+    keymap_path = keyboard_root / "keymaps/default/keymap.c"
+    via_path = keyboard_root / "keymaps/via/via.json"
     layout_name = next(iter(info["layouts"]))
     positions = info["layouts"][layout_name]["layout"]
     geometries = parse_via_layout(via["layouts"]["keymap"])
-    validate_sources(positions, geometries, layers, VISIBLE_LAYERS if has_trackpad else VISIBLE_LAYERS[:3])
+    validate_sources(positions, geometries, layers, config["layers"])
 
-    keys = []
-    for index, position in enumerate(positions):
-        matrix = tuple(position["matrix"])
-        keys.append(
-            build_key(
-                index,
-                position,
-                geometries[matrix],
-                layers,
-                definitions,
-            )
-        )
+    keys = [
+        build_key(index, position, geometries[tuple(position["matrix"])], layers, definitions)
+        for index, position in enumerate(positions)
+    ]
 
     return {
         "id": keyboard_id,
         "keyboard": info["keyboard_name"],
-        "layoutVersion": layout_version(keyboard_root / "keymaps/default/keymap.c"),
+        "layoutVersion": layout_version(keymap_path),
         "layout": layout_name,
-        "source": str((keyboard_root / "keymaps/default/keymap.c").relative_to(REPOSITORY_ROOT)),
-        "geometrySource": str((keyboard_root / "keymaps/via/via.json").relative_to(REPOSITORY_ROOT)),
-        "trackpad": {
-            **TRACKPAD_GEOMETRY,
-            "replaces": [list(matrix) for matrix in TRACKPAD_REPLACED_MATRIXES],
-        } if has_trackpad else None,
+        "source": str(keymap_path.relative_to(REPOSITORY_ROOT)),
+        "geometrySource": str(via_path.relative_to(REPOSITORY_ROOT)),
+        "trackpad": config["trackpad"],
         "keys": keys,
     }
 
@@ -481,7 +482,7 @@ def write_payload(payload: dict[str, object]) -> None:
 
 
 def build_keyboard(keyboard_id: str) -> dict[str, object]:
-    if keyboard_id not in ("kerigokbd_v2", "kerigokbd_v1"):
+    if keyboard_id not in KEYBOARD_CONFIGS:
         raise ValueError(f"Unsupported keyboard: {keyboard_id}")
     root = KEYBOARD_ROOT / keyboard_id
     info = json.loads((root / "info.json").read_text(encoding="utf-8"))
@@ -492,7 +493,7 @@ def build_keyboard(keyboard_id: str) -> dict[str, object]:
 
 
 def main() -> None:
-    keyboards = {name: build_keyboard(name) for name in ("kerigokbd_v2", "kerigokbd_v1")}
+    keyboards = {name: build_keyboard(name) for name in KEYBOARD_CONFIGS}
     write_payload({"keyboards": keyboards})
     print(f"Generated {OUTPUT_PATH.relative_to(REPOSITORY_ROOT)} ({len(keyboards)} keyboards)")
 

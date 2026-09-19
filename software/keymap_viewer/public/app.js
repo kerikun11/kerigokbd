@@ -53,6 +53,7 @@
     mouseToggle: requiredElement("#toggle-auto-mouse"),
     mouseGuide: requiredElement(".guide-auto-mouse"),
     mouseLegend: requiredElement(".legend-auto-section"),
+    mouseDescription: requiredElement(".legend-layer-mouse"),
     copyButton: requiredElement("#copy-png"),
     downloadButton: requiredElement("#download-png"),
     copyStatus: requiredElement("#copy-status"),
@@ -85,9 +86,6 @@
     if (label.length === 1) return PNG_TYPOGRAPHY.auxiliarySingle;
     return PNG_TYPOGRAPHY.auxiliary;
   };
-
-  elements.keyboardName.textContent = data.keyboard;
-  elements.layoutVersion.textContent = `Layout ${data.layoutVersion}`;
 
   const createIcon = (name) => {
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -230,17 +228,15 @@
     keyboard.replaceChildren(fragment);
     autoMouseToggle.disabled = !data.trackpad;
   };
-  renderKeyboard();
 
   const setAutoMouseVisibility = (visible) => {
     visible = visible && Boolean(data.trackpad);
-    document.querySelector(".legend-layer-mouse").hidden = !data.trackpad;
+    elements.mouseDescription.hidden = !data.trackpad;
     keyboard.classList.toggle("show-auto-mouse", visible);
     keyboard.setAttribute("data-auto-mouse-visible", String(visible));
     elements.mouseGuide.hidden = !visible;
     elements.mouseLegend.hidden = !visible;
   };
-  setAutoMouseVisibility(autoMouseToggle.checked);
   autoMouseToggle.addEventListener("change", () => {
     setAutoMouseVisibility(autoMouseToggle.checked);
   });
@@ -254,14 +250,17 @@
     guide.style.width = `${referenceBounds.width}px`;
     guide.style.height = `${referenceBounds.height}px`;
   };
-  syncLegendKeySize();
-  window.addEventListener("resize", syncLegendKeySize);
-  elements.keyboardSelect.addEventListener("change", () => {
-    data = window.KEYMAP_DATA.keyboards[elements.keyboardSelect.value];
+  const selectKeyboard = (keyboardId) => {
+    data = window.KEYMAP_DATA.keyboards[keyboardId];
     renderKeyboard();
     setAutoMouseVisibility(autoMouseToggle.checked);
     syncLegendKeySize();
     elements.copyStatus.textContent = "";
+  };
+  selectKeyboard(elements.keyboardSelect.value);
+  window.addEventListener("resize", syncLegendKeySize);
+  elements.keyboardSelect.addEventListener("change", () => {
+    selectKeyboard(elements.keyboardSelect.value);
   });
 
   const renderCardToPng = async () => {
@@ -526,338 +525,348 @@
     const keyboardY = cardY + keyboardBounds.top - bounds.top;
     const keyUnitX = keyboardBounds.width / VIEWER_CONFIG.layoutColumns;
     const keyUnitY = keyboardBounds.height / VIEWER_CONFIG.layoutRows;
-    data.keys.forEach((key) => {
-      if (trackpadKeys.has(matrixId(key.matrix))) return;
-      const position = rotatePoint(key.x, key.y, key.rotationX, key.rotationY, key.rotation);
-      const x = keyboardX + position.x * keyUnitX;
-      const y = keyboardY + position.y * keyUnitY;
-      const keyWidth = key.width * keyUnitX
-        - keyboardBounds.width * VIEWER_CONFIG.keyGapXPercent / 100;
-      const keyHeight = key.height * keyUnitY
-        - keyboardBounds.height * VIEWER_CONFIG.keyGapYPercent / 100;
+    const drawKeys = () => {
+      data.keys.forEach((key) => {
+        if (trackpadKeys.has(matrixId(key.matrix))) return;
+        const position = rotatePoint(key.x, key.y, key.rotationX, key.rotationY, key.rotation);
+        const x = keyboardX + position.x * keyUnitX;
+        const y = keyboardY + position.y * keyUnitY;
+        const keyWidth = key.width * keyUnitX
+          - keyboardBounds.width * VIEWER_CONFIG.keyGapXPercent / 100;
+        const keyHeight = key.height * keyUnitY
+          - keyboardBounds.height * VIEWER_CONFIG.keyGapYPercent / 100;
+        context.save();
+        context.translate(x, y);
+        context.rotate(key.rotation * Math.PI / 180);
+        context.shadowColor = "rgba(45,43,34,.12)";
+        context.shadowBlur = 6;
+        context.shadowOffsetY = 3;
+        const gradient = context.createLinearGradient(0, 0, keyWidth, keyHeight);
+        gradient.addColorStop(0, "#ffffff");
+        gradient.addColorStop(1, "#f2f0e8");
+        roundedRectangle(0, 0, keyWidth, keyHeight, 9);
+        context.fillStyle = gradient;
+        context.fill();
+        context.shadowColor = "transparent";
+        context.strokeStyle = colors.border;
+        context.lineWidth = 1;
+        context.stroke();
+
+        const mainSize = isCompactMainLabel(key.main.label)
+          ? PNG_TYPOGRAPHY.mainCompact
+          : PNG_TYPOGRAPHY.main;
+        if (key.main.label === "Backspace") {
+          drawBackspace(keyWidth / 2, 21);
+        } else if (CLICK_PATTERN.test(key.main.label)) {
+          const click = key.main.label.match(CLICK_PATTERN);
+          drawMouse(keyWidth / 2, 8 + mainSize / 2, CLICK_MODES[click[1]], colors.ink, mainSize / 16);
+        } else {
+          context.font = `750 ${mainSize}px ${fontFamily}`;
+          context.fillStyle = colors.ink;
+          context.textAlign = "center";
+          context.textBaseline = "top";
+          context.fillText(key.main.label, keyWidth / 2, 8);
+        }
+        if (key.main.shift) {
+          context.font = `750 ${mainSize}px ${fontFamily}`;
+          context.fillStyle = colors.ink;
+          context.textAlign = "right";
+          context.textBaseline = "top";
+          context.fillText(key.main.shift, keyWidth - 7, 8);
+        }
+
+        const auxiliaryY = keyHeight - (key.main.hold ? 18 : 6);
+        const hasStackedNums = key.nums.label === "Alt+PrSc";
+        const numsSize = pngAuxiliaryFontSize(key.nums.label, hasStackedNums);
+        const funcSize = pngAuxiliaryFontSize(key.func.label, hasStackedNums);
+        const numsX = key.nums.label === "Alt+PrSc" ? 4 : 5;
+        const funcX = keyWidth - (key.nums.label === "Alt+PrSc" ? 3 : 5);
+        context.fillStyle = colors.nums;
+        context.font = `750 ${numsSize}px ${fontFamily}`;
+        context.textAlign = "left";
+        context.textBaseline = "bottom";
+        if (key.nums.label === "Alt+PrSc") {
+          context.fillText("Alt+", numsX, auxiliaryY - numsSize);
+          context.fillText("PrSc", numsX, auxiliaryY);
+        } else {
+          context.fillText(key.nums.label, numsX, auxiliaryY);
+        }
+        drawOperation(key.func.label, funcX, auxiliaryY, "right", funcSize);
+        if (data.trackpad && autoMouseToggle.checked && key.autoMouse.label) {
+          drawAutoMouseValue(key.autoMouse, keyWidth / 2, keyHeight * VIEWER_CONFIG.mouseLabelY);
+        }
+
+        if (key.main.hold) {
+          const holdColor = holdColors[key.main.hold] ?? colors.hold;
+          context.beginPath();
+          context.moveTo(5, keyHeight - 15);
+          context.lineTo(keyWidth - 5, keyHeight - 15);
+          context.strokeStyle = colors.ink;
+          context.lineWidth = .7;
+          context.stroke();
+          context.font = `500 ${key.main.hold.length > 6 ? 8.5 : 13}px ${fontFamily}`;
+          context.fillStyle = holdColor;
+          context.textAlign = "center";
+          context.textBaseline = "bottom";
+          context.fillText(key.main.hold, keyWidth / 2, keyHeight - 2);
+        }
+        context.restore();
+      });
+    };
+
+    const drawTrackpad = () => {
+      if (data.trackpad) {
+        const trackpadX = keyboardX + data.trackpad.x * keyUnitX;
+        const trackpadY = keyboardY + data.trackpad.y * keyUnitY;
+        const diameter = data.trackpad.width * keyUnitX - keyboardBounds.width * .0055;
+        context.save();
+        context.shadowColor = "rgba(45,43,34,.13)";
+        context.shadowBlur = 7;
+        context.shadowOffsetY = 3;
+        context.beginPath();
+        context.arc(trackpadX + diameter / 2, trackpadY + diameter / 2, diameter / 2, 0, Math.PI * 2);
+        context.fillStyle = colors.key;
+        context.fill();
+        context.shadowColor = "transparent";
+        context.strokeStyle = colors.border;
+        context.stroke();
+        context.fillStyle = "#777a73";
+        context.textAlign = "center";
+        context.textBaseline = "middle";
+        drawMouse(
+          trackpadX + diameter / 2,
+          trackpadY + diameter * .39,
+          "left",
+          colors.autoMouse,
+          1,
+        );
+        context.font = `700 12px ${fontFamily}`;
+        context.fillText("Trackpad", trackpadX + diameter / 2, trackpadY + diameter * .58);
+        context.beginPath();
+        context.moveTo(trackpadX + diameter * .15, trackpadY + diameter * .79);
+        context.lineTo(trackpadX + diameter * .85, trackpadY + diameter * .79);
+        context.strokeStyle = colors.ink;
+        context.stroke();
+        context.font = `500 13px ${fontFamily}`;
+        context.fillStyle = colors.autoMouse;
+        context.fillText("Mouse", trackpadX + diameter / 2, trackpadY + diameter * .87);
+        context.restore();
+      }
+    };
+
+    const drawLegend = () => {
+      const legend = document.querySelector(".legend").getBoundingClientRect();
+      const legendY = cardY + legend.top - bounds.top;
+      context.beginPath();
+      context.moveTo(cardX + 24, legendY);
+      context.lineTo(cardX + cardWidth - 24, legendY);
+      context.strokeStyle = colors.rule;
+      context.stroke();
+      drawDomText(".legend-title", 700, 12, colors.muted);
+      const guideBounds = document.querySelector(".legend-key-guide").getBoundingClientRect();
+      const guideX = cardX + guideBounds.left - bounds.left;
+      const guideY = cardY + guideBounds.top - bounds.top;
       context.save();
-      context.translate(x, y);
-      context.rotate(key.rotation * Math.PI / 180);
-      context.shadowColor = "rgba(45,43,34,.12)";
-      context.shadowBlur = 6;
+      context.shadowColor = "rgba(45,43,34,.08)";
+      context.shadowBlur = 7;
       context.shadowOffsetY = 3;
-      const gradient = context.createLinearGradient(0, 0, keyWidth, keyHeight);
-      gradient.addColorStop(0, "#ffffff");
-      gradient.addColorStop(1, "#f2f0e8");
-      roundedRectangle(0, 0, keyWidth, keyHeight, 9);
-      context.fillStyle = gradient;
+      roundedRectangle(guideX, guideY, guideBounds.width, guideBounds.height, 9);
+      context.fillStyle = colors.key;
       context.fill();
-      context.shadowColor = "transparent";
+      context.restore();
+      roundedRectangle(guideX, guideY, guideBounds.width, guideBounds.height, 9);
       context.strokeStyle = colors.border;
       context.lineWidth = 1;
       context.stroke();
-
-      const mainSize = isCompactMainLabel(key.main.label)
-        ? PNG_TYPOGRAPHY.mainCompact
-        : PNG_TYPOGRAPHY.main;
-      if (key.main.label === "Backspace") {
-        drawBackspace(keyWidth / 2, 21);
-      } else if (CLICK_PATTERN.test(key.main.label)) {
-        const click = key.main.label.match(CLICK_PATTERN);
-        drawMouse(keyWidth / 2, 8 + mainSize / 2, CLICK_MODES[click[1]], colors.ink, mainSize / 16);
-      } else {
-        context.font = `750 ${mainSize}px ${fontFamily}`;
-        context.fillStyle = colors.ink;
-        context.textAlign = "center";
-        context.textBaseline = "top";
-        context.fillText(key.main.label, keyWidth / 2, 8);
-      }
-      if (key.main.shift) {
-        context.font = `750 ${mainSize}px ${fontFamily}`;
-        context.fillStyle = colors.ink;
-        context.textAlign = "right";
-        context.textBaseline = "top";
-        context.fillText(key.main.shift, keyWidth - 7, 8);
-      }
-
-      const auxiliaryY = keyHeight - (key.main.hold ? 18 : 6);
-      const hasStackedNums = key.nums.label === "Alt+PrSc";
-      const numsSize = pngAuxiliaryFontSize(key.nums.label, hasStackedNums);
-      const funcSize = pngAuxiliaryFontSize(key.func.label, hasStackedNums);
-      const numsX = key.nums.label === "Alt+PrSc" ? 4 : 5;
-      const funcX = keyWidth - (key.nums.label === "Alt+PrSc" ? 3 : 5);
-      context.fillStyle = colors.nums;
-      context.font = `750 ${numsSize}px ${fontFamily}`;
-      context.textAlign = "left";
-      context.textBaseline = "bottom";
-      if (key.nums.label === "Alt+PrSc") {
-        context.fillText("Alt+", numsX, auxiliaryY - numsSize);
-        context.fillText("PrSc", numsX, auxiliaryY);
-      } else {
-        context.fillText(key.nums.label, numsX, auxiliaryY);
-      }
-      drawOperation(key.func.label, funcX, auxiliaryY, "right", funcSize);
-      if (data.trackpad && autoMouseToggle.checked && key.autoMouse.label) {
-        drawAutoMouseValue(key.autoMouse, keyWidth / 2, keyHeight * VIEWER_CONFIG.mouseLabelY);
-      }
-
-      if (key.main.hold) {
-        const holdColor = holdColors[key.main.hold] ?? colors.hold;
-        context.beginPath();
-        context.moveTo(5, keyHeight - 15);
-        context.lineTo(keyWidth - 5, keyHeight - 15);
-        context.strokeStyle = colors.ink;
-        context.lineWidth = .7;
-        context.stroke();
-        context.font = `500 ${key.main.hold.length > 6 ? 8.5 : 13}px ${fontFamily}`;
-        context.fillStyle = holdColor;
-        context.textAlign = "center";
-        context.textBaseline = "bottom";
-        context.fillText(key.main.hold, keyWidth / 2, keyHeight - 2);
-      }
-      context.restore();
-    });
-
-    if (data.trackpad) {
-      const trackpadX = keyboardX + data.trackpad.x * keyUnitX;
-      const trackpadY = keyboardY + data.trackpad.y * keyUnitY;
-      const diameter = data.trackpad.width * keyUnitX - keyboardBounds.width * .0055;
-      context.save();
-      context.shadowColor = "rgba(45,43,34,.13)";
-      context.shadowBlur = 7;
-      context.shadowOffsetY = 3;
-      context.beginPath();
-      context.arc(trackpadX + diameter / 2, trackpadY + diameter / 2, diameter / 2, 0, Math.PI * 2);
-      context.fillStyle = colors.key;
-      context.fill();
-      context.shadowColor = "transparent";
-      context.strokeStyle = colors.border;
-      context.stroke();
-      context.fillStyle = "#777a73";
+      context.font = `750 10px ${fontFamily}`;
+      context.textBaseline = "top";
       context.textAlign = "center";
-      context.textBaseline = "middle";
-      drawMouse(
-        trackpadX + diameter / 2,
-        trackpadY + diameter * .39,
-        "left",
-        colors.autoMouse,
-        1,
-      );
-      context.font = `700 12px ${fontFamily}`;
-      context.fillText("Trackpad", trackpadX + diameter / 2, trackpadY + diameter * .58);
+      context.fillStyle = colors.ink;
+      context.fillText("Main", guideX + guideBounds.width / 2, guideY + 7);
+      context.textBaseline = "bottom";
+      context.textAlign = "left";
+      context.fillStyle = colors.nums;
+      context.fillText("Num", guideX + 5, guideY + guideBounds.height - 18);
+      if (data.trackpad && autoMouseToggle.checked) {
+        context.textAlign = "center";
+        context.fillStyle = colors.autoMouse;
+        context.fillText("Mouse", guideX + guideBounds.width / 2, guideY + guideBounds.height - 31);
+      }
+      context.textAlign = "right";
+      context.fillStyle = colors.func;
+      context.fillText("Fn", guideX + guideBounds.width - 5, guideY + guideBounds.height - 18);
       context.beginPath();
-      context.moveTo(trackpadX + diameter * .15, trackpadY + diameter * .79);
-      context.lineTo(trackpadX + diameter * .85, trackpadY + diameter * .79);
+      context.moveTo(guideX + 5, guideY + guideBounds.height - 12);
+      context.lineTo(guideX + guideBounds.width - 5, guideY + guideBounds.height - 12);
       context.strokeStyle = colors.ink;
       context.stroke();
-      context.font = `500 13px ${fontFamily}`;
-      context.fillStyle = colors.autoMouse;
-      context.fillText("Mouse", trackpadX + diameter / 2, trackpadY + diameter * .87);
-      context.restore();
-    }
-
-    const legend = document.querySelector(".legend").getBoundingClientRect();
-    const legendY = cardY + legend.top - bounds.top;
-    context.beginPath();
-    context.moveTo(cardX + 24, legendY);
-    context.lineTo(cardX + cardWidth - 24, legendY);
-    context.strokeStyle = colors.rule;
-    context.stroke();
-    drawDomText(".legend-title", 700, 12, colors.muted);
-    const guideBounds = document.querySelector(".legend-key-guide").getBoundingClientRect();
-    const guideX = cardX + guideBounds.left - bounds.left;
-    const guideY = cardY + guideBounds.top - bounds.top;
-    context.save();
-    context.shadowColor = "rgba(45,43,34,.08)";
-    context.shadowBlur = 7;
-    context.shadowOffsetY = 3;
-    roundedRectangle(guideX, guideY, guideBounds.width, guideBounds.height, 9);
-    context.fillStyle = colors.key;
-    context.fill();
-    context.restore();
-    roundedRectangle(guideX, guideY, guideBounds.width, guideBounds.height, 9);
-    context.strokeStyle = colors.border;
-    context.lineWidth = 1;
-    context.stroke();
-    context.font = `750 10px ${fontFamily}`;
-    context.textBaseline = "top";
-    context.textAlign = "center";
-    context.fillStyle = colors.ink;
-    context.fillText("Main", guideX + guideBounds.width / 2, guideY + 7);
-    context.textBaseline = "bottom";
-    context.textAlign = "left";
-    context.fillStyle = colors.nums;
-    context.fillText("Num", guideX + 5, guideY + guideBounds.height - 18);
-    if (data.trackpad && autoMouseToggle.checked) {
+      context.font = `500 10px ${fontFamily}`;
+      context.fillStyle = colors.hold;
       context.textAlign = "center";
-      context.fillStyle = colors.autoMouse;
-      context.fillText("Mouse", guideX + guideBounds.width / 2, guideY + guideBounds.height - 31);
-    }
-    context.textAlign = "right";
-    context.fillStyle = colors.func;
-    context.fillText("Fn", guideX + guideBounds.width - 5, guideY + guideBounds.height - 18);
-    context.beginPath();
-    context.moveTo(guideX + 5, guideY + guideBounds.height - 12);
-    context.lineTo(guideX + guideBounds.width - 5, guideY + guideBounds.height - 12);
-    context.strokeStyle = colors.ink;
-    context.stroke();
-    context.font = `500 10px ${fontFamily}`;
-    context.fillStyle = colors.hold;
-    context.textAlign = "center";
-    context.fillText("Hold", guideX + guideBounds.width / 2, guideY + guideBounds.height - 2);
+      context.fillText("Hold", guideX + guideBounds.width / 2, guideY + guideBounds.height - 2);
 
-    [...document.querySelectorAll(".legend-layer-descriptions > span")].forEach((row) => {
-      if (row.hidden) return;
-      [row.querySelector("b"), row.querySelector("small")].forEach((element) => {
-        const elementBounds = element.getBoundingClientRect();
-        const elementStyle = getComputedStyle(element);
-        context.font = `${elementStyle.fontWeight} ${elementStyle.fontSize} ${fontFamily}`;
-        context.fillStyle = elementStyle.color;
-        context.textAlign = "left";
-        context.textBaseline = "top";
-        context.fillText(
-          element.textContent,
-          cardX + elementBounds.left - bounds.left,
-          cardY + elementBounds.top - bounds.top,
-        );
-      });
-    });
-
-    const drawLegendColumn = (selector, modes, hasArrowLabel, drawColor = colors.func) => {
-      const rows = [...document.querySelector(selector).children];
-      rows.forEach((row, index) => {
-        const iconBounds = row.querySelector("svg").getBoundingClientRect();
-        const iconX = cardX + iconBounds.left + iconBounds.width / 2 - bounds.left;
-        const iconY = cardY + iconBounds.top + iconBounds.height / 2 - bounds.top;
-        drawMouse(iconX, iconY, modes[index], drawColor);
-
-        if (hasArrowLabel) {
-          const moveBounds = row.querySelector(".move-icon").getBoundingClientRect();
-          drawMoveIcon(
-            cardX + moveBounds.left + moveBounds.width / 2 - bounds.left,
-            cardY + moveBounds.top + moveBounds.height / 2 - bounds.top,
-            moveBounds.width,
+      [...document.querySelectorAll(".legend-layer-descriptions > span")].forEach((row) => {
+        if (row.hidden) return;
+        [row.querySelector("b"), row.querySelector("small")].forEach((element) => {
+          const elementBounds = element.getBoundingClientRect();
+          const elementStyle = getComputedStyle(element);
+          context.font = `${elementStyle.fontWeight} ${elementStyle.fontSize} ${fontFamily}`;
+          context.fillStyle = elementStyle.color;
+          context.textAlign = "left";
+          context.textBaseline = "top";
+          context.fillText(
+            element.textContent,
+            cardX + elementBounds.left - bounds.left,
+            cardY + elementBounds.top - bounds.top,
           );
-        }
-
-        const description = row.querySelector("small");
-        const descriptionBounds = description.getBoundingClientRect();
-        const descriptionStyle = getComputedStyle(description);
-        context.font = `${descriptionStyle.fontWeight} ${descriptionStyle.fontSize} ${fontFamily}`;
-        context.fillStyle = colors.muted;
-        context.textAlign = "left";
-        context.textBaseline = "top";
-        context.fillText(
-          description.textContent,
-          cardX + descriptionBounds.left - bounds.left,
-          cardY + descriptionBounds.top - bounds.top,
-        );
+        });
       });
+
+      const drawLegendColumn = (selector, modes, hasArrowLabel, drawColor = colors.func) => {
+        const rows = [...document.querySelector(selector).children];
+        rows.forEach((row, index) => {
+          const iconBounds = row.querySelector("svg").getBoundingClientRect();
+          const iconX = cardX + iconBounds.left + iconBounds.width / 2 - bounds.left;
+          const iconY = cardY + iconBounds.top + iconBounds.height / 2 - bounds.top;
+          drawMouse(iconX, iconY, modes[index], drawColor);
+
+          if (hasArrowLabel) {
+            const moveBounds = row.querySelector(".move-icon").getBoundingClientRect();
+            drawMoveIcon(
+              cardX + moveBounds.left + moveBounds.width / 2 - bounds.left,
+              cardY + moveBounds.top + moveBounds.height / 2 - bounds.top,
+              moveBounds.width,
+            );
+          }
+
+          const description = row.querySelector("small");
+          const descriptionBounds = description.getBoundingClientRect();
+          const descriptionStyle = getComputedStyle(description);
+          context.font = `${descriptionStyle.fontWeight} ${descriptionStyle.fontSize} ${fontFamily}`;
+          context.fillStyle = colors.muted;
+          context.textAlign = "left";
+          context.textBaseline = "top";
+          context.fillText(
+            description.textContent,
+            cardX + descriptionBounds.left - bounds.left,
+            cardY + descriptionBounds.top - bounds.top,
+          );
+        });
+      };
+      drawLegendColumn(".legend-clicks", ["left", "right", "middle"], false);
+      drawLegendColumn(".legend-mouse", ["pointer", "wheel"], true);
+      if (data.trackpad && autoMouseToggle.checked) {
+        drawLegendColumn(
+          ".legend-auto-clicks",
+          ["left", "right", "middle"],
+          false,
+          colors.autoMouse,
+        );
+        [...document.querySelector(".legend-auto-actions").children].forEach((row, index) => {
+          const iconBounds = row.querySelector("svg").getBoundingClientRect();
+          const iconX = cardX + iconBounds.left + iconBounds.width / 2 - bounds.left;
+          const iconY = cardY + iconBounds.top + iconBounds.height / 2 - bounds.top;
+          if (index === 0) drawScrollIcon(iconX, iconY, 18);
+          else drawZoomIcon(iconX, iconY, 18);
+
+          const description = row.querySelector("small");
+          const descriptionBounds = description.getBoundingClientRect();
+          const descriptionStyle = getComputedStyle(description);
+          context.font = `${descriptionStyle.fontWeight} ${descriptionStyle.fontSize} ${fontFamily}`;
+          context.fillStyle = colors.muted;
+          context.textAlign = "left";
+          context.textBaseline = "top";
+          context.fillText(
+            description.textContent,
+            cardX + descriptionBounds.left - bounds.left,
+            cardY + descriptionBounds.top - bounds.top,
+          );
+        });
+      }
     };
-    drawLegendColumn(".legend-clicks", ["left", "right", "middle"], false);
-    drawLegendColumn(".legend-mouse", ["pointer", "wheel"], true);
-    if (data.trackpad && autoMouseToggle.checked) {
-      drawLegendColumn(
-        ".legend-auto-clicks",
-        ["left", "right", "middle"],
-        false,
-        colors.autoMouse,
+
+    const drawFooter = () => {
+      const footerDivider = document.querySelector(".footer-divider").getBoundingClientRect();
+      const footerDividerY = cardY + footerDivider.top - bounds.top + footerDivider.height / 2;
+      context.beginPath();
+      context.moveTo(cardX + footerDivider.left - bounds.left, footerDividerY);
+      context.lineTo(cardX + footerDivider.right - bounds.left, footerDividerY);
+      context.strokeStyle = colors.rule;
+      context.lineWidth = 1;
+      context.stroke();
+
+      const copyright = document.querySelector(".copyright");
+      const copyrightBounds = copyright.getBoundingClientRect();
+      const copyrightStyle = getComputedStyle(copyright);
+      const copyrightAlign = copyrightStyle.textAlign;
+      const copyrightX = copyrightAlign === "right" ? copyrightBounds.right : copyrightBounds.left;
+      context.font = `${copyrightStyle.fontWeight} ${copyrightStyle.fontSize} ${fontFamily}`;
+      context.fillStyle = copyrightStyle.color;
+      context.textAlign = copyrightAlign;
+      context.textBaseline = "top";
+      context.fillText(
+        copyright.textContent,
+        cardX + copyrightX - bounds.left,
+        cardY + copyrightBounds.top - bounds.top,
       );
-      [...document.querySelector(".legend-auto-actions").children].forEach((row, index) => {
-        const iconBounds = row.querySelector("svg").getBoundingClientRect();
-        const iconX = cardX + iconBounds.left + iconBounds.width / 2 - bounds.left;
-        const iconY = cardY + iconBounds.top + iconBounds.height / 2 - bounds.top;
-        if (index === 0) drawScrollIcon(iconX, iconY, 18);
-        else drawZoomIcon(iconX, iconY, 18);
+    };
 
-        const description = row.querySelector("small");
-        const descriptionBounds = description.getBoundingClientRect();
-        const descriptionStyle = getComputedStyle(description);
-        context.font = `${descriptionStyle.fontWeight} ${descriptionStyle.fontSize} ${fontFamily}`;
-        context.fillStyle = colors.muted;
-        context.textAlign = "left";
-        context.textBaseline = "top";
-        context.fillText(
-          description.textContent,
-          cardX + descriptionBounds.left - bounds.left,
-          cardY + descriptionBounds.top - bounds.top,
-        );
-      });
-    }
+    drawKeys();
+    drawTrackpad();
+    drawLegend();
+    drawFooter();
 
-    const footerDivider = document.querySelector(".footer-divider").getBoundingClientRect();
-    const footerDividerY = cardY + footerDivider.top - bounds.top + footerDivider.height / 2;
-    context.beginPath();
-    context.moveTo(cardX + footerDivider.left - bounds.left, footerDividerY);
-    context.lineTo(cardX + footerDivider.right - bounds.left, footerDividerY);
-    context.strokeStyle = colors.rule;
-    context.lineWidth = 1;
-    context.stroke();
-
-    const copyright = document.querySelector(".copyright");
-    const copyrightBounds = copyright.getBoundingClientRect();
-    const copyrightStyle = getComputedStyle(copyright);
-    const copyrightAlign = copyrightStyle.textAlign;
-    const copyrightX = copyrightAlign === "right" ? copyrightBounds.right : copyrightBounds.left;
-    context.font = `${copyrightStyle.fontWeight} ${copyrightStyle.fontSize} ${fontFamily}`;
-    context.fillStyle = copyrightStyle.color;
-    context.textAlign = copyrightAlign;
-    context.textBaseline = "top";
-    context.fillText(
-      copyright.textContent,
-      cardX + copyrightX - bounds.left,
-      cardY + copyrightBounds.top - bounds.top,
-    );
-
-    return await new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error("PNG conversion failed")), "image/png");
     });
   };
 
-  elements.copyButton.addEventListener("click", async () => {
-    elements.keyboardSelect.disabled = true;
-    elements.copyButton.disabled = true;
-    elements.downloadButton.disabled = true;
+  const copyPng = async () => {
+    if (!navigator.clipboard || typeof ClipboardItem === "undefined") {
+      throw new Error("Clipboard API is unavailable");
+    }
+    const png = await renderCardToPng();
+    await navigator.clipboard.write([new ClipboardItem({ "image/png": png })]);
+  };
+
+  const downloadPng = async () => {
+    const png = await renderCardToPng();
+    const url = URL.createObjectURL(png);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `${data.id}_keymap_${data.layoutVersion}.png`;
+    document.body.append(link);
+    try {
+      link.click();
+    } finally {
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 60000);
+    }
+  };
+
+  const runPngExport = async (exportPng, successMessage, errorMessage) => {
+    const controls = [elements.keyboardSelect, elements.copyButton, elements.downloadButton];
+    controls.forEach((control) => { control.disabled = true; });
     elements.copyStatus.textContent = "PNGを生成しています…";
     try {
-      if (!navigator.clipboard || typeof ClipboardItem === "undefined") {
-        throw new Error("Clipboard API is unavailable");
-      }
-      const png = await renderCardToPng();
-      await navigator.clipboard.write([new ClipboardItem({ "image/png": png })]);
-      elements.copyStatus.textContent = "PNGをクリップボードにコピーしました。";
+      await exportPng();
+      elements.copyStatus.textContent = successMessage;
     } catch (error) {
       console.error(error);
-      elements.copyStatus.textContent = "コピーできませんでした。Chromeなどの対応ブラウザで開いてください。";
+      elements.copyStatus.textContent = errorMessage;
     } finally {
-      elements.keyboardSelect.disabled = false;
-      elements.copyButton.disabled = false;
-      elements.downloadButton.disabled = false;
+      controls.forEach((control) => { control.disabled = false; });
     }
-  });
+  };
 
-  elements.downloadButton.addEventListener("click", async () => {
-    elements.keyboardSelect.disabled = true;
-    elements.copyButton.disabled = true;
-    elements.downloadButton.disabled = true;
-    elements.copyStatus.textContent = "PNGを生成しています…";
-    try {
-      const png = await renderCardToPng();
-      const url = URL.createObjectURL(png);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = `${data.id}_keymap_${data.layoutVersion}.png`;
-      document.body.append(link);
-      try {
-        link.click();
-      } finally {
-        link.remove();
-        setTimeout(() => URL.revokeObjectURL(url), 60000);
-      }
-      elements.copyStatus.textContent = "PNGのダウンロードを開始しました。";
-    } catch (error) {
-      console.error(error);
-      elements.copyStatus.textContent = "PNGをダウンロードできませんでした。もう一度お試しください。";
-    } finally {
-      elements.keyboardSelect.disabled = false;
-      elements.copyButton.disabled = false;
-      elements.downloadButton.disabled = false;
-    }
-  });
-
+  elements.copyButton.addEventListener("click", () => runPngExport(
+    copyPng,
+    "PNGをクリップボードにコピーしました。",
+    "コピーできませんでした。Chromeなどの対応ブラウザで開いてください。",
+  ));
+  elements.downloadButton.addEventListener("click", () => runPngExport(
+    downloadPng,
+    "PNGのダウンロードを開始しました。",
+    "PNGをダウンロードできませんでした。もう一度お試しください。",
+  ));
 })();
