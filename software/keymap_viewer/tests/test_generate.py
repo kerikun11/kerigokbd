@@ -50,7 +50,7 @@ class KeyboardSelectionTest(unittest.TestCase):
         for name in generate.KEYBOARD_CONFIGS:
             payload = generate.build_keyboard(name)
             source = generate.KEYBOARD_ROOT / name / "keymaps/default/keymap.c"
-            escape = generate.parse_layers(source.read_text())["KGL_ESC"]
+            escape = generate.parse_layers(source.read_text())["KGL_EXT"]
             self.assertEqual([key["escape"]["source"] for key in payload["keys"]], escape)
             self.assertIn("7", {key["escape"]["label"] for key in payload["keys"]})
             for key in payload["keys"]:
@@ -166,8 +166,8 @@ class GenerateTest(unittest.TestCase):
         )
 
     def test_nested_commas_are_not_split(self):
-        self.assertEqual(generate.split_arguments("KC_A, LT(KGL_ESC, KC_ESC), KC_B"), [
-            "KC_A", "LT(KGL_ESC, KC_ESC)", "KC_B"
+        self.assertEqual(generate.split_arguments("KC_A, LT(KGL_EXT, KC_ESC), KC_B"), [
+            "KC_A", "LT(KGL_EXT, KC_ESC)", "KC_B"
         ])
 
     def test_via_layout_contains_all_keys_and_thumb_rotations(self):

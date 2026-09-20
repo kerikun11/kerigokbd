@@ -24,26 +24,26 @@ OUTPUT_LAYERS = (
     ("nums", "KGL_NUM"),
     ("func", "KGL_FUN"),
     ("autoMouse", "KGL_AM"),
-    ("escape", "KGL_ESC"),
+    ("escape", "KGL_EXT"),
 )
 TRACKPAD_REPLACED_MATRIXES = ((7, 4), (7, 3))
 TRACKPAD_GEOMETRY = {"x": 10.125, "y": 3.15, "width": 1.75, "height": 1.75}
 KEYBOARD_CONFIGS = {
     "kerigokbd_v2": {
-        "layers": (*VISIBLE_LAYERS, "KGL_ESC"),
+        "layers": (*VISIBLE_LAYERS, "KGL_EXT"),
         "trackpad": {
             **TRACKPAD_GEOMETRY,
             "replaces": [list(matrix) for matrix in TRACKPAD_REPLACED_MATRIXES],
         },
     },
-    "kerigokbd_v1": {"layers": (*VISIBLE_LAYERS[:3], "KGL_ESC"), "trackpad": None},
+    "kerigokbd_v1": {"layers": (*VISIBLE_LAYERS[:3], "KGL_EXT"), "trackpad": None},
 }
 LAYER_LABELS = {
     "KGL_MAIN": "Main",
     "KGL_NUM": "Num",
     "KGL_FUN": "Fn",
-    "KGL_ESC": "Extra",
-    "KGL_TEMP": "Temporary",
+    "KGL_EXT": "Extra",
+    "KGL_RES": "Reserved",
     "KGL_CONF": "Config",
     "KGL_AM": "Mouse",
 }
@@ -282,10 +282,10 @@ def hold_label(expression: str, definitions: dict[str, str]) -> str:
     name, arguments = call
     if name == "LT" and len(arguments) == 2:
         layer = arguments[0]
-        return LAYER_LABELS.get(layer, layer) if layer in (*VISIBLE_LAYERS, "KGL_ESC") else ""
+        return LAYER_LABELS.get(layer, layer) if layer in (*VISIBLE_LAYERS, "KGL_EXT") else ""
     if name == "MO" and arguments:
         layer = arguments[0]
-        return LAYER_LABELS.get(layer, layer) if layer in (*VISIBLE_LAYERS, "KGL_ESC") else ""
+        return LAYER_LABELS.get(layer, layer) if layer in (*VISIBLE_LAYERS, "KGL_EXT") else ""
     if name.endswith("_T"):
         modifier = name[:-2]
         return MODIFIER_LABELS.get(modifier, modifier.title())
@@ -304,7 +304,7 @@ def layer_label(
         return ""
     if output_name == "func" and label == main_label:
         return ""
-    if output_name == "escape" and main_hold == LAYER_LABELS["KGL_ESC"]:
+    if output_name == "escape" and main_hold == LAYER_LABELS["KGL_EXT"]:
         # The Extra layer's own hold key shows its "return to Main" entry here,
         # which is redundant with releasing the hold, so hide it exceptionally.
         return ""
