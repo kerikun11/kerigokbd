@@ -352,6 +352,8 @@ h1 {
   cursor: pointer;
 }
 
+.layer-toggle[hidden] { display: none; }
+
 .layer-toggle input {
   position: absolute;
   width: 1px;

@@ -57,6 +57,7 @@
     escapeDescription: requiredElement(".legend-layer-escape"),
     escapeGuide: requiredElement(".guide-escape"),
     mouseToggle: requiredElement("#toggle-auto-mouse"),
+    mouseToggleLabel: requiredElement('label[for="toggle-auto-mouse"]'),
     mouseGuide: requiredElement(".guide-auto-mouse"),
     mouseLegend: requiredElement(".legend-auto-section"),
     mouseDescription: requiredElement(".legend-layer-mouse"),
@@ -267,6 +268,7 @@
     if (data.trackpad) fragment.append(createTrackpadElement());
     keyboard.replaceChildren(fragment);
     autoMouseToggle.disabled = !data.trackpad;
+    elements.mouseToggleLabel.hidden = !data.trackpad;
   };
 
   const setAutoMouseVisibility = (visible) => {
