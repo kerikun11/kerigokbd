@@ -4,7 +4,8 @@
   const VIEWER_CONFIG = Object.freeze({
     layoutColumns: 15,
     layoutRows: 5,
-    mouseLabelY: 0.6,
+    mouseLabelBottom: 12,
+    mouseLabelBottomWithHold: 24,
     keyGapXPercent: 0.55,
     keyGapYPercent: 0.7,
     pngPadding: 18,
@@ -15,7 +16,7 @@
     mainCompact: 16,
     auxiliary: 13,
     auxiliarySingle: 15,
-    auxiliaryCompact: 8.5,
+    auxiliaryCompact: 13,
   });
   const LARGE_VIEW_BOX_ICONS = new Set(["backspace", "delete", "move", "scroll", "zoom"]);
   const CLICK_ICONS = Object.freeze({
@@ -50,6 +51,11 @@
     keyboardSelect: requiredElement("#keyboard-select"),
     keyboardName: requiredElement("#keyboard-name"),
     layoutVersion: requiredElement("#layout-version"),
+    numToggle: requiredElement("#toggle-num"),
+    fnToggle: requiredElement("#toggle-fn"),
+    escapeToggle: requiredElement("#toggle-escape"),
+    escapeDescription: requiredElement(".legend-layer-escape"),
+    escapeGuide: requiredElement(".guide-escape"),
     mouseToggle: requiredElement("#toggle-auto-mouse"),
     mouseGuide: requiredElement(".guide-auto-mouse"),
     mouseLegend: requiredElement(".legend-auto-section"),
@@ -60,11 +66,30 @@
   });
   const keyboard = elements.keyboard;
   const autoMouseToggle = elements.mouseToggle;
+  for (const [layer, toggle] of [["num", elements.numToggle], ["fn", elements.fnToggle]]) {
+    const update = () => {
+      keyboard.classList.toggle(`hide-${layer}`, !toggle.checked);
+      requiredElement(`.legend-layer-${layer}`).hidden = !toggle.checked;
+      requiredElement(layer === "num" ? ".guide-nums" : ".guide-func").hidden = !toggle.checked;
+      if (layer === "fn") {
+        requiredElement(".legend-clicks").hidden = !toggle.checked;
+        requiredElement(".legend-mouse").hidden = !toggle.checked;
+      }
+    };
+    toggle.addEventListener("change", update);
+    update();
+  }
+
   const unitX = 100 / VIEWER_CONFIG.layoutColumns;
   const unitY = 100 / VIEWER_CONFIG.layoutRows;
   document.documentElement.style.setProperty(
-    "--mouse-label-y",
-    `${VIEWER_CONFIG.mouseLabelY * 100}%`,
+    "--mouse-label-bottom",
+    `${VIEWER_CONFIG.mouseLabelBottom}px`,
+  );
+
+  document.documentElement.style.setProperty(
+    "--mouse-label-bottom-with-hold",
+    `${VIEWER_CONFIG.mouseLabelBottomWithHold}px`,
   );
 
   const rotatePoint = (x, y, originX, originY, degrees) => {
@@ -79,12 +104,16 @@
 
   const matrixId = (matrix) => matrix.join(",");
   let trackpadKeys = new Set();
+  const hasJapanese = (label) => /[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u.test(label);
+  const labelFontSize = (label, size) => size * (hasJapanese(label) ? 0.8 : 1);
   const isCompactMainLabel = (label) => label !== "Backspace" && label.length > 1;
   const pngAuxiliaryFontSize = (label, forceStandard = false) => {
-    if (forceStandard) return PNG_TYPOGRAPHY.auxiliary;
-    if (label.length > 4) return PNG_TYPOGRAPHY.auxiliaryCompact;
-    if (label.length === 1) return PNG_TYPOGRAPHY.auxiliarySingle;
-    return PNG_TYPOGRAPHY.auxiliary;
+    let size = PNG_TYPOGRAPHY.auxiliary;
+    if (!forceStandard) {
+      if (label.length > 1) size = PNG_TYPOGRAPHY.auxiliaryCompact;
+      else if (label.length === 1) size = PNG_TYPOGRAPHY.auxiliarySingle;
+    }
+    return labelFontSize(label, size);
   };
 
   const createIcon = (name) => {
@@ -101,6 +130,8 @@
   const createKeyLabel = (className, value) => {
     const span = document.createElement("span");
     span.className = className;
+    span.classList.toggle("single-label", value.length === 1);
+    span.classList.toggle("long-label", value.length > 1);
     const mouseClick = value.match(CLICK_PATTERN);
     const mouseOperation = value.match(POINTER_PATTERN);
     const wheelOperation = value.match(WHEEL_PATTERN);
@@ -133,7 +164,14 @@
       span.classList.add("stacked-operation");
       span.append("Alt+", document.createElement("br"), "PrSc");
     } else {
-      span.textContent = value;
+      if (hasJapanese(value)) {
+        const text = document.createElement("span");
+        text.className = "japanese-label";
+        text.textContent = value;
+        span.append(text);
+      } else {
+        span.textContent = value;
+      }
     }
     return span;
   };
@@ -155,11 +193,10 @@
     if (key.autoMouse.label) classNames.push("has-auto-mouse");
     if (isCompactMainLabel(key.main.label)) classNames.push("compact-main-label");
     if (key.nums.label === "Alt+PrSc") classNames.push("stacked-nums-label");
-    else if (key.nums.label.length > 4) classNames.push("long-nums-label");
-    if (key.func.label.length > 4) classNames.push("long-func-label");
+    else if (key.nums.label.length > 1) classNames.push("long-nums-label");
+    if (key.func.label.length > 1) classNames.push("long-func-label");
     if (key.nums.label.length === 1) classNames.push("single-nums-label");
     if (key.func.label.length === 1) classNames.push("single-func-label");
-    if (key.main.hold.length > 6) classNames.push("long-hold-label");
     return classNames.join(" ");
   };
 
@@ -188,10 +225,13 @@
       createMouseLabel(key.autoMouse),
       createKeyLabel("key-func", key.func.label),
     );
+    const escape = createKeyLabel("key-escape", key.escape.label);
+    keyElement.append(escape);
     if (key.main.hold) {
       const hold = createKeyLabel("key-hold", key.main.hold);
       if (key.main.hold === "Num") hold.classList.add("hold-nums");
       if (key.main.hold === "Fn") hold.classList.add("hold-func");
+      if (key.main.hold === "Extra") hold.classList.add("hold-extra");
       keyElement.append(hold);
     }
     return keyElement;
@@ -231,7 +271,7 @@
 
   const setAutoMouseVisibility = (visible) => {
     visible = visible && Boolean(data.trackpad);
-    elements.mouseDescription.hidden = !data.trackpad;
+    elements.mouseDescription.hidden = !visible;
     keyboard.classList.toggle("show-auto-mouse", visible);
     keyboard.setAttribute("data-auto-mouse-visible", String(visible));
     elements.mouseGuide.hidden = !visible;
@@ -240,6 +280,14 @@
   autoMouseToggle.addEventListener("change", () => {
     setAutoMouseVisibility(autoMouseToggle.checked);
   });
+
+  const updateEscapeVisibility = () => {
+    keyboard.classList.toggle("show-escape", elements.escapeToggle.checked);
+    elements.escapeDescription.hidden = !elements.escapeToggle.checked;
+    elements.escapeGuide.hidden = !elements.escapeToggle.checked;
+  };
+  elements.escapeToggle.addEventListener("change", updateEscapeVisibility);
+  updateEscapeVisibility();
 
   const syncLegendKeySize = () => {
     const guide = requiredElement(".legend-key-guide");
@@ -284,11 +332,12 @@
     const colors = {
       page: color("--page"), card: color("--card"), ink: color("--ink"),
       muted: color("--muted"), nums: color("--nums"), func: color("--func"),
+      escape: color("--escape"),
       autoMouse: color("--auto-mouse"), hold: color("--hold"),
       key: color("--key"), border: color("--key-border"),
       rule: color("--rule"),
     };
-    const holdColors = { Num: colors.nums, Fn: colors.func };
+    const holdColors = { Num: colors.nums, Fn: colors.func, Extra: colors.escape };
     const fontFamily = getComputedStyle(document.body).fontFamily;
     const cardX = padding;
     const cardY = padding;
@@ -421,22 +470,22 @@
         drawDelete(centerX, centerY, colors.autoMouse, .65);
         return;
       }
-      context.font = `800 ${PNG_TYPOGRAPHY.auxiliary}px ${fontFamily}`;
+      context.font = `800 ${pngAuxiliaryFontSize(value)}px ${fontFamily}`;
       context.fillStyle = colors.autoMouse;
       context.textAlign = "center";
       context.textBaseline = "middle";
       context.fillText(value, centerX, centerY);
     };
-    const drawOperation = (value, x, y, align, fontSize) => {
+    const drawOperation = (value, x, y, align, fontSize, color = colors.func) => {
       const click = value.match(CLICK_PATTERN);
       const operation = value.match(/^([MW])([⬅⬇⬆➡])$/);
       context.font = `750 ${fontSize}px ${fontFamily}`;
       context.textBaseline = "bottom";
-      context.fillStyle = colors.func;
+      context.fillStyle = color;
       context.textAlign = "left";
       if (click) {
         const start = align === "right" ? x - 12 : align === "center" ? x - 6 : x;
-        drawMouse(start + 5, y - fontSize / 2, CLICK_MODES[click[1]]);
+        drawMouse(start + 5, y - fontSize / 2, CLICK_MODES[click[1]], color);
         return;
       }
       if (!operation) {
@@ -450,7 +499,7 @@
       let start = x;
       if (align === "right") start -= totalWidth;
       if (align === "center") start -= totalWidth / 2;
-      drawMouse(start + 5, y - fontSize / 2, operation[1] === "W" ? "wheel" : "pointer");
+      drawMouse(start + 5, y - fontSize / 2, operation[1] === "W" ? "wheel" : "pointer", color);
       context.fillText(operation[2], start + iconAdvance, y);
     };
     const drawBackspace = (centerX, centerY, strokeColor = colors.ink, iconScale = 1) => {
@@ -556,23 +605,36 @@
           ? PNG_TYPOGRAPHY.mainCompact
           : PNG_TYPOGRAPHY.main;
         if (key.main.label === "Backspace") {
-          drawBackspace(keyWidth / 2, 21);
+          drawBackspace(keyWidth / 2, 17);
         } else if (CLICK_PATTERN.test(key.main.label)) {
           const click = key.main.label.match(CLICK_PATTERN);
-          drawMouse(keyWidth / 2, 8 + mainSize / 2, CLICK_MODES[click[1]], colors.ink, mainSize / 16);
+          drawMouse(keyWidth / 2, 4 + mainSize / 2, CLICK_MODES[click[1]], colors.ink, mainSize / 16);
         } else {
-          context.font = `750 ${mainSize}px ${fontFamily}`;
+          context.font = `750 ${labelFontSize(key.main.label, mainSize)}px ${fontFamily}`;
           context.fillStyle = colors.ink;
           context.textAlign = "center";
           context.textBaseline = "top";
-          context.fillText(key.main.label, keyWidth / 2, 8);
+          context.fillText(key.main.label, keyWidth / 2, 4);
         }
         if (key.main.shift) {
-          context.font = `750 ${mainSize}px ${fontFamily}`;
+          context.font = `750 ${labelFontSize(key.main.shift, mainSize)}px ${fontFamily}`;
           context.fillStyle = colors.ink;
           context.textAlign = "right";
           context.textBaseline = "top";
-          context.fillText(key.main.shift, keyWidth - 7, 8);
+          context.fillText(key.main.shift, keyWidth - 7, 4);
+        }
+
+        if (elements.escapeToggle.checked && key.escape.label) {
+          if (WHEEL_PATTERN.test(key.escape.label) || POINTER_PATTERN.test(key.escape.label) || CLICK_PATTERN.test(key.escape.label)) {
+            const size = pngAuxiliaryFontSize(key.escape.label);
+            drawOperation(key.escape.label, keyWidth / 2, keyHeight * .5 + size / 2, "center", size, colors.escape);
+          } else {
+          context.font = `750 ${pngAuxiliaryFontSize(key.escape.label)}px ${fontFamily}`;
+          context.fillStyle = colors.escape;
+          context.textAlign = "center";
+          context.textBaseline = "middle";
+          context.fillText(key.escape.label, keyWidth / 2, keyHeight * .5, keyWidth - 8);
+          }
         }
 
         const auxiliaryY = keyHeight - (key.main.hold ? 18 : 6);
@@ -585,15 +647,20 @@
         context.font = `750 ${numsSize}px ${fontFamily}`;
         context.textAlign = "left";
         context.textBaseline = "bottom";
-        if (key.nums.label === "Alt+PrSc") {
-          context.fillText("Alt+", numsX, auxiliaryY - numsSize);
-          context.fillText("PrSc", numsX, auxiliaryY);
-        } else {
-          context.fillText(key.nums.label, numsX, auxiliaryY);
+        if (elements.numToggle.checked) {
+          if (key.nums.label === "Alt+PrSc") {
+            context.fillText("Alt+", numsX, auxiliaryY - numsSize);
+            context.fillText("PrSc", numsX, auxiliaryY);
+          } else {
+            context.fillText(key.nums.label, numsX, auxiliaryY);
+          }
         }
-        drawOperation(key.func.label, funcX, auxiliaryY, "right", funcSize);
+        if (elements.fnToggle.checked) drawOperation(key.func.label, funcX, auxiliaryY, "right", funcSize);
         if (data.trackpad && autoMouseToggle.checked && key.autoMouse.label) {
-          drawAutoMouseValue(key.autoMouse, keyWidth / 2, keyHeight * VIEWER_CONFIG.mouseLabelY);
+          const mouseBottom = key.main.hold
+            ? VIEWER_CONFIG.mouseLabelBottomWithHold
+            : VIEWER_CONFIG.mouseLabelBottom;
+          drawAutoMouseValue(key.autoMouse, keyWidth / 2, keyHeight - mouseBottom);
         }
 
         if (key.main.hold) {
@@ -604,7 +671,7 @@
           context.strokeStyle = colors.ink;
           context.lineWidth = .7;
           context.stroke();
-          context.font = `500 ${key.main.hold.length > 6 ? 8.5 : 13}px ${fontFamily}`;
+          context.font = `500 ${labelFontSize(key.main.hold, PNG_TYPOGRAPHY.auxiliary)}px ${fontFamily}`;
           context.fillStyle = holdColor;
           context.textAlign = "center";
           context.textBaseline = "bottom";
@@ -683,10 +750,14 @@
       context.textAlign = "center";
       context.fillStyle = colors.ink;
       context.fillText("Main", guideX + guideBounds.width / 2, guideY + 7);
+      if (elements.escapeToggle.checked) {
+        context.fillStyle = colors.escape;
+        context.fillText("Extra", guideX + guideBounds.width / 2, guideY + 19);
+      }
       context.textBaseline = "bottom";
       context.textAlign = "left";
       context.fillStyle = colors.nums;
-      context.fillText("Num", guideX + 5, guideY + guideBounds.height - 18);
+      if (elements.numToggle.checked) context.fillText("Num", guideX + 5, guideY + guideBounds.height - 18);
       if (data.trackpad && autoMouseToggle.checked) {
         context.textAlign = "center";
         context.fillStyle = colors.autoMouse;
@@ -694,7 +765,7 @@
       }
       context.textAlign = "right";
       context.fillStyle = colors.func;
-      context.fillText("Fn", guideX + guideBounds.width - 5, guideY + guideBounds.height - 18);
+      if (elements.fnToggle.checked) context.fillText("Fn", guideX + guideBounds.width - 5, guideY + guideBounds.height - 18);
       context.beginPath();
       context.moveTo(guideX + 5, guideY + guideBounds.height - 12);
       context.lineTo(guideX + guideBounds.width - 5, guideY + guideBounds.height - 12);
@@ -753,8 +824,10 @@
           );
         });
       };
-      drawLegendColumn(".legend-clicks", ["left", "right", "middle"], false);
-      drawLegendColumn(".legend-mouse", ["pointer", "wheel"], true);
+      if (elements.fnToggle.checked) {
+        drawLegendColumn(".legend-clicks", ["left", "right", "middle"], false);
+        drawLegendColumn(".legend-mouse", ["pointer", "wheel"], true);
+      }
       if (data.trackpad && autoMouseToggle.checked) {
         drawLegendColumn(
           ".legend-auto-clicks",
@@ -845,7 +918,7 @@
   };
 
   const runPngExport = async (exportPng, successMessage, errorMessage) => {
-    const controls = [elements.keyboardSelect, elements.copyButton, elements.downloadButton];
+    const controls = [elements.numToggle, elements.fnToggle, elements.keyboardSelect, elements.escapeToggle, elements.copyButton, elements.downloadButton];
     controls.forEach((control) => { control.disabled = true; });
     elements.copyStatus.textContent = "PNGを生成しています…";
     try {

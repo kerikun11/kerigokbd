@@ -37,7 +37,7 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory software/keymap_viewer/
 
 設定ペインの「キーボード」でv1・v2を選択。初期表示はv2。v1は48キーすべてを表示し、トラックパッドと専用MouseレイヤがないためMouse切り替えは無効になる。PNGの内容とファイル名も選択したキーボードに合わせる。
 
-表示対象はMain、Num、Fn、Mouse（v2のみ）。Mainはキー上部中央、Numは左下、Mouseは中央、Fnは右下、長押し時の割り当ては下端に表示。Mouseは下部ペインで表示を切り替え。
+表示対象はMain、Num、Fn、Mouse（v2のみ）。Mainはキー上部中央、Numは左下、Mouseは中央下部、Fnは右下、長押し時の割り当ては下端に表示。Mouseは下部ペインで表示を切り替え。
 
 `,`、`.`、`/`には、Shift時の`<`、`>`、`?`をMainの右側に併記。
 
@@ -50,3 +50,7 @@ python3 -m http.server 8000 --bind 127.0.0.1 --directory software/keymap_viewer/
 ```sh
 python3 -m unittest discover -s software/keymap_viewer/tests -q
 ```
+
+設定の「Extraレイヤを表示」で、Extraレイヤ（ファームウェアのKGL_ESC）をキー中央に紫色で表示する。v1・v2に対応し、Mouseとは独立に切り替え可能。初期状態は非表示。透明キー・無効キーは空欄。ホイール操作はアイコンと方向矢印で表示。PNGのコピー・ダウンロードにも反映する。
+
+設定のNum・Fnトグルで各レイヤと凡例を個別に表示・非表示にできる。初期状態は両方ON。選択はキーボード切り替え後も維持し、PNGにも反映する。長押しのNum・Fn表示はそのまま残る。

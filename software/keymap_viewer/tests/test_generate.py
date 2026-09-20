@@ -46,6 +46,20 @@ class LayoutVersionTest(unittest.TestCase):
 
 
 class KeyboardSelectionTest(unittest.TestCase):
+    def test_escape_reference_for_both_keyboards(self):
+        for name in generate.KEYBOARD_CONFIGS:
+            payload = generate.build_keyboard(name)
+            source = generate.KEYBOARD_ROOT / name / "keymaps/default/keymap.c"
+            escape = generate.parse_layers(source.read_text())["KGL_ESC"]
+            self.assertEqual([key["escape"]["source"] for key in payload["keys"]], escape)
+            self.assertIn("7", {key["escape"]["label"] for key in payload["keys"]})
+            for key in payload["keys"]:
+                entry = key["escape"]
+                if entry["state"] == "disabled":
+                    self.assertEqual(entry["label"], "")
+                elif entry["state"] == "transparent":
+                    self.assertEqual(entry["label"], "")
+
     def test_v1_preserves_all_thumb_keys_without_trackpad(self):
         payload = generate.build_keyboard("kerigokbd_v1")
         self.assertEqual(payload["keyboard"], "KERIgoKBD v1")
@@ -91,12 +105,12 @@ class GenerateTest(unittest.TestCase):
 
     def test_layer_tap_labels(self):
         self.assertEqual(generate.label_for("KG_ESC", self.definitions), "Esc")
-        self.assertEqual(generate.hold_label("KG_ESC", self.definitions), "")
+        self.assertEqual(generate.hold_label("KG_ESC", self.definitions), "Extra")
         self.assertEqual(generate.hold_label("MO(KGL_NUM)", self.definitions), "Num")
         self.assertEqual(generate.hold_label("MO(KGL_AM)", self.definitions), "Mouse")
 
     def test_layers_outside_quick_reference_are_hidden(self):
-        for expression in ("KG_ESC", "KG_TEMP", "KG_EXBL", "KG_EXBR"):
+        for expression in ("KG_TEMP", "KG_EXBL", "KG_EXBR"):
             self.assertEqual(generate.hold_label(expression, self.definitions), "")
 
     def test_compact_key_labels(self):
@@ -223,7 +237,7 @@ class GenerateTest(unittest.TestCase):
             {
                 "index", "matrix", "x", "y", "width", "height",
                 "rotation", "rotationX", "rotationY", "main", "nums",
-                "func", "autoMouse",
+                "func", "autoMouse", "escape",
             },
         )
 

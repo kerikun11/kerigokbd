@@ -23,8 +23,9 @@
       <div id="keyboard" class="keyboard" role="group" aria-label="キーボードレイアウト"></div>
       <section class="legend" aria-label="表示とマウス操作の凡例">
         <h3 class="legend-title">凡例</h3>
-        <div class="legend-key-guide" aria-label="Mainは上部中央、Mouseは中央、Numは左下、Fnは右下、Holdは下端">
+        <div class="legend-key-guide" aria-label="Mainは上部中央、Extraは中央、Mouseは中央下寄り、Numは左下、Fnは右下、Holdは下端">
           <span class="guide-main">Main</span>
+          <span class="guide-escape" hidden>Extra</span>
           <span class="guide-nums">Num</span>
           <span class="guide-auto-mouse">Mouse</span>
           <span class="guide-func">Fn</span>
@@ -34,6 +35,7 @@
           <span class="legend-layer-main"><b>Main</b><small>デフォルト状態のレイアウト</small></span>
           <span class="legend-layer-num"><b>Num</b><small>Numキーを押した状態のレイアウト</small></span>
           <span class="legend-layer-fn"><b>Fn</b><small>Fnキーを押した状態のレイアウト</small></span>
+          <span class="legend-layer-escape" hidden><b>Extra</b><small>Escキーを押した状態のレイアウト</small></span>
           <span class="legend-layer-mouse"><b>Mouse</b><small>Trackpadに触れている状態のレイアウト</small></span>
         </div>
         <div class="legend-column legend-clicks" aria-label="クリック操作">
@@ -88,33 +90,57 @@
     </section>
     <section class="control-pane" aria-labelledby="settings-title">
       <h2 id="settings-title" class="settings-title">設定</h2>
-      <label class="keyboard-selector" for="keyboard-select">
-        <span>キーボード</span>
-        <select id="keyboard-select">
-          <option value="kerigokbd_v2">KERIgoKBD v2</option>
-          <option value="kerigokbd_v1">KERIgoKBD v1</option>
-        </select>
-      </label>
-      <label class="layer-toggle" for="toggle-auto-mouse">
-        <input id="toggle-auto-mouse" type="checkbox" checked>
-        <span class="toggle-track" aria-hidden="true"><span></span></span>
-        <span>Mouseレイヤを表示</span>
-      </label>
-      <div class="control-actions">
-        <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
-        <button id="copy-png" class="copy-button" type="button">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="8" y="8" width="11" height="11" rx="2"></rect>
-            <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path>
-          </svg>
-          <span>PNGをコピー</span>
-        </button>
-        <button id="download-png" class="copy-button" type="button">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"></path>
-          </svg>
-          <span>PNGをダウンロード</span>
-        </button>
+      <div class="control-body">
+        <div class="control-settings">
+          <label class="keyboard-selector" for="keyboard-select">
+            <span>キーボード</span>
+            <select id="keyboard-select">
+              <option value="kerigokbd_v2">KERIgoKBD v2</option>
+              <option value="kerigokbd_v1">KERIgoKBD v1</option>
+            </select>
+          </label>
+          <div class="layer-toggles">
+            <label class="layer-toggle" for="toggle-num">
+              <input id="toggle-num" type="checkbox" checked>
+              <span class="toggle-track" aria-hidden="true"><span></span></span>
+              <span>Numレイヤを表示</span>
+            </label>
+            <label class="layer-toggle" for="toggle-fn">
+              <input id="toggle-fn" type="checkbox" checked>
+              <span class="toggle-track" aria-hidden="true"><span></span></span>
+              <span>Fnレイヤを表示</span>
+            </label>
+            <label class="layer-toggle" for="toggle-escape">
+              <input id="toggle-escape" type="checkbox" checked>
+              <span class="toggle-track" aria-hidden="true"><span></span></span>
+              <span>Extraレイヤを表示</span>
+            </label>
+            <label class="layer-toggle" for="toggle-auto-mouse">
+              <input id="toggle-auto-mouse" type="checkbox" checked>
+              <span class="toggle-track" aria-hidden="true"><span></span></span>
+              <span>Mouseレイヤを表示</span>
+            </label>
+          </div>
+        </div>
+        <div class="control-divider" aria-hidden="true"></div>
+        <div class="control-actions">
+          <div class="control-buttons">
+            <button id="copy-png" class="copy-button" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <rect x="8" y="8" width="11" height="11" rx="2"></rect>
+                <path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path>
+              </svg>
+              <span>PNGをコピー</span>
+            </button>
+            <button id="download-png" class="copy-button" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3v12m-5-5 5 5 5-5M4 16v5h16v-5"></path>
+              </svg>
+              <span>PNGをダウンロード</span>
+            </button>
+          </div>
+          <p id="copy-status" class="copy-status" role="status" aria-live="polite"></p>
+        </div>
       </div>
     </section>
     <footer class="source-footer">

@@ -13,12 +13,13 @@
   --auto-mouse: #d49a00;
   --hold: #278554;
   --accent: #e35e35;
-  --aux-font-size: clamp(9px, .95vw, 13px);
-  --aux-single-font-size: clamp(10px, 1.08vw, 15px);
-  --aux-compact-font-size: clamp(8px, .66vw, 8.5px);
+  --aux-font-size: 13px;
+  --aux-single-font-size: 15px;
+  --aux-compact-font-size: 13px;
   --panel-border: 1px solid var(--rule);
   --key-shadow: 0 3px 7px rgb(45 43 34 / 8%);
-  --mouse-label-y: 60%;
+  --mouse-label-bottom: 12px;
+  --mouse-label-bottom-with-hold: 24px;
   --shadow: 0 18px 50px rgb(50 47 36 / 10%);
 }
 
@@ -280,30 +281,47 @@ h1 {
 
 .control-pane {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 18px;
+  flex-direction: column;
+  gap: 14px;
   margin-top: 14px;
   border: var(--panel-border);
   border-radius: 18px;
   background: var(--card);
   box-shadow: 0 8px 24px rgb(50 47 36 / 8%);
-  padding: 12px 14px 12px 18px;
+  padding: 16px 20px;
 }
 
 .settings-title {
-  flex-basis: 100%;
   margin: 0;
   color: var(--muted);
   font-size: 13px;
   font-weight: 700;
 }
 
-.layer-toggle,
-.control-actions {
+.control-body {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px 28px;
+}
+
+.control-settings {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.control-divider {
+  align-self: stretch;
+  width: 1px;
+  background: var(--rule);
+}
+
+.layer-toggles {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .keyboard-selector {
@@ -326,6 +344,8 @@ h1 {
 .layer-toggle:has(input:disabled) { opacity: .5; cursor: default; }
 
 .layer-toggle {
+  display: flex;
+  align-items: center;
   gap: 10px;
   font-size: 13px;
   font-weight: 700;
@@ -362,17 +382,37 @@ h1 {
 }
 
 .layer-toggle input:checked + .toggle-track {
-  border-color: var(--auto-mouse);
-  background: var(--auto-mouse);
+  border-color: var(--accent);
+  background: var(--accent);
 }
 
 .layer-toggle input:checked + .toggle-track span { transform: translateX(16px); }
 .layer-toggle input:focus-visible + .toggle-track {
-  outline: 3px solid color-mix(in srgb, var(--auto-mouse), transparent 65%);
+  outline: 3px solid color-mix(in srgb, var(--accent), transparent 65%);
   outline-offset: 2px;
 }
 
-.control-actions { gap: 14px; }
+#toggle-num:checked + .toggle-track { background: var(--nums); border-color: var(--nums); }
+#toggle-num:focus-visible + .toggle-track { outline-color: color-mix(in srgb, var(--nums), transparent 65%); }
+
+#toggle-fn:checked + .toggle-track { background: var(--func); border-color: var(--func); }
+#toggle-fn:focus-visible + .toggle-track { outline-color: color-mix(in srgb, var(--func), transparent 65%); }
+
+#toggle-auto-mouse:checked + .toggle-track { background: var(--auto-mouse); border-color: var(--auto-mouse); }
+#toggle-auto-mouse:focus-visible + .toggle-track { outline-color: color-mix(in srgb, var(--auto-mouse), transparent 65%); }
+
+.control-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.control-buttons {
+  display: flex;
+  gap: 10px;
+}
 
 .section-heading { align-items: start; margin-top: -3px; }
 .section-heading > p { max-width: 28rem; text-align: right; font-size: 13px; }
@@ -401,9 +441,9 @@ h1 {
 
 .key-main {
   position: absolute;
-  inset: 9px 4px auto;
+  inset: 5px 4px auto;
   color: var(--main);
-  font-size: clamp(12px, 1.45vw, 20px);
+  font-size: 20px;
   font-weight: 750;
   line-height: 1.05;
   text-align: center;
@@ -411,7 +451,7 @@ h1 {
 }
 
 .key.compact-main-label .key-main {
-  font-size: clamp(10px, 1.15vw, 16px);
+  font-size: 16px;
   letter-spacing: -.025em;
 }
 
@@ -424,10 +464,10 @@ h1 {
 
 .key-main-shift {
   position: absolute;
-  top: 9px;
+  top: 5px;
   right: 7px;
   color: var(--main);
-  font-size: clamp(12px, 1.45vw, 20px);
+  font-size: 20px;
   font-weight: 750;
   line-height: 1.05;
 }
@@ -445,8 +485,7 @@ h1 {
 }
 
 .key.long-nums-label .key-nums,
-.key.long-func-label .key-func,
-.key.long-hold-label .key-hold {
+.key.long-func-label .key-func {
   font-size: var(--aux-compact-font-size);
   letter-spacing: -.04em;
 }
@@ -491,8 +530,7 @@ h1 {
 
 .key-auto-mouse {
   position: absolute;
-  top: var(--mouse-label-y);
-  bottom: auto;
+  bottom: var(--mouse-label-bottom);
   left: 50%;
   z-index: 1;
   display: none;
@@ -502,9 +540,11 @@ h1 {
   font-size: var(--aux-font-size);
   font-weight: 800;
   line-height: 1;
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, 50%);
   white-space: nowrap;
 }
+
+.key.has-hold .key-auto-mouse { bottom: var(--mouse-label-bottom-with-hold); }
 
 .keyboard.show-auto-mouse .key-auto-mouse:not(:empty) { display: inline-flex; }
 .key-auto-mouse .operation-icon { width: 1.35em; height: 1.35em; }
@@ -603,3 +643,58 @@ h1 {
   .keyboard-card { border: 0; box-shadow: none; padding: 0; }
   .key { print-color-adjust: exact; }
 }
+
+/* Escape reference shares the key with the lower Mouse reference. */
+:root { --escape: #8754b3; }
+.key-escape {
+  position: absolute;
+  top: 50%;
+  left: 4px;
+  right: 4px;
+  transform: translateY(-50%);
+  display: none;
+  color: var(--escape);
+  font-size: var(--aux-font-size);
+  font-weight: 750;
+  line-height: 1;
+  text-align: center;
+}
+.keyboard.show-escape .key-escape { display: block; }
+.legend-layer-escape b { color: var(--escape); }
+.legend-layer-escape[hidden] { display: none; }
+#toggle-escape:checked + .toggle-track { background: var(--escape); border-color: var(--escape); }
+#toggle-escape:focus-visible + .toggle-track { outline-color: color-mix(in srgb, var(--escape), transparent 65%); }
+
+.guide-escape {
+  top: 19px;
+  left: 50%;
+  color: var(--escape);
+  font-size: 10px;
+  transform: translateX(-50%);
+}
+.guide-escape[hidden] { display: none; }
+
+.key-escape.single-label,
+.key-auto-mouse.single-label { font-size: var(--aux-single-font-size); }
+.key-escape.long-label,
+.key-auto-mouse.long-label { font-size: var(--aux-compact-font-size); }
+
+.keyboard.show-escape .key-escape.pointer-operation,
+.keyboard.show-escape .key-escape.click-operation {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.key-hold.hold-extra { color: var(--escape); }
+
+.japanese-label { font-size: 80%; }
+
+.keyboard.hide-num .key-nums,
+.keyboard.hide-fn .key-func,
+.guide-nums[hidden],
+.guide-func[hidden],
+.legend-layer-num[hidden],
+.legend-layer-fn[hidden],
+.legend-clicks[hidden],
+.legend-mouse[hidden] { display: none; }

@@ -16,31 +16,33 @@ KEYMAP_PATH = KEYBOARD_ROOT / "kerigokbd_v2/keymaps/default/keymap.c"
 INFO_PATH = KEYBOARD_ROOT / "kerigokbd_v2/info.json"
 VIA_PATH = KEYBOARD_ROOT / "kerigokbd_v2/keymaps/via/via.json"
 DEFINITIONS_PATH = KEYBOARD_ROOT / "kerigokbd.h"
-OUTPUT_PATH = Path(__file__).resolve().parents[1] / "public/generated/keymap-data.js"
+OUTPUT_PATH = Path(__file__).resolve(
+).parents[1] / "public/generated/keymap-data.js"
 
 VISIBLE_LAYERS = ("KGL_MAIN", "KGL_NUM", "KGL_FUN", "KGL_AM")
 OUTPUT_LAYERS = (
     ("nums", "KGL_NUM"),
     ("func", "KGL_FUN"),
     ("autoMouse", "KGL_AM"),
+    ("escape", "KGL_ESC"),
 )
 TRACKPAD_REPLACED_MATRIXES = ((7, 4), (7, 3))
 TRACKPAD_GEOMETRY = {"x": 10.125, "y": 3.15, "width": 1.75, "height": 1.75}
 KEYBOARD_CONFIGS = {
     "kerigokbd_v2": {
-        "layers": VISIBLE_LAYERS,
+        "layers": (*VISIBLE_LAYERS, "KGL_ESC"),
         "trackpad": {
             **TRACKPAD_GEOMETRY,
             "replaces": [list(matrix) for matrix in TRACKPAD_REPLACED_MATRIXES],
         },
     },
-    "kerigokbd_v1": {"layers": VISIBLE_LAYERS[:3], "trackpad": None},
+    "kerigokbd_v1": {"layers": (*VISIBLE_LAYERS[:3], "KGL_ESC"), "trackpad": None},
 }
 LAYER_LABELS = {
     "KGL_MAIN": "Main",
     "KGL_NUM": "Num",
     "KGL_FUN": "Fn",
-    "KGL_ESC": "Tenkey",
+    "KGL_ESC": "Extra",
     "KGL_TEMP": "Temporary",
     "KGL_CONF": "Config",
     "KGL_AM": "Mouse",
@@ -55,7 +57,7 @@ KEY_LABELS = {
     "KC_VOLU": "Vol+", "KC_VOLD": "Vol-", "KC_LEFT": "⬅",
     "KC_DOWN": "⬇", "KC_UP": "⬆", "KC_RGHT": "➡",
     "KC_HOME": "Home", "KC_END": "End", "KC_PGUP": "PgUp",
-    "KC_PGDN": "PgDn", "KC_SLEP": "Sleep", "KC_NUM": "Num Lock",
+    "KC_PGDN": "PgDn", "KC_SLEP": "Sleep", "KC_NUM": "NumLock",
     "KC_P7": "7", "KC_P8": "8", "KC_P9": "9", "KC_PMNS": "−",
     "KC_PSLS": "÷", "KC_P4": "4", "KC_P5": "5", "KC_P6": "6",
     "KC_PPLS": "+", "KC_PENT": "Enter", "KC_PAST": "×",
@@ -280,10 +282,10 @@ def hold_label(expression: str, definitions: dict[str, str]) -> str:
     name, arguments = call
     if name == "LT" and len(arguments) == 2:
         layer = arguments[0]
-        return LAYER_LABELS.get(layer, layer) if layer in VISIBLE_LAYERS else ""
+        return LAYER_LABELS.get(layer, layer) if layer in (*VISIBLE_LAYERS, "KGL_ESC") else ""
     if name == "MO" and arguments:
         layer = arguments[0]
-        return LAYER_LABELS.get(layer, layer) if layer in VISIBLE_LAYERS else ""
+        return LAYER_LABELS.get(layer, layer) if layer in (*VISIBLE_LAYERS, "KGL_ESC") else ""
     if name.endswith("_T"):
         modifier = name[:-2]
         return MODIFIER_LABELS.get(modifier, modifier.title())
@@ -295,9 +297,16 @@ def layer_label(
     expression: str,
     definitions: dict[str, str],
     main_label: str,
+    main_hold: str = "",
 ) -> str:
     label = label_for(expression, definitions)
+    if output_name == "escape" and key_state(expression) == "disabled":
+        return ""
     if output_name == "func" and label == main_label:
+        return ""
+    if output_name == "escape" and main_hold == LAYER_LABELS["KGL_ESC"]:
+        # The Extra layer's own hold key shows its "return to Main" entry here,
+        # which is redundant with releasing the hold, so hide it exceptionally.
         return ""
     return label
 
@@ -333,7 +342,8 @@ def validate_sources(
     layers: dict[str, list[str]],
     required_layers: tuple[str, ...] = VISIBLE_LAYERS,
 ) -> None:
-    missing_layers = [layer for layer in required_layers if layer not in layers]
+    missing_layers = [
+        layer for layer in required_layers if layer not in layers]
     if missing_layers:
         raise ValueError(f"Missing layers: {', '.join(missing_layers)}")
 
@@ -370,7 +380,9 @@ def build_layer_entry(
             main_entry["hold"],
         )
         if output_name == "autoMouse"
-        else layer_label(output_name, source, definitions, main_entry["label"])
+        else layer_label(
+            output_name, source, definitions, main_entry["label"], main_entry["hold"]
+        )
     )
     return {
         "source": source,
@@ -420,7 +432,8 @@ def layout_version(keymap_path: Path = KEYMAP_PATH) -> str:
         ).strip()
 
     if git("rev-parse", "--is-shallow-repository") == "true":
-        raise ValueError("Layout version requires full Git history (fetch-depth: 0).")
+        raise ValueError(
+            "Layout version requires full Git history (fetch-depth: 0).")
     history = git(
         "log", "--follow", "--format=%cI", "--",
         str(keymap_path.relative_to(REPOSITORY_ROOT)),
@@ -456,7 +469,8 @@ def build_payload(
     validate_sources(positions, geometries, layers, config["layers"])
 
     keys = [
-        build_key(index, position, geometries[tuple(position["matrix"])], layers, definitions)
+        build_key(index, position, geometries[tuple(
+            position["matrix"])], layers, definitions)
         for index, position in enumerate(positions)
     ]
 
@@ -486,16 +500,20 @@ def build_keyboard(keyboard_id: str) -> dict[str, object]:
         raise ValueError(f"Unsupported keyboard: {keyboard_id}")
     root = KEYBOARD_ROOT / keyboard_id
     info = json.loads((root / "info.json").read_text(encoding="utf-8"))
-    via = json.loads((root / "keymaps/via/via.json").read_text(encoding="utf-8"))
-    definitions = parse_definitions(DEFINITIONS_PATH.read_text(encoding="utf-8"))
-    layers = parse_layers((root / "keymaps/default/keymap.c").read_text(encoding="utf-8"))
+    via = json.loads(
+        (root / "keymaps/via/via.json").read_text(encoding="utf-8"))
+    definitions = parse_definitions(
+        DEFINITIONS_PATH.read_text(encoding="utf-8"))
+    layers = parse_layers(
+        (root / "keymaps/default/keymap.c").read_text(encoding="utf-8"))
     return build_payload(info, via, layers, definitions, keyboard_id)
 
 
 def main() -> None:
     keyboards = {name: build_keyboard(name) for name in KEYBOARD_CONFIGS}
     write_payload({"keyboards": keyboards})
-    print(f"Generated {OUTPUT_PATH.relative_to(REPOSITORY_ROOT)} ({len(keyboards)} keyboards)")
+    print(
+        f"Generated {OUTPUT_PATH.relative_to(REPOSITORY_ROOT)} ({len(keyboards)} keyboards)")
 
 
 if __name__ == "__main__":
