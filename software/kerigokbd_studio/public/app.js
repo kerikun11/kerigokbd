@@ -58,7 +58,7 @@ const syncEngine = new SyncEngine(store);
 let pickerCategory = "letters_numbers";
 let deviceBusy = false;
 let viewMode = "cheatSheet"; // "cheatSheet" (default landing) | "edit"
-// Per-layer show/hide for the cheat sheet, matching keymap_viewer's toggles.
+// Per-layer show/hide for the cheat sheet.
 const cheatSheetVisibility = { nums: true, func: true, extra: true, mouse: true };
 
 /**
@@ -119,10 +119,10 @@ async function updateToLatestLayout() {
   render();
   const progress = (message) => { elements.deviceActionStatus.textContent = message; };
   try {
-    // store.defaults/store.layout are this editor's own bundled copy of
-    // main's default/keymap.c, loaded locally at startup -- this page is
-    // itself published to GitHub Pages from main, so there's nothing to
-    // fetch: the page already IS "the latest main version".
+    // store.defaults is this editor's own bundled copy of main's
+    // default/keymap.c (scripts/build_defaults.py, loaded locally at
+    // startup) -- the same data already shown in the cheat sheet before any
+    // device connects, so there's nothing to fetch over the network.
     const confirmed = await confirmDialog({
       heading: "最新版レイアウトに更新",
       message: `現在のキーマップが削除されて、mainの最新版（${store.defaults.layoutVersion}）に置き換わります。更新しますか？`,
@@ -178,8 +178,8 @@ async function runDeviceAction(action, message) {
  * Builds the offscreen "poster" version of the cheat sheet for PNG export:
  * the same .editor-card styling (padding, rounded corners, shadow) the page
  * itself uses, plus the keyboard name/layout version header stripped out of
- * the on-page layout -- matching keymap_viewer's PNG output, which draws
- * that same header onto its canvas rather than exporting a bare key grid.
+ * the on-page layout -- so the exported image is self-describing rather
+ * than a bare key grid with no keyboard/version label.
  */
 function buildPngExportCard() {
   const card = document.createElement("div");

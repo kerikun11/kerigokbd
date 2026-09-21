@@ -15,8 +15,7 @@ test("an explicit Num reassignment still shows even when it renders identically 
   // again (keeping "." reachable while Num is held) instead of leaving it
   // transparent -- the cheat sheet should say so, not hide it as redundant.
   // Num never dedupes against Main (unlike Fn/Trackpad -- see the per-layer
-  // tests below), matching keymap_viewer's own layer_label()/
-  // auto_mouse_label() rules.
+  // tests below).
   const result = describeCheatSheetKey({ main: 55, nums: 55 }); // JP_DOT on both Main and Num
   assert.equal(result.main, ".");
   assert.equal(result.nums, ".");

@@ -1,8 +1,8 @@
 // Maps a cheat sheet overlay label (as produced by cheat-sheet-labels.js's
-// describeCheatSheetKey, e.g. "BTN1", "MSL", "SCRL") to the same operation
-// icon keymap_viewer shows for mouse/pointer keys, so the
-// cheat sheet reads at a glance instead of as a wall of short mnemonics.
-// Labels with no icon mapping here are left as plain text by the caller.
+// describeCheatSheetKey, e.g. "BTN1", "MSL", "SCRL") to an operation icon,
+// so the cheat sheet reads at a glance instead of as a wall of short
+// mnemonics. Labels with no icon mapping here are left as plain text by the
+// caller.
 
 const CLICK_ICONS = { BTN1: "mouse-left", BTN2: "mouse-right", BTN3: "mouse-middle" };
 const POINTER_ARROWS = { MSL: "⬅", MSD: "⬇", MSU: "⬆", MSR: "➡" };

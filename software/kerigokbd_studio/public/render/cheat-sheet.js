@@ -71,11 +71,10 @@ function appendOverlay(cell, className, text, { extraClass, sizeByLength = true 
 /**
  * The two matrix positions a trackpad-equipped board (kerigokbd_v2) reuses
  * underneath the trackpad still carry real keycodes (VIA still addresses
- * them), but there's no physical switch there -- so, matching
- * keymap_viewer, they're drawn as one circular trackpad instead of two key
- * cards. There's nothing to edit here (VIA has no trackpad-specific
- * settings), so this is cheat-sheet-only; the edit view still shows both
- * matrix positions as ordinary keys.
+ * them), but there's no physical switch there -- so they're drawn as one
+ * circular trackpad instead of two key cards. There's nothing to edit here
+ * (VIA has no trackpad-specific settings), so this is cheat-sheet-only; the
+ * edit view still shows both matrix positions as ordinary keys.
  */
 function createTrackpadElement(trackpad, unitX, unitY) {
   const element = document.createElement("div");
@@ -102,13 +101,13 @@ function createTrackpadElement(trackpad, unitX, unitY) {
 
 /**
  * Renders the whole keyboard read-only, with every relevant layer's action
- * on each key shown at once, each corner matching keymap_viewer's own
- * layout: Main near the top, Extra vertically centered (its own "Escape
- * reference" slot), Num bottom-left, Fn bottom-right, Trackpad bottom-center
- * -- only on keyboards with a trackpad -- and Hold along the very bottom
- * edge with a divider line above it, at a fixed position regardless of
- * what else is on the key (editor.css shifts Num/Fn/Trackpad up out of its
- * way via the .has-hold class rather than this module tracking layout).
+ * on each key shown at once: Main near the top, Extra vertically centered
+ * (its own "Escape reference" slot), Num bottom-left, Fn bottom-right,
+ * Trackpad bottom-center -- only on keyboards with a trackpad -- and Hold
+ * along the very bottom edge with a divider line above it, at a fixed
+ * position regardless of what else is on the key (editor.css shifts
+ * Num/Fn/Trackpad up out of its way via the .has-hold class rather than
+ * this module tracking layout).
  */
 export function renderCheatSheet(container, { layout, main, nums, func, extra, mouse }) {
   const { columns, rows } = layoutExtent(layout);

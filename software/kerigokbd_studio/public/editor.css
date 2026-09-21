@@ -1,6 +1,4 @@
-/* Color/spacing tokens copied by value from keymap_viewer/public/styles.css
-   so both tools look like the same product, even though this stylesheet
-   and all layout rules below are written fresh. */
+/* Color/spacing tokens shared by the whole stylesheet below. */
 :root {
   color-scheme: light;
   --page: #f3f0e8;
@@ -31,8 +29,8 @@ body {
   font-family: Inter, "Noto Sans JP", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
 }
 
-/* Same width as ../keymap_viewer/public/styles.css's main, so the key
-   layout renders at roughly the same physical size in both tools. */
+/* Fixed width rather than fluid, so the key layout renders at a consistent,
+   comfortable physical size regardless of window width. */
 main {
   width: 1180px;
   margin: 0 auto;
@@ -68,8 +66,6 @@ h1 {
   border-bottom: 1px solid var(--rule);
 }
 
-/* Copied by value from ../keymap_viewer/public/styles.css's .layout-version
-   so both tools label "how current is this default keymap" the same way. */
 .layout-version {
   margin: 0;
   color: var(--muted);
@@ -151,9 +147,7 @@ h1 {
 .mode-action { display: flex; }
 .mode-action-button { width: 100%; }
 
-/* Per-layer show/hide switches, copied by value from
-   ../keymap_viewer/public/styles.css's .layer-toggle / .toggle-track so the
-   two tools' toggle switches look identical. */
+/* Per-layer show/hide switches. */
 .layer-toggles {
   display: flex;
   flex-wrap: wrap;
@@ -212,8 +206,8 @@ h1 {
   gap: 8px;
 }
 /* Stacked full-width, matching device-actions/edit-actions/mode-action --
-   was side-by-side flex:1 1 auto, the one button pair in the pane not
-   matching everything else's one-button-per-row layout. */
+   a consistent one-button-per-row layout throughout the pane rather than
+   this one pair sized to its own text. */
 .png-export-buttons { display: flex; flex-direction: column; gap: 8px; }
 .png-export-buttons button { width: 100%; }
 .png-export-status { margin: 0; font-size: 12px; color: var(--muted); }
@@ -359,7 +353,7 @@ button:disabled { cursor: not-allowed; opacity: .5; }
 .cheat-key.is-empty { color: var(--muted); }
 .cheat-key.is-transparent { color: var(--key-border); }
 
-/* Absolute corners, matching keymap_viewer's own key-label layout: Main
+/* Absolute corners: Main
    near the top, Extra vertically centered (its own "Escape reference"
    slot), Num bottom-left, Fn bottom-right, Trackpad bottom-center, Hold along
    the very bottom edge with a divider above it. Hold's position never
@@ -464,15 +458,13 @@ button:disabled { cursor: not-allowed; opacity: .5; }
   white-space: nowrap;
   text-overflow: ellipsis;
 }
-/* A Hold that jumps to Num/Fn/Extra is colored to match that layer,
-   matching keymap_viewer's .key-hold.hold-nums/.hold-func/.hold-extra. */
+/* A Hold that jumps to Num/Fn/Extra is colored to match that layer. */
 .cheat-key-hold.hold-nums { color: var(--nums); }
 .cheat-key-hold.hold-func { color: var(--func); }
 .cheat-key-hold.hold-extra { color: var(--escape); }
 
 /* The trackpad circle (kerigokbd_v2 only), replacing the two matrix
-   positions it physically covers -- matches keymap_viewer's own
-   .trackpad/.trackpad-main/.trackpad-hold, redrawn independently here. */
+   positions it physically covers. */
 .cheat-trackpad {
   position: absolute;
   aspect-ratio: 1;
@@ -562,21 +554,10 @@ button:disabled { cursor: not-allowed; opacity: .5; }
   overflow: hidden;
 }
 
-/* A titled, bordered card -- matching keymap_viewer's own <h3
-   class="legend-title">凡例</h3> section -- rather than two loose,
-   unlabeled rows of color/icon keys. */
 .legend {
   margin-top: 4px;
   padding-top: 14px;
   border-top: 1px solid var(--rule);
-}
-.legend-title {
-  margin: 0 0 10px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: .06em;
 }
 /* Each category has one vertical list; wrap whole groups on narrow screens. */
 .legend-groups {
@@ -614,10 +595,9 @@ button:disabled { cursor: not-allowed; opacity: .5; }
 
 /* A small sample key card showing where each overlay lands on a real key
    -- Main top-center, Extra/Trackpad stacked centered below it, Num/Fn side
-   by side at the bottom, Hold along the very bottom edge -- matching
-   keymap_viewer's own .legend-key-guide (same corner layout as the real
-   cheat-key cards, just a fixed size since there's no keyboard grid to
-   size it against here). */
+   by side at the bottom, Hold along the very bottom edge -- the same corner
+   layout as the real cheat-key cards, just a fixed size since there's no
+   keyboard grid to size it against here. */
 .legend-key-guide {
   position: relative;
   flex: 0 0 auto;

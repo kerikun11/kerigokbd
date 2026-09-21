@@ -1,7 +1,5 @@
-// Per-layer show/hide switches for the cheat sheet, matching keymap_viewer's
-// "Numレイヤを表示" / "Fnレイヤを表示" / "Trackpadレイヤを表示" toggles so a
-// crowded key can be decluttered down to just the layers someone cares
-// about right now.
+// Per-layer show/hide switches for the cheat sheet, so a crowded key can be
+// decluttered down to just the layers someone cares about right now.
 const TOGGLES = [
   { key: "nums", label: "Numレイヤを表示", colorClass: "toggle-nums" },
   { key: "func", label: "Fnレイヤを表示", colorClass: "toggle-func" },

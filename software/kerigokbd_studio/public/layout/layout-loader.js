@@ -7,8 +7,8 @@ const LAYOUTS = {
 };
 
 // Object key order determines both the <select> option order and its
-// default selection (the first one), so kerigokbd_v2 -- the keyboard
-// keymap_viewer itself defaults to -- must be listed first here.
+// default selection (the first one), so kerigokbd_v2 -- the current
+// flagship keyboard -- must be listed first here.
 export const availableKeyboards = () =>
   Object.values(LAYOUTS).map(({ id, keyboard }) => ({ id, keyboard }));
 

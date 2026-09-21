@@ -9,8 +9,7 @@ export const LAYERS = KEYCODE_DATA.layers;
 // the same value out as e.g. `LT(KGL_EXT, KC_ESC)`.
 export const MACRO_ALIASES = KEYCODE_DATA.macroAliases;
 
-// Display names for layers, matching keymap_viewer/scripts/generate.py's
-// LAYER_LABELS so both tools call the same layer the same thing.
+// Display names for layers.
 const LAYER_DISPLAY_NAMES = {
   KGL_MAIN: "Main", KGL_NUM: "Num", KGL_FUN: "Fn", KGL_EXT: "Extra",
   KGL_RES: "Reserved", KGL_CONF: "Config", KGL_AM: "Trackpad",
@@ -35,8 +34,8 @@ export const CATEGORIES = [
 // Priority used to pick ONE canonical display symbol when several symbols
 // share the same numeric value (e.g. KC_A === JP_A, KC_MINS === JP_MINS).
 // "japanese" ranks above generic "punctuation"/"navigation" because
-// kerigokbd's own keymap.c uses JP_* names for symbol keys by convention
-// (see keymap_viewer's KEY_LABELS); letters/numbers still prefer plain KC_.
+// kerigokbd's own keymap.c uses JP_* names for symbol keys by convention;
+// letters/numbers still prefer plain KC_.
 const CANONICAL_CATEGORY_ORDER = [
   "letters_numbers", "japanese", "punctuation", "navigation", "function",
   "modifiers", "numpad", "media_system", "mouse", "rgb", "kerigokbd", "special",

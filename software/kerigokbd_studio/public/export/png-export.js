@@ -1,11 +1,10 @@
 // Rasterizes a live DOM element (the cheat sheet) to a PNG, for the
-// "PNGをコピー" / "PNGをダウンロード" buttons keymap_viewer has.
+// "PNGをコピー" / "PNGをダウンロード" buttons.
 //
-// keymap_viewer hand-draws its keyboard a second time onto a <canvas> with
-// the 2D drawing API, pixel-matching its DOM layout by hand. That approach
-// doesn't fit here: it would mean re-deriving every position, font size and
-// icon this app already computed once for the live cheat sheet. Instead,
-// this clones the already-rendered element into a standalone SVG (via
+// Hand-drawing the keyboard a second time onto a <canvas> with the 2D
+// drawing API would mean re-deriving every position, font size and icon
+// this app already computed once for the live cheat sheet. Instead, this
+// clones the already-rendered element into a standalone SVG (via
 // <foreignObject>, with the stylesheet and icon defs inlined so it doesn't
 // depend on the surrounding page) and draws *that* onto a canvas -- the
 // same DOM/CSS the browser already rendered on screen, captured as-is.

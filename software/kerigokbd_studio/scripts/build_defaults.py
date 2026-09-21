@@ -5,10 +5,9 @@ from the device's live (EEPROM) state.
 
 There is no VIA command to read the compiled-in default without erasing the
 live EEPROM copy (id_dynamic_keymap_reset overwrites it), so this script
-takes the same route keymap_viewer/scripts/generate.py does: read the
-default/keymap.c that the firmware was actually built from, and resolve
-every key expression down to the exact numeric keycode QMK would compile
-it to, using build_keycodes.py's shared expression resolver.
+reads the default/keymap.c that the firmware was actually built from, and
+resolves every key expression down to the exact numeric keycode QMK would
+compile it to, using build_keycodes.py's shared expression resolver.
 """
 
 from __future__ import annotations
@@ -27,10 +26,9 @@ OUTPUT_DIR = Path(__file__).resolve().parents[1] / "public/generated"
 
 
 def layout_version(keymap_path: Path) -> str:
-    """Same convention as keymap_viewer/scripts/generate.py's
-    layout_version(): the committed keymap.c history's latest date (JST),
-    with a lettered suffix for same-day revisions -- so both tools label
-    "how current is this default keymap" the same way."""
+    """The committed keymap.c history's latest date (JST), with a lettered
+    suffix for same-day revisions, as "how current is this default
+    keymap"."""
     def git(*args: str) -> str:
         return subprocess.check_output(["git", "-C", str(REPOSITORY_ROOT), *args], text=True).strip()
 

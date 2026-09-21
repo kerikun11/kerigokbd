@@ -307,9 +307,9 @@ def preferred_symbol(entry: dict[str, object]) -> str:
     """Pick the short, conventional QMK alias (KC_LCTL, MS_LEFT, RM_TOGG, ...)
     over the newer, longer canonical name (KC_LEFT_CTRL, QK_MOUSE_CURSOR_LEFT,
     QK_RGB_MATRIX_TOGGLE, ...), since that's what kerigokbd's own keymap.c
-    and the existing keymap_viewer labels use. On a length tie, prefer a
-    "WIN"-named alias (KC_LWIN over KC_LGUI/KC_LCMD): kerigokbd's keymap.c
-    consistently spells the GUI/Super/Cmd modifier that way."""
+    uses. On a length tie, prefer a "WIN"-named alias (KC_LWIN over
+    KC_LGUI/KC_LCMD): kerigokbd's keymap.c consistently spells the
+    GUI/Super/Cmd modifier that way."""
     candidates = [entry["key"], *aliases_of(entry)]
     return min(candidates, key=lambda candidate: (len(candidate), "WIN" not in candidate))
 
@@ -456,9 +456,7 @@ def collect_group_entries(
     return entries
 
 
-# Presentation labels for kerigokbd's pointing-device custom keycodes,
-# matching keymap_viewer/scripts/generate.py's KEY_LABELS so both tools show
-# the same names for the same keys.
+# Presentation labels for kerigokbd's pointing-device custom keycodes.
 KERIGOKBD_CUSTOM_LABELS = {
     "KG_SCRL": "Scroll", "KG_ZOOM": "Zoom",
     "KG_MSL": "M⬅", "KG_MSD": "M⬇", "KG_MSU": "M⬆", "KG_MSR": "M➡",
@@ -469,7 +467,7 @@ KERIGOKBD_CUSTOM_LABELS = {
 def parse_kerigokbd_custom_keycodes(header_text: str) -> dict[str, str]:
     """Resolve kerigokbd.h's `enum kerigokbd_keycodes { NAME = EXPR, ... }`
     aliases down to their QK_KB_N base symbol, so QK_KB_1 can be displayed
-    as its friendlier alias KG_SCRL, matching keymap_viewer's labels."""
+    as its friendlier alias KG_SCRL."""
     header_text = strip_line_comments(header_text)
     match = re.search(r"enum\s+kerigokbd_keycodes\s*\{([^}]*)\}", header_text, re.S)
     if not match:
@@ -525,7 +523,7 @@ def main() -> None:
     # Only the pointing-device custom keycodes (QK_KB_1..10) are meaningful
     # to assign from the editor; QK_KB_0 is unused by kerigokbd.c. Prefer
     # kerigokbd.h's own friendlier aliases (KG_SCRL, KG_MSL, ...) over the
-    # generic QK_KB_N symbol, with labels matching keymap_viewer.
+    # generic QK_KB_N symbol.
     base_symbol_by_alias = parse_kerigokbd_custom_keycodes(KERIGOKBD_HEADER.read_text(encoding="utf-8"))
     alias_by_base_symbol = {base: alias for alias, base in base_symbol_by_alias.items()}
     for entry in entries:

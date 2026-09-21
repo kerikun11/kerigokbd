@@ -1,16 +1,14 @@
 // Combines every relevant layer's action on one key into the overlay label
-// set keymap_viewer's "quick reference" (早見表) view uses: the Main layer's
-// tap label, its own Hold action (if the Main-layer key is a layer-tap,
-// mod-tap or momentary-layer key), and the tap action on the Num/Fn/Extra/
-// Trackpad layers. Only those five layers get their own overlay row -- a Hold
+// set the cheat sheet (早見表) view uses: the Main layer's tap label, its own
+// Hold action (if the Main-layer key is a layer-tap, mod-tap or
+// momentary-layer key), and the tap action on the Num/Fn/Extra/Trackpad
+// layers. Only those five layers get their own overlay row -- a Hold
 // that names one of the other two layers (Config, Reserved) is hidden
 // outright rather than shown as a dangling reference the sheet never
 // explains (see HIDDEN_HOLD_LABELS below). A layer left transparent
 // (_______) on a key is always
 // hidden -- there's nothing there to report -- but beyond that, how much
-// an *explicit* reassignment gets deduped against Main varies by layer,
-// matching keymap_viewer's own scripts/generate.py layer_label()/
-// auto_mouse_label() exactly (verified against its source, not guessed):
+// an *explicit* reassignment gets deduped against Main varies by layer:
 // - Num: never deduped. The "." key's Num-layer entry is JP_DOT again,
 //   deliberately keeping "." reachable while Num is held -- showing it is
 //   the point, not noise.
@@ -37,8 +35,7 @@ const CHEAT_SHEET_LABEL_STYLE = { modLabelStyle: "word", symbolStyle: "printable
 
 // When Hold says "Num", "Fn" or "Extra" (a MO()/LT() pointing at that
 // layer), it's colored to match that layer's own color instead of the
-// generic Hold green -- matching keymap_viewer's .key-hold.hold-nums/
-// .hold-func/.hold-extra (KG_ESC = LT(KGL_EXT, KC_ESC) is the real example:
+// generic Hold green (KG_ESC = LT(KGL_EXT, KC_ESC) is the real example:
 // its Hold reads "Extra" and should be the same purple as the Extra-layer
 // overlay text, not plain Hold green).
 function holdColorName(layerSymbol) {
@@ -84,8 +81,7 @@ function dedupedLabel(value, dedupeAgainst = []) {
 }
 
 // The comma/period/slash keys type a different symbol when shifted, shown
-// as a small badge next to Main -- copied by value from keymap_viewer's
-// scripts/generate.py MAIN_SHIFT_LABELS.
+// as a small badge next to Main.
 const SHIFT_SYMBOL_BY_MAIN_SYMBOL = { JP_COMM: "<", JP_DOT: ">", JP_SLSH: "?" };
 
 function mainShiftLabel(value) {

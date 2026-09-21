@@ -1,12 +1,11 @@
 #!/usr/bin/env python3
 """Generate physical keyboard layout data for the realtime keymap editor.
 
-Unlike keymap_viewer/scripts/generate.py, this script does not read
-keymap.c at all: the editor fetches keycode values live from the keyboard
-over WebHID, addressed by (layer, row, col). It only needs the physical
-key geometry and matrix coordinates, taken from info.json/via.json, in the
-same order VIA's LAYOUT_xxx(...) macro expects (which matters for
-exporting the live keymap back to C source).
+This script does not read keymap.c at all: the editor fetches keycode
+values live from the keyboard over WebHID, addressed by (layer, row, col).
+It only needs the physical key geometry and matrix coordinates, taken from
+info.json/via.json, in the same order VIA's LAYOUT_xxx(...) macro expects
+(which matters for exporting the live keymap back to C source).
 """
 
 from __future__ import annotations

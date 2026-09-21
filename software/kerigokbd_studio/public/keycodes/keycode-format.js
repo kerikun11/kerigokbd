@@ -1,6 +1,6 @@
 // Turns a raw 16-bit keycode value into a short {main, sub} label pair for
-// on-key display, the same two-line "main label + small hold/layer label"
-// convention keymap_viewer uses for held keys.
+// on-key display: a two-line "main label + small hold/layer label"
+// convention for held keys.
 //
 // Two callers want different trade-offs from the same decoded value:
 // - The editor's live keyboard view (keyboard-view.js) prizes precision --
@@ -40,8 +40,7 @@ function modsWordLabel(mods) {
 // in keymap.c at a glance. `symbolStyle: "printable"` swaps this for a more
 // readable cheat-sheet label: the actual character a symbol key types
 // (JP_EXLM -> "!"), an icon-friendly arrow character, or a short spelled-out
-// word (KC_LCTL -> "Ctrl") -- copied by value from keymap_viewer/scripts/
-// generate.py's KEY_LABELS.
+// word (KC_LCTL -> "Ctrl").
 const KNOWN_SYMBOL_PREFIXES = /^(KC_|JP_|MS_|RGB_|RM_|QK_|KG_)/;
 const PRINTABLE_SYMBOL_LABELS = {
   JP_MINS: "-", JP_COMM: ",", JP_DOT: ".", JP_SLSH: "/",
