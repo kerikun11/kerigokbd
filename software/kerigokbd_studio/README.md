@@ -1,10 +1,10 @@
-# KERIgoKBD Keymap Editor
+# KERIgoKBD Studio
 
 - KERIgoKBDのキーマップを、実機に接続した状態でリアルタイムに編集するWebアプリ(WebHID + QMK VIAプロトコル)。
 - `../keymap_viewer`の見た目(配色・キーカードの意匠)を踏襲しつつ、実装は独立した新規コードとして構成。
 - 画面は上が「レイアウト」(早見表 or 編集画面)、下が「設定」(キーボード選択・レイヤー表示切替・接続・実機操作)の縦2段構成。横幅は`../keymap_viewer`のキーボード表示と同じサイズ(`main`幅1180px)に合わせている。レイアウト側は`../keymap_viewer`が持っていた全レイヤー重ね合わせの早見表(デフォルト表示、Main/Num/Fn/Hold、トラックパッド搭載機種はTrackpadレイヤーも1キーに重ねて表示)と、実機の値を書き換える編集画面を、「設定」ペインの専用ボタンで切り替える。接続前はファームウェアの初期状態(`defaults-*.js`)、接続後は実機の現在の値を早見表に表示する。
 - 早見表のマウス操作系ラベル(クリック・ポインタ移動・ホイール・スクロール/ズームモード・Win・十字キー)は、`../keymap_viewer`と同じ発想のアイコン(`index.html`のSVG `<symbol>`定義)で表示する。Alt・Backspace・Delete・PrScは文字で表示する。ただしExtraレイヤーのようにモッド+キーが**タップ動作そのもの**を表す箇所(例: `A(KC_1)`)は、Hold用のバッジと違いアイコン化せず`Alt+1`のようにそのまま読める形で表示する(`keycode-format.js`の`modLabelStyle`参照)。
-- 画面上部のタイトルは`../keymap_viewer`同様、選択中のキーボード名(`info.json`の`keyboard_name`)とレイアウトバージョン(`default/keymap.c`のコミット履歴から算出、`vYYYY.MM.DDa`形式)を表示する。`<title>`タグ(ブラウザのタブ表示)は固定文言のまま変更していない。
+- 画面上部のタイトルは`../keymap_viewer`同様、選択中のキーボード名(`info.json`の`keyboard_name`)に"Studio"を付けた文字列と、レイアウトバージョン(`default/keymap.c`のコミット履歴から算出、`vYYYY.MM.DDa`形式)を表示する。`<title>`タグ(ブラウザのタブ表示)は"KERIgoKBD Studio"の固定文言。
 - `../keymap_viewer`の残り2機能も統合している。
   - **レイヤー表示ON/OFFトグル**: 「設定」ペインのNum/Fn/Mouseスイッチで、早見表上の該当レイヤーの重ね表示を個別に隠せる(`../keymap_viewer`の`#toggle-num`等と同じ配色・挙動)。オフにしたレイヤーは凡例からも消える。
   - **PNG保存**: 「PNGをコピー」「PNGをダウンロード」ボタンで、現在の早見表(トグルで隠したレイヤーはそのまま反映)をPNG化できる。`../keymap_viewer`はCanvas 2D APIでキー配置を手描きし直しているが、このアプリでは早見表のDOM/CSSをそのまま`<foreignObject>`入りのSVGに包んで`<canvas>`へ描画する方式を採っている(`export/png-export.js`)。画面に見えている内容をそのまま画像化するアプローチのため、手描きに比べて実装・保守コストが低い一方、フォントレンダリングなど細部が`../keymap_viewer`のPNG出力と完全一致するわけではない。
