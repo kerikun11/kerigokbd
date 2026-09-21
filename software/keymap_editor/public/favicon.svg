@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="KERIgoKBD Keymap Editor">
+  <!-- Recreates the cheat sheet legend's own sample key card (see
+       editor.css's .legend-key-guide/.guide-*) as the favicon: same
+       rounded key shape, same corner layout and colors (Extra/Trackpad/
+       Num/Fn/Hold), just redrawn as a static SVG since a favicon can't
+       reference the page's CSS. Colors copied by value from editor.css's
+       :root tokens. The Main slot itself shows the brand name instead of
+       the word "Main". -->
+  <rect x="4" y="4" width="56" height="56" rx="11" fill="#fffefa" stroke="#bbb9af" stroke-width="2"/>
+
+  <!-- Brand name in place of the legend's own "Main" label; textLength
+       force-fits all 9 characters within the card's inner width instead of
+       overflowing past the rounded corners. -->
+  <text x="32" y="19" font-family="Inter, 'Noto Sans JP', system-ui, sans-serif" font-size="9" font-weight="750" fill="#20231f" text-anchor="middle" textLength="52" lengthAdjust="spacingAndGlyphs">KERIgoKBD</text>
+  <text x="32" y="29" font-family="Inter, 'Noto Sans JP', system-ui, sans-serif" font-size="9" font-weight="750" fill="#8754b3" text-anchor="middle">Extra</text>
+  <!-- "Trackpad" is wide enough at its natural width to reach into Num/Fn's
+       corners, so it's the vertical gap (not horizontal fitting) that keeps
+       them apart: its own descender ('p') and Num/Fn's row below are kept
+       clear of each other here, rather than centered on the same row like
+       the real .legend-key-guide (there's no room for two side-by-side rows
+       at this width without the words themselves colliding). -->
+  <text x="32" y="37" font-family="Inter, 'Noto Sans JP', system-ui, sans-serif" font-size="7.5" font-weight="750" fill="#d49a00" text-anchor="middle">Trackpad</text>
+  <text x="9" y="47" font-family="Inter, 'Noto Sans JP', system-ui, sans-serif" font-size="9" font-weight="750" fill="#d52b82" text-anchor="start">Num</text>
+  <text x="55" y="47" font-family="Inter, 'Noto Sans JP', system-ui, sans-serif" font-size="9" font-weight="750" fill="#168fbd" text-anchor="end">Fn</text>
+
+  <!-- Kept clear of both neighbors: below Num/Fn's baseline, and far enough
+       above Hold's own baseline that its ascenders don't touch the line;
+       Hold's baseline is also kept clear of the card's own border
+       (stroke-width 2 centered on the y=60 edge, so the border visually
+       spans y=59 to 61). -->
+  <path d="M8 49h48" stroke="#c9c6ba" stroke-width="1.5"/>
+  <text x="32" y="57" font-family="Inter, 'Noto Sans JP', system-ui, sans-serif" font-size="7.5" font-weight="600" fill="#278554" text-anchor="middle">Hold</text>
+</svg>

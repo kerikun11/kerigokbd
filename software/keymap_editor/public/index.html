@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="KERIgoKBDのキーマップをVIAプロトコル(WebHID)でリアルタイムに編集するツール">
+  <meta name="theme-color" content="#fbfaf6">
+  <title>KERIgoKBD Keymap Editor</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="editor.css">
+</head>
+
+<body>
+  <main>
+    <section class="editor-shell" aria-labelledby="editor-title">
+      <div class="app-panes">
+        <section class="layout-pane editor-card" aria-label="レイアウト">
+          <div class="section-heading">
+            <h1 id="editor-title"></h1>
+            <p id="layout-version" class="layout-version"></p>
+          </div>
+          <div id="cheat-sheet-container">
+            <div id="cheat-sheet-view" class="cheat-sheet-view" role="group" aria-label="早見表"></div>
+            <section class="legend" aria-label="早見表の凡例">
+              <div class="legend-groups">
+                <div class="legend-group legend-group-key" aria-label="キー凡例">
+                  <h4 class="legend-group-title">キー凡例</h4>
+                  <div class="legend-key-row">
+                    <div class="legend-key-guide" aria-label="Mainはキー上部、Extraは中央、Trackpadは中央下寄り、Numは左下、Fnは右下、Holdは下端に表示されます">
+                      <span class="guide-main">Main</span>
+                      <span id="cheat-guide-extra" class="guide-extra">Extra</span>
+                      <span id="cheat-guide-mouse" class="guide-mouse" hidden>Trackpad</span>
+                      <span id="cheat-guide-nums" class="guide-nums">Num</span>
+                      <span id="cheat-guide-func" class="guide-func">Fn</span>
+                      <span class="guide-hold">Hold</span>
+                    </div>
+                    <div class="cheat-sheet-legend">
+                      <div class="cheat-legend-column">
+                        <span class="cheat-legend-item"><b class="cheat-legend-main">Main</b>通常時のキーマップ</span>
+                        <span id="cheat-legend-nums-item" class="cheat-legend-item"><b class="cheat-legend-nums">Num</b>Numキー押下中のキーマップ</span>
+                        <span id="cheat-legend-func-item" class="cheat-legend-item"><b class="cheat-legend-func">Fn</b>Fnキー押下中のキーマップ</span>
+                      </div>
+                      <div class="cheat-legend-column">
+                        <span id="cheat-legend-extra-item" class="cheat-legend-item"><b class="cheat-legend-extra">Extra</b>Escキー押下中のキーマップ</span>
+                        <span id="cheat-legend-mouse-item" class="cheat-legend-item" hidden><b class="cheat-legend-mouse">Trackpad</b>Trackpad接触中のキーマップ</span>
+                        <span class="cheat-legend-item"><b class="cheat-legend-hold">Hold</b>キーを長押ししたときの機能</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div id="legend-group-mouse-click" class="legend-group legend-group-mouse-click" aria-label="マウスクリック" hidden>
+                  <h4 class="legend-group-title">マウスクリック</h4>
+                  <div class="icon-legend-row">
+                    <span class="icon-legend-item"><svg class="operation-icon" viewBox="0 0 16 16" aria-hidden="true"><use href="#icon-mouse-left"></use></svg>左クリック</span>
+                    <span class="icon-legend-item"><svg class="operation-icon" viewBox="0 0 16 16" aria-hidden="true"><use href="#icon-mouse-right"></use></svg>右クリック</span>
+                    <span class="icon-legend-item"><svg class="operation-icon" viewBox="0 0 16 16" aria-hidden="true"><use href="#icon-mouse-middle"></use></svg>中クリック</span>
+                  </div>
+                </div>
+                <div id="legend-group-mouse-move" class="legend-group legend-group-mouse-move" aria-label="マウス移動" hidden>
+                  <h4 class="legend-group-title">マウス移動</h4>
+                  <div class="icon-legend-row">
+                    <span class="icon-legend-item"><svg class="operation-icon" viewBox="0 0 16 16" aria-hidden="true"><use href="#icon-mouse"></use></svg>⬅⬇⬆➡ ポインタ移動</span>
+                    <span class="icon-legend-item"><svg class="operation-icon" viewBox="0 0 16 16" aria-hidden="true"><use href="#icon-wheel"></use></svg>⬅⬇⬆➡ ホイール移動</span>
+                  </div>
+                </div>
+                <div id="legend-group-trackpad" class="legend-group legend-group-trackpad" aria-label="トラックパッド" hidden>
+                  <h4 class="legend-group-title">トラックパッド</h4>
+                  <div class="icon-legend-row">
+                    <span class="icon-legend-item"><svg class="operation-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-scroll"></use></svg>スクロールモード</span>
+                    <span class="icon-legend-item"><svg class="operation-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-zoom"></use></svg>ズームモード</span>
+                  </div>
+                </div>
+                <div class="legend-group legend-group-other" aria-label="その他">
+                  <h4 class="legend-group-title">その他</h4>
+                  <div class="icon-legend-row">
+                    <span class="icon-legend-item"><svg class="operation-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-volume-up"></use></svg>Vol+</span>
+                    <span class="icon-legend-item"><svg class="operation-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-volume-down"></use></svg>Vol-</span>
+                    <span class="icon-legend-item"><svg class="operation-icon" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-numpad"></use></svg>NumPad</span>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <hr class="footer-divider">
+            <footer class="copyright">©2026 KERI's Lab</footer>
+          </div>
+
+          <div id="edit-view" hidden>
+            <div id="layer-tabs" class="layer-tabs" role="tablist" aria-label="編集するレイヤー"></div>
+            <div id="keyboard-view" class="keyboard-view" role="group" aria-label="キーボードレイアウト"></div>
+            <p class="changed-legend"><span class="changed-legend-dot" aria-hidden="true"></span>初期状態(ファームウェア書き込み時)から変更したキー</p>
+            <p class="hold-legend"><span class="hold-legend-sample">Fn</span>青字は、そのキーを長押ししたときの動作(レイヤー移動など)</p>
+            <div id="key-picker" class="key-picker-root" hidden></div>
+          </div>
+        </section>
+
+        <aside class="settings-pane editor-card" aria-label="設定">
+          <h2 class="pane-title">設定</h2>
+          <div class="settings-groups">
+            <section class="settings-group" aria-labelledby="settings-group-display">
+              <h3 id="settings-group-display" class="settings-group-title">表示</h3>
+              <div class="settings-group-body">
+                <label class="keyboard-selector" for="keyboard-select">
+                  <span>キーボード</span>
+                  <select id="keyboard-select">
+                    <option value="kerigokbd_v2">KERIgoKBD v2</option>
+                    <option value="kerigokbd_v1">KERIgoKBD v1</option>
+                  </select>
+                </label>
+                <div id="layer-toggles" class="layer-toggles"></div>
+                <div class="png-export-row">
+                  <div id="png-export-buttons" class="png-export-buttons"></div>
+                  <p id="png-export-status" class="png-export-status" role="status" aria-live="polite"></p>
+                </div>
+              </div>
+            </section>
+
+            <section class="settings-group" aria-labelledby="settings-group-device">
+              <h3 id="settings-group-device" class="settings-group-title">デバイス</h3>
+              <div class="settings-group-body">
+                <div id="connection-bar" class="connection-bar" role="status"></div>
+                <div id="device-actions" class="device-actions"></div>
+              </div>
+            </section>
+
+            <section class="settings-group" aria-labelledby="settings-group-edit">
+              <h3 id="settings-group-edit" class="settings-group-title">編集</h3>
+              <div class="settings-group-body">
+                <div id="mode-action" class="mode-action"></div>
+                <div id="edit-actions" class="edit-actions"></div>
+                <p id="device-action-status" class="device-action-status" role="status" aria-live="polite"></p>
+              </div>
+            </section>
+          </div>
+        </aside>
+      </div>
+
+
+    </section>
+    <footer class="source-footer">
+      <a href="https://github.com/kerikun11/keryboard/tree/main/software/keymap_editor">ソースコードをGitHubで見る</a>
+    </footer>
+  </main>
+  <div id="dialog-root"></div>
+  <!-- Icon paths copied by value from ../keymap_viewer/public/index.html so the
+       cheat sheet's mouse/pointer icons match keymap_viewer's exactly. -->
+  <svg class="svg-definitions" aria-hidden="true">
+    <defs>
+      <symbol id="icon-mouse" viewBox="0 0 16 16">
+        <rect x="3" y="1.25" width="10" height="13.5" rx="5"></rect>
+        <path d="M8 1.5v5M3.5 6.5h9"></path>
+      </symbol>
+      <symbol id="icon-mouse-left" viewBox="0 0 16 16">
+        <path d="M8 1.25a5 5 0 0 0-5 5v.25h5Z" fill="currentColor" stroke="none"></path>
+        <rect x="3" y="1.25" width="10" height="13.5" rx="5"></rect>
+        <path d="M8 1.5v5M3.5 6.5h9"></path>
+      </symbol>
+      <symbol id="icon-mouse-right" viewBox="0 0 16 16">
+        <path d="M8 1.25a5 5 0 0 1 5 5v.25H8Z" fill="currentColor" stroke="none"></path>
+        <rect x="3" y="1.25" width="10" height="13.5" rx="5"></rect>
+        <path d="M8 1.5v5M3.5 6.5h9"></path>
+      </symbol>
+      <symbol id="icon-mouse-middle" viewBox="0 0 16 16">
+        <rect x="3" y="1.25" width="10" height="13.5" rx="5"></rect>
+        <path d="M3.5 6.5h9"></path>
+        <rect x="6.4" y="2.4" width="3.2" height="5.4" rx="1.6" fill="currentColor" stroke="none"></rect>
+      </symbol>
+      <symbol id="icon-wheel" viewBox="0 0 16 16">
+        <rect x="3" y="1.25" width="10" height="13.5" rx="5"></rect>
+        <rect x="6.75" y="3" width="2.5" height="4.5" rx="1.25" fill="currentColor" stroke="none"></rect>
+      </symbol>
+      <symbol id="icon-scroll" viewBox="0 0 24 24">
+        <path d="M7 5h7M7 9h5M7 13h7M7 17h5"></path>
+        <path d="M18 4v16m-3-3 3 3 3-3m0-10-3-3-3 3"></path>
+      </symbol>
+      <symbol id="icon-zoom" viewBox="0 0 24 24">
+        <circle cx="10" cy="10" r="6"></circle>
+        <path d="m14.5 14.5 5 5M10 7v6M7 10h6"></path>
+      </symbol>
+      <!-- Windows/Super/Cmd key pictograph, replacing the ⊞ font glyph with
+           a shape that always looks the same. -->
+      <symbol id="icon-windows" viewBox="0 0 24 24">
+        <rect x="3" y="3" width="8" height="8" fill="currentColor" stroke="none"></rect>
+        <rect x="13" y="3" width="8" height="8" fill="currentColor" stroke="none"></rect>
+        <rect x="3" y="13" width="8" height="8" fill="currentColor" stroke="none"></rect>
+        <rect x="13" y="13" width="8" height="8" fill="currentColor" stroke="none"></rect>
+      </symbol>
+      <!-- Speaker pictographs for Volume Up/Down, replacing the VOLU/VOLD
+           abbreviations: a speaker body plus a +/- sign. -->
+      <symbol id="icon-volume-up" viewBox="0 0 24 24">
+        <path d="M2 9v6h4l5 4V5L6 9H2Z" fill="currentColor" stroke="none"></path>
+        <path d="M15 12h6M18 9v6"></path>
+      </symbol>
+      <symbol id="icon-volume-down" viewBox="0 0 24 24">
+        <path d="M2 9v6h4l5 4V5L6 9H2Z" fill="currentColor" stroke="none"></path>
+        <path d="M15 12h6"></path>
+      </symbol>
+      <!-- Numpad pictograph (a 3x3 key grid), shown alongside a numpad
+           digit/symbol since a bare "7" or "*" alone looks identical to
+           its main-row equivalent. -->
+      <symbol id="icon-numpad" viewBox="0 0 24 24">
+        <path d="M9 4v16M15 4v16M4 9h16M4 15h16"></path>
+      </symbol>
+    </defs>
+  </svg>
+  <script type="module" src="app.js"></script>
+</body>
+
+</html>

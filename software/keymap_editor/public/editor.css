@@ -1,0 +1,944 @@
+/* Color/spacing tokens copied by value from keymap_viewer/public/styles.css
+   so both tools look like the same product, even though this stylesheet
+   and all layout rules below are written fresh. */
+:root {
+  color-scheme: light;
+  --page: #f3f0e8;
+  --ink: #20231f;
+  --muted: #6d706a;
+  --card: #fbfaf6;
+  --key: #fffefa;
+  --key-border: #bbb9af;
+  --rule: rgb(85 82 70 / 13%);
+  --nums: #d52b82;
+  --func: #168fbd;
+  --auto-mouse: #d49a00;
+  --hold: #278554;
+  --escape: #8754b3;
+  --accent: #e35e35;
+  --danger: #c23b3b;
+  --shadow: 0 18px 50px rgb(50 47 36 / 10%);
+  --key-shadow: 0 3px 7px rgb(45 43 34 / 8%);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-width: 1212px;
+  background: var(--page);
+  color: var(--ink);
+  font-family: Inter, "Noto Sans JP", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
+}
+
+/* Same width as ../keymap_viewer/public/styles.css's main, so the key
+   layout renders at roughly the same physical size in both tools. */
+main {
+  width: 1180px;
+  margin: 0 auto;
+  padding: 24px 0 28px;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(20px, 2.4vw, 25px);
+  line-height: 1.2;
+  letter-spacing: -.03em;
+}
+
+.editor-card {
+  background: var(--card);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  /* Compensate for the space above and below the visible text glyphs. */
+  padding: 16px 20px 18px;
+}
+
+/* Title and version share one row (version right-aligned via
+   justify-content) instead of stacking onto a second line, so the title
+   pane stays short -- a plain two-line heading pushed the whole card down
+   for no informational gain. */
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* Copied by value from ../keymap_viewer/public/styles.css's .layout-version
+   so both tools label "how current is this default keymap" the same way. */
+.layout-version {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: .025em;
+  white-space: nowrap;
+}
+
+/* Layout pane (the key layout itself, cheat sheet or editor) comes first
+   and Settings sits below it, full-width -- the screen isn't wide enough
+   to spare a side column for it without shrinking the key layout. */
+.app-panes {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.layout-pane { width: 100%; }
+
+.settings-pane {
+  background: #f5f6f2;
+}
+
+.settings-pane > .pane-title {
+  margin-bottom: 16px;
+  line-height: 1.2;
+}
+
+/* Three purpose-grouped columns -- デバイス (talks to the keyboard),
+   表示 (what the cheat sheet shows), 編集 (enter the edit screen) -- rather
+   than one flat row of unrelated controls. */
+.settings-groups {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+}
+
+.settings-group {
+  flex: 1 1 260px;
+  min-width: 220px;
+}
+
+.settings-group-title {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.settings-group-body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 10px;
+}
+
+.device-actions, .edit-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.device-actions button, .edit-actions button { width: 100%; }
+.device-action-status { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.device-action-status:empty { display: none; }
+
+.pane-title {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+/* Full width, matching every other settings-pane button (device-actions,
+   edit-actions, png-export-buttons below) -- a consistent one-button-per-row
+   layout throughout the pane rather than this one sized to its own text. */
+.mode-action { display: flex; }
+.mode-action-button { width: 100%; }
+
+/* Per-layer show/hide switches, copied by value from
+   ../keymap_viewer/public/styles.css's .layer-toggle / .toggle-track so the
+   two tools' toggle switches look identical. */
+.layer-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+.layer-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+}
+.layer-toggle input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.toggle-track {
+  position: relative;
+  width: 34px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 1px solid var(--key-border);
+  border-radius: 999px;
+  background: var(--key);
+  transition: background .15s ease, border-color .15s ease;
+}
+.toggle-track span {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgb(32 35 31 / 24%);
+  transition: transform .15s ease;
+}
+.layer-toggle input:checked + .toggle-track span { transform: translateX(14px); }
+.layer-toggle input:focus-visible + .toggle-track {
+  outline: 3px solid color-mix(in srgb, var(--accent), transparent 65%);
+  outline-offset: 2px;
+}
+.toggle-nums { border-color: var(--key-border); }
+.layer-toggle input:checked + .toggle-track.toggle-nums { background: var(--nums); border-color: var(--nums); }
+.layer-toggle input:checked + .toggle-track.toggle-func { background: var(--func); border-color: var(--func); }
+.layer-toggle input:checked + .toggle-track.toggle-extra { background: var(--escape); border-color: var(--escape); }
+.layer-toggle input:checked + .toggle-track.toggle-mouse { background: var(--auto-mouse); border-color: var(--auto-mouse); }
+
+.png-export-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+/* Stacked full-width, matching device-actions/edit-actions/mode-action --
+   was side-by-side flex:1 1 auto, the one button pair in the pane not
+   matching everything else's one-button-per-row layout. */
+.png-export-buttons { display: flex; flex-direction: column; gap: 8px; }
+.png-export-buttons button { width: 100%; }
+.png-export-status { margin: 0; font-size: 12px; color: var(--muted); }
+
+.keyboard-selector {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.keyboard-selector select {
+  font: inherit;
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--key-border);
+  background: var(--key);
+  color: var(--ink);
+}
+
+.connection-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 10px 8px;
+  padding: 12px;
+  border-radius: 12px;
+  background: var(--key);
+  border: 1px solid var(--rule);
+  font-size: 13px;
+}
+
+.connection-status { font-weight: 700; white-space: nowrap; }
+.connection-bar button { white-space: nowrap; }
+.connection-status.is-connected { color: var(--hold); }
+.connection-status.is-error { color: var(--danger); }
+.connection-status.is-connecting { color: var(--auto-mouse); }
+.connection-info,
+.connection-warning {
+  grid-column: 1 / -1;
+  min-width: 0;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.connection-info {
+  padding-top: 8px;
+  border-top: 1px solid var(--rule);
+  color: var(--muted);
+  font-size: 12px;
+}
+.connection-info:empty { display: none; }
+.connection-device-ids { display: block; white-space: nowrap; }
+.connection-warning { color: var(--danger); }
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+button:disabled { cursor: not-allowed; opacity: .5; }
+
+.primary-button, .secondary-button, .danger-button {
+  border-radius: 9px;
+  padding: 7px 14px;
+  border: 1px solid transparent;
+  font-weight: 600;
+  font-size: 13px;
+}
+.primary-button { background: var(--ink); color: var(--card); }
+.secondary-button { background: var(--key); border-color: var(--key-border); color: var(--ink); }
+.danger-button { background: #fff; border-color: var(--danger); color: var(--danger); }
+
+.layer-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+
+.layer-tab {
+  border: 1px solid var(--key-border);
+  background: var(--key);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.layer-tab.is-active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--card);
+}
+
+.changed-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.changed-legend-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--nums);
+  flex-shrink: 0;
+}
+
+.hold-legend {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.hold-legend-sample {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--func);
+  flex-shrink: 0;
+}
+
+.cheat-sheet-view {
+  position: relative;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.cheat-key {
+  position: absolute;
+  background: var(--key);
+  border: 1px solid var(--key-border);
+  border-radius: 9px;
+  box-shadow: var(--key-shadow);
+  color: var(--ink);
+  overflow: hidden;
+  transform: rotate(var(--rotation, 0deg));
+  transform-origin: top left;
+}
+.cheat-key.is-empty { color: var(--muted); }
+.cheat-key.is-transparent { color: var(--key-border); }
+
+/* Absolute corners, matching keymap_viewer's own key-label layout: Main
+   near the top, Extra vertically centered (its own "Escape reference"
+   slot), Num bottom-left, Fn bottom-right, Trackpad bottom-center, Hold along
+   the very bottom edge with a divider above it. Hold's position never
+   moves -- when it's present, .has-hold shifts Num/Fn/Trackpad up out of its
+   way instead of Hold moving down to meet them.
+
+   One font-size scale throughout, with a single ".is-long" step-down (set
+   in cheat-sheet.js whenever a label is 2+ characters) so a lone digit or
+   symbol reads large while a word like "Reserved" still fits -- rather
+   than every corner having its own unrelated size. */
+.cheat-key-main {
+  position: absolute;
+  top: 4px;
+  left: 3px;
+  right: 3px;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 700;
+  /* 1.1 was too tight and clipped descenders (e.g. "PgUp"'s g) against this
+     box's own overflow:hidden -- 1.3 leaves enough room to draw them fully. */
+  line-height: 1.3;
+  text-align: center;
+  white-space: nowrap;
+}
+.cheat-key-main.is-long { font-size: 13px; }
+/* Kanji/kana glyphs read larger than Latin text at the same font-size, so
+   Japanese labels (半角/全角, 変換, 無変換) step down an extra notch past
+   .is-long to stay visually balanced against the Latin labels around them. */
+.cheat-key-main.is-japanese { font-size: 11px; }
+.cheat-key-main-shift {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  opacity: .55;
+}
+.cheat-key-extra,
+.cheat-key-nums,
+.cheat-key-func,
+.cheat-key-mouse {
+  position: absolute;
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.cheat-key-extra.is-long,
+.cheat-key-nums.is-long,
+.cheat-key-func.is-long,
+.cheat-key-mouse.is-long { font-size: 10px; }
+.cheat-key-extra {
+  top: 50%;
+  left: 3px;
+  right: 3px;
+  transform: translateY(-50%);
+  color: var(--escape);
+  text-align: center;
+}
+.cheat-key-nums,
+.cheat-key-func {
+  bottom: 4px;
+  max-width: 44%;
+}
+.cheat-key-nums { left: 4px; color: var(--nums); text-align: left; }
+.cheat-key-func { right: 4px; color: var(--func); text-align: right; }
+.cheat-key-mouse {
+  left: 50%;
+  bottom: 4px;
+  transform: translateX(-50%);
+  max-width: 28%;
+  color: var(--auto-mouse);
+  text-align: center;
+}
+/* Room for the fixed Hold row along the very bottom. */
+.cheat-key.has-hold .cheat-key-nums,
+.cheat-key.has-hold .cheat-key-func,
+.cheat-key.has-hold .cheat-key-mouse {
+  bottom: 16px;
+}
+/* Hold is always this one size, on every key and the trackpad alike --
+   never shrunk by .is-long, since "Reserved"/"Trackpad" already read fine
+   at this size and shrinking only Hold out of step with everything else
+   would undo the "one shared scale" this block is built around. */
+.cheat-key-hold,
+.cheat-trackpad-hold {
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+}
+.cheat-key-hold {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  bottom: 2px;
+  overflow: hidden;
+  border-top: 1px solid var(--rule);
+  color: var(--hold);
+  line-height: 13px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/* A Hold that jumps to Num/Fn/Extra is colored to match that layer,
+   matching keymap_viewer's .key-hold.hold-nums/.hold-func/.hold-extra. */
+.cheat-key-hold.hold-nums { color: var(--nums); }
+.cheat-key-hold.hold-func { color: var(--func); }
+.cheat-key-hold.hold-extra { color: var(--escape); }
+
+/* The trackpad circle (kerigokbd_v2 only), replacing the two matrix
+   positions it physically covers -- matches keymap_viewer's own
+   .trackpad/.trackpad-main/.trackpad-hold, redrawn independently here. */
+.cheat-trackpad {
+  position: absolute;
+  aspect-ratio: 1;
+  border: 1px solid var(--key-border);
+  border-bottom-width: 3px;
+  border-radius: 50%;
+  background: var(--key);
+  box-shadow: var(--key-shadow);
+  color: var(--muted);
+  overflow: hidden;
+}
+/* The left-click icon just sits at the circle's own center -- no need to
+   share a box with the "Trackpad" label anymore (that's its own
+   top-aligned element above). */
+.cheat-trackpad-main {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  /* Base for its icon's 1.15em (see .operation-icon) -- same rendered
+     size as every other key's icon, not the oversized default it inherits
+     from the surrounding page otherwise. */
+  font-size: 11px;
+}
+.cheat-trackpad-main .operation-icon {
+  color: var(--auto-mouse);
+}
+/* Top-aligned, matching every ordinary key's Main label sitting at the top
+   of its card. */
+.cheat-trackpad-label {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 10%;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+.cheat-trackpad-hold {
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  bottom: 6%;
+  border-top: 1px solid var(--rule);
+  color: var(--auto-mouse);
+  line-height: 13px;
+}
+
+.cheat-key-nums.has-icon,
+.cheat-key-func.has-icon,
+.cheat-key-extra.has-icon,
+.cheat-key-mouse.has-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.cheat-key-func.has-icon { justify-content: flex-end; }
+.cheat-key-extra.has-icon,
+.cheat-key-mouse.has-icon { justify-content: center; }
+
+/* Arrow characters (⬅⬇⬆➡) and numpad digits carry a lot of built-in
+   left-side bearing in most fonts, so even a 0 flex-gap still reads as a
+   wide gap next to the icon -- pull it in past that padding explicitly. */
+.icon-arrow {
+  margin-left: -3px;
+}
+
+.operation-icon {
+  width: 1.15em;
+  height: 1.15em;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.cheat-key .operation-icon-emphasized {
+  width: 1.35em;
+  height: 1.35em;
+}
+.svg-definitions {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+/* A titled, bordered card -- matching keymap_viewer's own <h3
+   class="legend-title">凡例</h3> section -- rather than two loose,
+   unlabeled rows of color/icon keys. */
+.legend {
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+}
+.legend-title {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+/* Each category has one vertical list; wrap whole groups on narrow screens. */
+.legend-groups {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 10px 14px;
+}
+.legend-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.legend-group[hidden] {
+  display: none;
+}
+.legend-group-title {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+/* The キー group's own text list sits beside the sample key image rather
+   than stacked underneath it -- the image is tall and narrow, so a row
+   puts its spare vertical space to use instead of pushing the text down. */
+.legend-key-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* A small sample key card showing where each overlay lands on a real key
+   -- Main top-center, Extra/Trackpad stacked centered below it, Num/Fn side
+   by side at the bottom, Hold along the very bottom edge -- matching
+   keymap_viewer's own .legend-key-guide (same corner layout as the real
+   cheat-key cards, just a fixed size since there's no keyboard grid to
+   size it against here). */
+.legend-key-guide {
+  position: relative;
+  flex: 0 0 auto;
+  width: 70px;
+  height: 74px;
+  border: 1px solid var(--key-border);
+  border-bottom-width: 3px;
+  border-radius: 9px;
+  background: var(--key);
+  box-shadow: var(--key-shadow);
+  color: var(--ink);
+  font-weight: 750;
+}
+.legend-key-guide span { position: absolute; display: block; line-height: 1; }
+.guide-main {
+  top: 7px;
+  left: 50%;
+  font-size: 10px;
+  transform: translateX(-50%);
+}
+.guide-extra {
+  top: 19px;
+  left: 50%;
+  color: var(--escape);
+  font-size: 10px;
+  transform: translateX(-50%);
+}
+.guide-mouse {
+  bottom: 31px;
+  left: 50%;
+  color: var(--auto-mouse);
+  font-size: 10px;
+  transform: translateX(-50%);
+}
+.guide-nums,
+.guide-func {
+  bottom: 18px;
+  font-size: 10px;
+  letter-spacing: -.03em;
+}
+.guide-nums { left: 5px; color: var(--nums); }
+.guide-func { right: 5px; color: var(--func); }
+.guide-hold {
+  right: 5px;
+  bottom: 2px;
+  left: 5px;
+  border-top: 1px solid var(--rule);
+  color: var(--hold);
+  font-size: 10px;
+  font-weight: 500;
+  line-height: 13px !important;
+  text-align: center;
+}
+
+.cheat-sheet-legend {
+  display: grid;
+  align-items: start;
+  grid-template-columns: repeat(2, max-content);
+  gap: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.cheat-legend-column {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  gap: 6px;
+}
+.cheat-legend-main { color: var(--ink); }
+.cheat-legend-hold { color: var(--hold); }
+.cheat-legend-item {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: center;
+  column-gap: 6px;
+}
+.cheat-legend-item[hidden],
+.legend-key-guide span[hidden] { display: none; }
+.cheat-legend-item b { font-size: 11px; font-weight: 700; }
+.cheat-legend-nums { color: var(--nums); }
+.cheat-legend-func { color: var(--func); }
+.cheat-legend-extra { color: var(--escape); }
+.cheat-legend-mouse { color: var(--auto-mouse); }
+
+.icon-legend-row {
+  display: grid;
+  grid-template-columns: max-content;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.icon-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.icon-legend-item .operation-icon {
+  width: 1.3em;
+  height: 1.3em;
+  color: var(--ink);
+}
+
+.keyboard-view {
+  position: relative;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.editor-key {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  background: var(--key);
+  border: 1px solid var(--key-border);
+  border-radius: 9px;
+  box-shadow: var(--key-shadow);
+  color: var(--ink);
+  padding: 2px;
+  overflow: hidden;
+  transform: rotate(var(--rotation, 0deg));
+  transform-origin: top left;
+}
+.editor-key:hover { border-color: var(--accent); }
+.editor-key.is-selected { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+.editor-key.is-pending { opacity: .55; }
+.editor-key.is-loading { background: var(--rule); }
+.editor-key.is-empty { color: var(--muted); }
+.editor-key.is-transparent { color: var(--key-border); }
+.editor-key.is-changed { border-color: var(--nums); }
+.editor-key.is-changed::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--nums);
+  box-shadow: 0 0 0 1px var(--card);
+}
+
+.editor-key-main {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.1;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+.editor-key-sub {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--func);
+}
+
+.key-picker-root:not([hidden]) {
+  margin-bottom: 16px;
+}
+
+.key-picker {
+  border: 1px solid var(--rule);
+  border-radius: 14px;
+  background: var(--key);
+  overflow: hidden;
+}
+
+.key-picker-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--card);
+}
+
+.key-picker-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.key-picker-tab {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.key-picker-tab.is-active { background: var(--ink); color: var(--card); }
+
+.key-picker-close {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  text-decoration: underline;
+}
+
+.key-picker-body {
+  max-height: 260px;
+  overflow-y: auto;
+  padding: 10px;
+}
+
+.key-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
+  gap: 6px;
+}
+.layer-action-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.layer-action-group {
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  padding: 8px 10px;
+  background: var(--card);
+}
+.layer-action-heading {
+  margin: 0 0 6px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--func);
+}
+.layer-action-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.layer-action-row .key-picker-item { flex: 1 1 120px; }
+
+.key-picker-item {
+  border: 1px solid var(--key-border);
+  background: var(--card);
+  border-radius: 8px;
+  padding: 8px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ink);
+}
+.key-picker-item:hover { border-color: var(--accent); color: var(--accent); }
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.source-footer {
+  margin-top: 16px;
+  text-align: right;
+  font-size: 13px;
+}
+.source-footer a { color: var(--muted); text-underline-offset: 3px; }
+.source-footer a:hover { color: var(--ink); }
+
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgb(20 20 15 / 45%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 10;
+}
+
+.dialog {
+  background: var(--card);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 20px 22px;
+  width: min(720px, 100%);
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.dialog h2 { margin: 0; font-size: 16px; }
+.dialog-note { margin: 0; color: var(--muted); font-size: 12px; }
+/* The Yes/No popups (update-to-latest, reset) don't need the export
+   dialog's wide textarea-sized card. */
+.confirm-dialog { width: min(420px, 100%); }
+.export-dialog-textarea {
+  flex: 1;
+  min-height: 320px;
+  font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+  font-size: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--key-border);
+  background: var(--key);
+  color: var(--ink);
+  resize: vertical;
+}
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.footer-divider {
+  height: 0;
+  margin: 10px 0 8px;
+  border: 0;
+  border-top: 1px solid var(--rule);
+}
+.copyright {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: .025em;
+  text-align: left;
+  transform: translateY(1px);
+}

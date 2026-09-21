@@ -1,0 +1,4 @@
+__pycache__/
+*.pyc
+public/generated/
+node_modules/
