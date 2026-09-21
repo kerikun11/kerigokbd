@@ -245,7 +245,7 @@ async function runPngExport({ perform, successMessage, errorMessage }) {
 }
 
 function render() {
-  elements.keyboardName.textContent = `${store.layout.keyboard} Keymap`;
+  elements.keyboardName.textContent = `${store.layout.keyboard} Keymap${viewMode === "edit" ? " Editor" : ""}`;
   elements.layoutVersion.textContent = store.defaults?.layoutVersion ? `Layout ${store.defaults.layoutVersion}` : "";
 
   renderConnectionBar(elements.connectionBar, store, {
