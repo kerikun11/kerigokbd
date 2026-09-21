@@ -1,6 +1,7 @@
 # KERIgoKBD Studio
 
 - KERIgoKBD v1/v2の各レイヤーのキーマップを一枚の早見表として表示しつつ、実機に接続した状態でリアルタイムに編集できるWebアプリ(WebHID + QMK VIAプロトコル)。
+- GitHub Pagesで公開中: <https://www.kerislab.jp/kerigokbd/>
 
 ## 主な機能
 
