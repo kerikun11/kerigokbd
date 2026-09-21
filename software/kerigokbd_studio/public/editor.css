@@ -682,6 +682,13 @@ button:disabled { cursor: not-allowed; opacity: .5; }
 .cheat-legend-extra { color: var(--escape); }
 .cheat-legend-mouse { color: var(--auto-mouse); }
 
+/* Side-by-side pair of .icon-legend-row lists (used by the マウス group's
+   click/move split) rather than one tall stacked column. */
+.icon-legend-columns {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
 .icon-legend-row {
   display: grid;
   grid-template-columns: max-content;

@@ -37,8 +37,7 @@ const elements = {
   cheatLegendFuncItem: requiredElement("#cheat-legend-func-item"),
   cheatLegendExtraItem: requiredElement("#cheat-legend-extra-item"),
   cheatLegendMouseItem: requiredElement("#cheat-legend-mouse-item"),
-  iconLegendMouseClickGroup: requiredElement("#legend-group-mouse-click"),
-  iconLegendMouseMoveGroup: requiredElement("#legend-group-mouse-move"),
+  iconLegendMouseGroup: requiredElement("#legend-group-mouse"),
   iconLegendTrackpadGroup: requiredElement("#legend-group-trackpad"),
   cheatGuideNums: requiredElement("#cheat-guide-nums"),
   cheatGuideFunc: requiredElement("#cheat-guide-func"),
@@ -245,7 +244,7 @@ async function runPngExport({ perform, successMessage, errorMessage }) {
 }
 
 function render() {
-  elements.keyboardName.textContent = `${store.layout.keyboard} Studio`;
+  elements.keyboardName.textContent = `${store.layout.keyboard} Keymap${viewMode === "edit" ? " Editor" : ""}`;
   elements.layoutVersion.textContent = store.defaults?.layoutVersion ? `Layout ${store.defaults.layoutVersion}` : "";
 
   renderConnectionBar(elements.connectionBar, store, {
@@ -276,8 +275,7 @@ function render() {
   // the Fn layer on every keyboard, trackpad or not -- only the Trackpad
   // group's scroll/zoom modes are specific to the trackpad-only Auto Mouse
   // layer, so that's the sole group gated on store.layout.trackpad.
-  elements.iconLegendMouseClickGroup.hidden = false;
-  elements.iconLegendMouseMoveGroup.hidden = false;
+  elements.iconLegendMouseGroup.hidden = false;
   elements.iconLegendTrackpadGroup.hidden = !store.layout.trackpad;
   // The sample-key legend image's own corner labels follow the exact same
   // visibility rules as the text legend items above.
