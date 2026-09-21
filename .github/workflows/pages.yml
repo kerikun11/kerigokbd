@@ -1,4 +1,4 @@
-name: Deploy Keymap Viewer to GitHub Pages
+name: Deploy KERIgoKBD Studio to GitHub Pages
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - '.github/workflows/pages.yml'
-      - 'software/keymap_viewer/**'
+      - 'software/kerigokbd_studio/**'
       - 'software/qmk/keyboards/kerigokbd/**'
   workflow_dispatch:
 
@@ -29,12 +29,16 @@ jobs:
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
+          submodules: true
 
       - name: Generate keymap data
-        run: python3 software/keymap_viewer/scripts/generate.py
+        run: |
+          python3 software/kerigokbd_studio/scripts/build_layout.py
+          python3 software/kerigokbd_studio/scripts/build_keycodes.py
+          python3 software/kerigokbd_studio/scripts/build_defaults.py
 
       - name: Test generator
-        run: python3 -m unittest discover -s software/keymap_viewer/tests -q
+        run: node --test software/kerigokbd_studio/tests/*.test.js
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
@@ -42,7 +46,7 @@ jobs:
       - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: software/keymap_viewer/public
+          path: software/kerigokbd_studio/public
 
   deploy:
     name: Deploy GitHub Pages
