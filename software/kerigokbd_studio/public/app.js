@@ -272,8 +272,12 @@ function render() {
   elements.cheatLegendFuncItem.hidden = !cheatSheetVisibility.func;
   elements.cheatLegendExtraItem.hidden = !cheatSheetVisibility.extra;
   elements.cheatLegendMouseItem.hidden = !store.layout.trackpad || !cheatSheetVisibility.mouse;
-  elements.iconLegendMouseClickGroup.hidden = !store.layout.trackpad;
-  elements.iconLegendMouseMoveGroup.hidden = !store.layout.trackpad;
+  // Mouse click/move keycodes (MS_BTN*, KG_MSL/D/U/R, KG_MWLL/D/U/R) live on
+  // the Fn layer on every keyboard, trackpad or not -- only the Trackpad
+  // group's scroll/zoom modes are specific to the trackpad-only Auto Mouse
+  // layer, so that's the sole group gated on store.layout.trackpad.
+  elements.iconLegendMouseClickGroup.hidden = false;
+  elements.iconLegendMouseMoveGroup.hidden = false;
   elements.iconLegendTrackpadGroup.hidden = !store.layout.trackpad;
   // The sample-key legend image's own corner labels follow the exact same
   // visibility rules as the text legend items above.
