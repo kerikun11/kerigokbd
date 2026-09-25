@@ -113,3 +113,25 @@ test("the very last token of a layer isn't padded, matching kerigokbd_v1's keyma
     "};",
   ].join("\n"));
 });
+
+test("a long token widens only its own column, not every column of the keymap", () => {
+  const source = formatKeymapCSource({
+    layers: [
+      [0x4104, 0x0005, 0x0006, 0x0007, 0x0000, 0x0001], // LT(KGL_NUM, KC_A), KC_B | KC_C, KC_D ; XXXXXXX | _______
+      [0x0001, 0x0001, 0x0001, 0x0001, 0x0001, 0x0001],
+    ],
+    layoutMacroName: "LAYOUT_split_2_1",
+  });
+  assert.equal(source, [
+    "const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {",
+    "  [KGL_MAIN] = LAYOUT_split_2_1( /* Default Layer */",
+    "    LT(KGL_NUM, KC_A), KC_B   , /**/ KC_C   , KC_D   ,",
+    "                       XXXXXXX, /**/ _______",
+    "  ),",
+    "  [KGL_NUM] = LAYOUT_split_2_1( /* Numbers and Symbols Layer */",
+    "    _______          , _______, /**/ _______, _______,",
+    "                       _______, /**/ _______",
+    "  ),",
+    "};",
+  ].join("\n"));
+});

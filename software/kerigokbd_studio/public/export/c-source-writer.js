@@ -114,69 +114,87 @@ function parseSplitRowCounts(layoutMacroName) {
   return match ? match[1].split("_").map(Number) : null;
 }
 
+const MIN_TOKEN_WIDTH = 7; // "XXXXXXX" / "_______", the width keymap.c aligns to
+
 /**
- * Lays out one layer's tokens the way kerigokbd's keymap.c is hand-aligned:
- * a "/**\/" gap marker between the two hands at the same column on every
- * row, so the source visually reads as the keyboard's split shape.
- *
- * Two different treatments, both verified character-for-character against
- * kerigokbd_v2's default/keymap.c:
- * - Finger rows (every row but the last) are left-aligned at the base
- *   indent even when shorter than the widest row; the "missing" column(s)
- *   are padded in on BOTH sides of the gap, so every finger row -- and the
- *   gap position itself -- lines up to the exact same total width.
- * - The last row (the thumb cluster, which really is offset further right
- *   on the physical board) instead gets extra LEADING indent equal to the
- *   deficit, and its right half starts right after the gap with no extra
- *   padding -- it does not try to match the finger rows' total width.
+ * Where each token of a LAYOUT_split_A_B_... layer sits on the printed
+ * grid: a hand ("left"/"right") and a column within that hand, out of
+ * max(rowCounts) columns per hand. Finger rows (every row but the last)
+ * leave their missing column(s) on the INNER side of each hand, next to
+ * the "/**\/" gap; the last row (the thumb cluster, which really is offset
+ * inward on the physical board) sits against the gap instead, with its
+ * missing columns on the OUTER side.
  */
-function formatLayerRows(tokens, rowCounts, tokenWidth) {
-  const columnWidth = tokenWidth + 2; // token + "," + one separator space
+function splitCells(rowCounts) {
   const maxPerHand = Math.max(...rowCounts);
-  const gapColumn = BASE_INDENT + maxPerHand * columnWidth;
-
-  // The very last token of the whole layer (the last row's right half,
-  // when it has no trailing comma) isn't padded either -- there's nothing
-  // after it left to align with, and the real keymap.c doesn't pad it.
-  const formatHalf = (halfTokens, keepLastComma) =>
-    halfTokens
-      .map((token, index) => {
-        const isLastToken = index === halfTokens.length - 1;
-        if (isLastToken && !keepLastComma) return token;
-        return token.padEnd(tokenWidth) + ",";
-      })
-      .join(" ");
-
-  const lines = [];
-  let cursor = 0;
-  rowCounts.forEach((perHand, rowIndex) => {
-    const isLastRow = rowIndex === rowCounts.length - 1;
+  const cells = [];
+  rowCounts.forEach((perHand, row) => {
+    const isLastRow = row === rowCounts.length - 1;
     const deficit = maxPerHand - perHand;
-    const rowTokens = tokens.slice(cursor, cursor + perHand * 2);
-    cursor += perHand * 2;
-
-    const indentWidth = isLastRow ? BASE_INDENT + deficit * columnWidth : BASE_INDENT;
-    let leftPart = formatHalf(rowTokens.slice(0, perHand), true);
-    leftPart += isLastRow
-      ? " ".repeat(Math.max(gapColumn - indentWidth - leftPart.length, 1))
-      : " ".repeat(1 + deficit * columnWidth);
-    const rightGapPad = isLastRow ? "" : " ".repeat(deficit * columnWidth);
-    const rightPart = rightGapPad + formatHalf(rowTokens.slice(perHand), !isLastRow);
-
-    lines.push(`${" ".repeat(indentWidth)}${leftPart}/**/ ${rightPart}`);
+    for (let index = 0; index < perHand; index++) {
+      cells.push({ row, hand: "left", column: isLastRow ? deficit + index : index });
+    }
+    for (let index = 0; index < perHand; index++) {
+      cells.push({ row, hand: "right", column: isLastRow ? index : deficit + index });
+    }
   });
-  return lines;
+  return { cells, maxPerHand };
 }
 
-/** Renders one layer's `[LAYER] = LAYOUT_xxx(...)` block. */
-export function formatLayerBlock(layerIndex, tokens, layoutMacroName, tokenWidth) {
+/**
+ * Per-column widths shared by every layer, so each column is only as wide
+ * as its own longest token (min. MIN_TOKEN_WIDTH): one long token such as
+ * LT(KGL_EXT, KC_ESC) widens just its own column instead of every column
+ * of the whole keymap.
+ */
+function splitColumnWidths(tokensByLayer, rowCounts) {
+  const { cells, maxPerHand } = splitCells(rowCounts);
+  const widths = { left: Array(maxPerHand).fill(MIN_TOKEN_WIDTH), right: Array(maxPerHand).fill(MIN_TOKEN_WIDTH) };
+  for (const tokens of tokensByLayer) {
+    tokens.forEach((token, index) => {
+      const { hand, column } = cells[index];
+      widths[hand][column] = Math.max(widths[hand][column], token.length);
+    });
+  }
+  return widths;
+}
+
+/**
+ * Lays out one layer's tokens the way kerigokbd's keymap.c is hand-aligned:
+ * one grid of columns per hand with a "/**\/" gap marker between them at
+ * the same position on every row, so the source visually reads as the
+ * keyboard's split shape (verified character-for-character against
+ * kerigokbd_v2's default/keymap.c). Missing cells are blank-padded to their
+ * column's width; each line's trailing blanks are trimmed, and the very
+ * last token of the layer has no comma or padding, like the real file.
+ */
+function formatLayerRows(tokens, rowCounts, widths) {
+  const { cells, maxPerHand } = splitCells(rowCounts);
+  const grid = rowCounts.map(() => ({ left: Array(maxPerHand).fill(null), right: Array(maxPerHand).fill(null) }));
+  tokens.forEach((token, index) => {
+    const { row, hand, column } = cells[index];
+    grid[row][hand][column] = { token, isLast: index === tokens.length - 1 };
+  });
+  const formatHand = (slots, hand) =>
+    slots
+      .map((slot, column) => {
+        const width = widths[hand][column];
+        if (!slot) return " ".repeat(width + 1);
+        return slot.isLast ? slot.token : `${slot.token.padEnd(width)},`;
+      })
+      .join(" ");
+  return grid.map(({ left, right }) =>
+    `${" ".repeat(BASE_INDENT)}${formatHand(left, "left")} /**/ ${formatHand(right, "right")}`.trimEnd());
+}
+
+/** Renders one layer's `[LAYER] = LAYOUT_xxx(...)` block; `widths` from splitColumnWidths, when the shape matches. */
+export function formatLayerBlock(layerIndex, tokens, layoutMacroName, widths = null) {
   const description = layerDescription(layerIndex);
   const header = `  [${layerSymbol(layerIndex)}] = ${layoutMacroName}(${description ? ` /* ${description} */` : ""}`;
 
   const rowCounts = parseSplitRowCounts(layoutMacroName);
-  const shapeMatches = rowCounts && rowCounts.reduce((sum, count) => sum + count * 2, 0) === tokens.length;
-  const lines = shapeMatches
-    ? formatLayerRows(tokens, rowCounts, tokenWidth)
+  const lines = widths && rowCounts
+    ? formatLayerRows(tokens, rowCounts, widths)
     : tokens.map((token, index) => `    ${token}${index === tokens.length - 1 ? "" : ","}`);
 
   return [header, ...lines, "  ),"].join("\n");
@@ -189,10 +207,17 @@ export function formatKeymapCSource({ layers, layoutMacroName }) {
     .filter((entry) => entry !== null);
 
   const tokensByLayer = presentLayers.map(({ keycodesByKeyIndex }) => keycodesByKeyIndex.map(formatKeycodeToken));
-  const tokenWidth = Math.max(7, ...tokensByLayer.flat().map((token) => token.length));
+  // The hand-aligned grid only applies when every layer has exactly the
+  // LAYOUT_split_A_B_... shape's key count; otherwise fall back to one
+  // token per line rather than guess.
+  const rowCounts = parseSplitRowCounts(layoutMacroName);
+  const keyCount = rowCounts ? rowCounts.reduce((sum, count) => sum + count * 2, 0) : -1;
+  const widths = rowCounts && tokensByLayer.every((tokens) => tokens.length === keyCount)
+    ? splitColumnWidths(tokensByLayer, rowCounts)
+    : null;
 
   const blocks = presentLayers.map(({ layerIndex }, index) =>
-    formatLayerBlock(layerIndex, tokensByLayer[index], layoutMacroName, tokenWidth));
+    formatLayerBlock(layerIndex, tokensByLayer[index], layoutMacroName, widths));
 
   return [
     "const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {",
