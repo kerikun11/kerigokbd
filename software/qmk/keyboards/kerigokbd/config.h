@@ -11,3 +11,6 @@
 
 /* RGB Matrix */
 #define RGB_MATRIX_DEFAULT_MODE RGB_MATRIX_CUSTOM_keyfunc // c.f. rgb_matrix_user.inc
+
+/* Tap-Hold (https://docs.qmk.fm/tap_hold#hold-on-other-key-press) */
+#define HOLD_ON_OTHER_KEY_PRESS
