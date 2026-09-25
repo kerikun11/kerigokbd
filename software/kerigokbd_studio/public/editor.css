@@ -10,9 +10,10 @@
   --rule: rgb(85 82 70 / 13%);
   --nums: #d52b82;
   --func: #168fbd;
-  --auto-mouse: #d49a00;
+  --auto-mouse: #8754b3;
   --hold: #278554;
-  --escape: #8754b3;
+  --escape: #d49a00;
+  --pending: #d49a00;
   --accent: #e35e35;
   --danger: #c23b3b;
   --shadow: 0 18px 50px rgb(50 47 36 / 10%);
@@ -276,7 +277,7 @@ h1 {
   background: currentColor;
 }
 .connection-status.is-connected { color: var(--hold); }
-.connection-status.is-connecting { color: var(--auto-mouse); }
+.connection-status.is-connecting { color: var(--pending); }
 .connection-status.is-error { color: var(--danger); }
 .connection-info {
   margin: 0;

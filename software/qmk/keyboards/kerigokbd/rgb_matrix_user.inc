@@ -112,7 +112,7 @@ static inline rgb_t keyfunc_color_for_keycode(uint16_t keycode, const rgb_t *col
             return colors[KFI_CYAN];
     }
     /* Layer-Tap (tap: ESC) */
-    if (IS_QK_LAYER_TAP(keycode) && QK_LAYER_TAP_GET_TAP_KEYCODE(keycode) == KC_ESC) return colors[KFI_YELLOW];
+    if (IS_QK_LAYER_TAP(keycode) && QK_LAYER_TAP_GET_TAP_KEYCODE(keycode) == KC_ESC) return colors[KFI_ORANGE];
     /* Special */
     if (is_keycode_special(keycode)) return colors[KFI_GREEN];
     /* Symbol */

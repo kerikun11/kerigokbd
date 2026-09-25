@@ -12,14 +12,14 @@
        force-fits all 9 characters within the card's inner width instead of
        overflowing past the rounded corners. -->
   <text x="32" y="19" font-family="Inter, 'Noto Sans JP', system-ui, sans-serif" font-size="9" font-weight="750" fill="#20231f" text-anchor="middle" textLength="52" lengthAdjust="spacingAndGlyphs">KERIgoKBD</text>
-  <text x="32" y="29" font-family="Inter, 'Noto Sans JP', system-ui, sans-serif" font-size="9" font-weight="750" fill="#8754b3" text-anchor="middle">Extra</text>
+  <text x="32" y="29" font-family="Inter, 'Noto Sans JP', system-ui, sans-serif" font-size="9" font-weight="750" fill="#d49a00" text-anchor="middle">Extra</text>
   <!-- "Trackpad" is wide enough at its natural width to reach into Num/Fn's
        corners, so it's the vertical gap (not horizontal fitting) that keeps
        them apart: its own descender ('p') and Num/Fn's row below are kept
        clear of each other here, rather than centered on the same row like
        the real .legend-key-guide (there's no room for two side-by-side rows
        at this width without the words themselves colliding). -->
-  <text x="32" y="37" font-family="Inter, 'Noto Sans JP', system-ui, sans-serif" font-size="7.5" font-weight="750" fill="#d49a00" text-anchor="middle">Trackpad</text>
+  <text x="32" y="37" font-family="Inter, 'Noto Sans JP', system-ui, sans-serif" font-size="7.5" font-weight="750" fill="#8754b3" text-anchor="middle">Trackpad</text>
   <text x="9" y="47" font-family="Inter, 'Noto Sans JP', system-ui, sans-serif" font-size="9" font-weight="750" fill="#d52b82" text-anchor="start">Num</text>
   <text x="55" y="47" font-family="Inter, 'Noto Sans JP', system-ui, sans-serif" font-size="9" font-weight="750" fill="#168fbd" text-anchor="end">Fn</text>
 
