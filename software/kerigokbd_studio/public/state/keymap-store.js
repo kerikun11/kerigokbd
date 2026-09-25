@@ -18,9 +18,10 @@ export function diffKeymaps(a, b) {
 export class KeymapStore extends EventTarget {
   keyboardId = null;
   layout = null;
-  // defaults.layers[layerIndex][keyIndex] is the firmware's as-flashed
-  // keycode, indexed exactly like `layers` below, used to highlight keys a
-  // user has since changed on the live device.
+  // defaults.layers[layerIndex][keyIndex] is main's default/keymap.c (the
+  // GitHub latest layout, not necessarily what the device's firmware was
+  // built from), indexed exactly like `layers` below, used to highlight
+  // keys that differ from it on the live device.
   defaults = null;
   connectionState = "disconnected"; // disconnected | connecting | connected | error
   connectionError = null;
@@ -186,13 +187,12 @@ export class KeymapStore extends EventTarget {
   }
 
   /**
-   * True if this key's shown value (draft, else live) differs from what the firmware flashed
-   * (undefined -> false, since "not yet read" isn't "changed"). Layers
-   * beyond what default/keymap.c defines (there is none here, since
-   * `defaults` is only ever built from the device's own compiled keymap)
-   * simply have no default to compare against.
+   * True if this key's shown value (draft, else live) differs from the
+   * GitHub latest layout (undefined -> false, since "not yet read" isn't
+   * "changed"). Layers beyond what default/keymap.c defines simply have no
+   * default to compare against.
    */
-  isChangedFromDefault(layerIndex, keyIndex) {
+  isChangedFromLatest(layerIndex, keyIndex) {
     const defaultValue = this.defaults?.layers?.[layerIndex]?.[keyIndex];
     if (defaultValue === undefined) return false;
     const value = this.effectiveKeycodeAt(layerIndex, keyIndex);

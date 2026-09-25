@@ -8,40 +8,40 @@ const defaults = { layers: [[0x0004, 0x0005]] }; // KC_A, KC_B on layer 0
 test("a key not yet read from the device is never flagged as changed", () => {
   const store = new KeymapStore();
   store.setLayout("test", layout, defaults);
-  assert.equal(store.isChangedFromDefault(0, 0), false);
+  assert.equal(store.isChangedFromLatest(0, 0), false);
 });
 
-test("a key matching the firmware default is not flagged as changed", () => {
+test("a key matching the GitHub latest layout is not flagged as changed", () => {
   const store = new KeymapStore();
   store.setLayout("test", layout, defaults);
   store.setLayerKeycodes(0, [0x0004, 0x0005]);
-  assert.equal(store.isChangedFromDefault(0, 0), false);
-  assert.equal(store.isChangedFromDefault(0, 1), false);
+  assert.equal(store.isChangedFromLatest(0, 0), false);
+  assert.equal(store.isChangedFromLatest(0, 1), false);
 });
 
-test("a key that differs from the firmware default is flagged as changed", () => {
+test("a key that differs from the GitHub latest layout is flagged as changed", () => {
   const store = new KeymapStore();
   store.setLayout("test", layout, defaults);
   store.setLayerKeycodes(0, [0x0004, 0x0006]); // second key edited to KC_C
-  assert.equal(store.isChangedFromDefault(0, 0), false);
-  assert.equal(store.isChangedFromDefault(0, 1), true);
+  assert.equal(store.isChangedFromLatest(0, 0), false);
+  assert.equal(store.isChangedFromLatest(0, 1), true);
 });
 
-test("a layer with no firmware default (out of range) is never flagged as changed", () => {
+test("a layer with no GitHub latest layout (out of range) is never flagged as changed", () => {
   const store = new KeymapStore();
   store.setLayout("test", layout, defaults);
   store.setLayerKeycodes(5, [0x0004, 0x0006]);
-  assert.equal(store.isChangedFromDefault(5, 0), false);
-  assert.equal(store.isChangedFromDefault(5, 1), false);
+  assert.equal(store.isChangedFromLatest(5, 0), false);
+  assert.equal(store.isChangedFromLatest(5, 1), false);
 });
 
 test("resetting a changed key back to the default value clears the flag", () => {
   const store = new KeymapStore();
   store.setLayout("test", layout, defaults);
   store.setLayerKeycodes(0, [0x0004, 0x0006]);
-  assert.equal(store.isChangedFromDefault(0, 1), true);
+  assert.equal(store.isChangedFromLatest(0, 1), true);
   store.setKeycodeAt(0, 1, 0x0005);
-  assert.equal(store.isChangedFromDefault(0, 1), false);
+  assert.equal(store.isChangedFromLatest(0, 1), false);
 });
 
 test("a draft is shown in place of the live value without touching it", () => {
@@ -51,7 +51,7 @@ test("a draft is shown in place of the live value without touching it", () => {
   store.setDraft(0, 1, 0x0006);
   assert.equal(store.keycodeAt(0, 1), 0x0005);
   assert.equal(store.effectiveKeycodeAt(0, 1), 0x0006);
-  assert.equal(store.isChangedFromDefault(0, 1), true);
+  assert.equal(store.isChangedFromLatest(0, 1), true);
   assert.deepEqual(store.draftEntries(), [{ layer: 0, keyIndex: 1, value: 0x0006 }]);
   assert.equal(store.layerHasDrafts(0), true);
 });

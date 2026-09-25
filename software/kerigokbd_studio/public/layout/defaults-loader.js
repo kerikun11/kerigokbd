@@ -7,7 +7,7 @@ const DEFAULTS_BY_KEYBOARD = {
 };
 
 /**
- * The firmware's as-flashed default keycode for every layer/key, indexed
+ * main's default/keymap.c keycode (the GitHub latest layout) for every layer/key, indexed
  * exactly like layout.keys (layer index -> key index), so it can be
  * compared directly against a live-read layer without any row/col lookup.
  */

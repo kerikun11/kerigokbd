@@ -304,6 +304,14 @@ function rewrapSelectedKey(rewrap) {
   else render();
 }
 
+/** Update-to-latest only writes the layers main defines; say so when the device has more. */
+function extraLayersNote() {
+  const written = store.defaults.layers.length;
+  if (!(store.layerCount > written)) return "";
+  const last = store.layerCount - 1;
+  return `実機のレイヤー${written === last ? written : `${written}〜${last}`}は変更されません。`;
+}
+
 async function updateToLatestLayout() {
   if (deviceBusy || store.connectionState !== "connected") return;
   if (store.pendingKeys.size) {
@@ -320,7 +328,7 @@ async function updateToLatestLayout() {
     // device connects, so there's nothing to fetch over the network.
     const confirmed = await confirmDialog({
       heading: "GitHub最新版レイアウトに更新",
-      message: `現在のキーマップ${draftsNote()}が削除されて、mainの最新版（${store.defaults.layoutVersion}）に置き換わります。更新しますか？`,
+      message: `現在のキーマップ${draftsNote()}が削除されて、mainの最新版（${store.defaults.layoutVersion}）に置き換わります。${extraLayersNote()}更新しますか？`,
       confirmLabel: "更新する",
       danger: true,
     });
@@ -533,7 +541,7 @@ function render() {
       keycodes: store.layout.keys.map((_, keyIndex) => store.effectiveKeycodeAt(store.activeLayer, keyIndex)),
       selectedKeyIndex: store.selectedKeyIndex,
       isPending: (row, col) => store.isPending(store.activeLayer, row, col),
-      isChanged: (keyIndex) => store.isChangedFromDefault(store.activeLayer, keyIndex),
+      isChangedFromLatest: (keyIndex) => store.isChangedFromLatest(store.activeLayer, keyIndex),
       isDraft: (keyIndex) => store.hasDraft(store.activeLayer, keyIndex),
     },
     // Clicking the selected key again deselects it.

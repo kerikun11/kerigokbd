@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
-"""Generate the firmware's as-flashed default keycode values, per layer and
-per key, so the editor can highlight keys that a user has since changed
-from the device's live (EEPROM) state.
+"""Generate main's default/keymap.c keycode values (the "GitHub latest"
+layout), per layer and per key, so the editor can highlight keys on the
+live device that differ from it, and overwrite the device with it.
 
-There is no VIA command to read the compiled-in default without erasing the
-live EEPROM copy (id_dynamic_keymap_reset overwrites it), so this script
-reads the default/keymap.c that the firmware was actually built from, and
-resolves every key expression down to the exact numeric keycode QMK would
-compile it to, using build_keycodes.py's shared expression resolver.
+This is not necessarily what the device's firmware was built from (an older
+or different build may be flashed), and there is no VIA command to read the
+compiled-in default without erasing the live EEPROM copy
+(id_dynamic_keymap_reset overwrites it). So this script reads main's
+default/keymap.c and resolves every key expression down to the exact numeric
+keycode QMK would compile it to, using build_keycodes.py's shared expression
+resolver.
 """
 
 from __future__ import annotations

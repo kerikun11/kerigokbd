@@ -142,13 +142,15 @@ export class SyncEngine {
    * trustworthy; the one thing still worth guarding is the device's own
    * reported layer count, in case its firmware predates a layer main has
    * since added (writing past that would address a layer VIA doesn't know
-   * about).
+   * about). Fewer layers than the device is fine -- e.g. kerigokbd_v1's 6
+   * layers onto kerigokbd_v2 firmware (same matrix) -- and leaves the
+   * device's remaining layers untouched.
    */
   async updateToLatest(layers, onProgress) {
     const { layout, layerCount } = this.#store;
     if (!this.#client || this.#store.connectionState !== "connected") throw new Error("実機に接続してください。");
-    if (layers.length !== layerCount) {
-      throw new Error("最新版レイアウトのレイヤー数が実機のファームウェアと一致しません。ファームウェアを書き込み直してください。");
+    if (layers.length > layerCount) {
+      throw new Error(`最新版レイアウトのレイヤー数(${layers.length})が実機のファームウェア(${layerCount})より多いため書き込めません。ファームウェアを書き込み直してください。`);
     }
     try {
       const written = await overwriteKeymap(this.#client, layout, layers, onProgress);

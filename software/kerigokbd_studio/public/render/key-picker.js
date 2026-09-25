@@ -1,5 +1,5 @@
 import { CATEGORIES, entriesByCategory } from "../keycodes/keycode-registry.js";
-import { momentaryLayer, toLayer, defaultLayer, toggleLayer, layerTap } from "../keycodes/keycode-values.js";
+import { toLayer, defaultLayer, toggleLayer, layerTap } from "../keycodes/keycode-values.js";
 import { LAYER_TAP_MAX_LAYERS, isLayerTapKeycode, isEmptyMods, encode, decode } from "../keycodes/keycode-codec.js";
 import { keycodeSummary as keycodeText, layerName } from "../keycodes/keycode-format.js";
 import { parseKeycodeExpression } from "../keycodes/keycode-parse.js";
@@ -14,9 +14,9 @@ import { formatKeycodeToken } from "../export/c-source-writer.js";
 // with the key (LALT(KC_PSCR)); any basic key from the category grids then
 // gets wrapped in whichever is active. The Any tab takes a raw value or a
 // keymap.c-style expression for everything else.
-// `kind` matches the keyboard view's kind-* colors (see editor.css).
+// `kind` matches the keyboard view's kind-* colors (see editor.css). MO is
+// assigned from the 長押し row instead.
 const LAYER_ACTIONS = [
-  { label: "押している間 (MO)", compose: momentaryLayer, kind: "momentary" },
   { label: "切り替え (TO)", compose: toLayer, kind: "to" },
   { label: "デフォルトに設定 (DF)", compose: defaultLayer },
   { label: "トグル (TG)", compose: toggleLayer },

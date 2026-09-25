@@ -25,7 +25,7 @@ import { keyPosition, layoutExtent } from "./layout-geometry.js";
  * its previous contents. Every key is a clickable button; `onSelectKey` is
  * called with the key's index into layout.keys.
  */
-export function renderKeyboardView(container, { layout, keycodes, selectedKeyIndex, isPending, isChanged, isDraft }, onSelectKey) {
+export function renderKeyboardView(container, { layout, keycodes, selectedKeyIndex, isPending, isChangedFromLatest, isDraft }, onSelectKey) {
   const { columns, rows } = layoutExtent(layout);
   const unitX = 100 / columns;
   const unitY = 100 / rows;
@@ -53,7 +53,9 @@ export function renderKeyboardView(container, { layout, keycodes, selectedKeyInd
       const { main, sub, empty, transparent } = describeKeycode(value);
       const mainLabel = document.createElement("span");
       mainLabel.className = "editor-key-main";
-      mainLabel.textContent = main;
+      // The TO box (editor.css) already says "switch to", so drop the
+      // shared label's leading arrow here (the cheat sheet keeps it).
+      mainLabel.textContent = decode(value).kind === "toLayer" ? main.replace(/^→/, "") : main;
       button.append(mainLabel);
       if (sub) {
         const subLabel = document.createElement("span");
@@ -70,12 +72,12 @@ export function renderKeyboardView(container, { layout, keycodes, selectedKeyInd
     const [row, col] = key.matrix;
     if (isPending?.(row, col)) button.classList.add("is-pending");
     if (keyIndex === selectedKeyIndex) button.classList.add("is-selected");
-    const changed = isChanged?.(keyIndex) ?? false;
-    if (changed) button.classList.add("is-changed");
+    const changedFromLatest = isChangedFromLatest?.(keyIndex) ?? false;
+    if (changedFromLatest) button.classList.add("is-changed");
     const draft = isDraft?.(keyIndex) ?? false;
     if (draft) button.classList.add("is-draft");
 
-    button.setAttribute("aria-label", `row ${row}, col ${col}${changed ? ", 初期状態から変更済み" : ""}${draft ? ", 未書き込み" : ""}`);
+    button.setAttribute("aria-label", `row ${row}, col ${col}${changedFromLatest ? ", GitHub最新版から変更" : ""}${draft ? ", 未書き込み" : ""}`);
     button.addEventListener("click", () => onSelectKey(keyIndex));
     fragment.append(button);
   });

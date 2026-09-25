@@ -14,6 +14,7 @@
   --hold: #278554;
   --escape: #d49a00;
   --pending: #d49a00;
+  --changed: #d32f2f; /* edit view: key differs from GitHub latest */
   --accent: #e35e35;
   --danger: #c23b3b;
   --shadow: 0 18px 50px rgb(50 47 36 / 10%);
@@ -441,17 +442,20 @@ button.draft-summary:hover { background: #ffe8dc; }
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--nums);
+  background: var(--changed);
   flex-shrink: 0;
 }
 
 /* Colors for composed keycodes, shared by the edit view's keys, its legend
    and the picker: LT blue, MO green, TO purple, MT amber, mods pink. */
-.kind-layer-tap { --kind-color: var(--func); }
-.kind-momentary { --kind-color: var(--hold); }
-.kind-to { --kind-color: var(--escape); }
-.kind-mod-tap { --kind-color: #b07800; }
-.kind-mods { --kind-color: var(--nums); }
+/* Hues spread apart from each other, the red changed-key dot and the
+   orange draft border, and dark enough (>= 4.5:1 on --key) to read as text. */
+.kind-layer-tap { --kind-color: #1565c0; }
+.kind-momentary { --kind-color: #7b3fbf; }
+.kind-to { --kind-color: #9c6300; }
+.kind-mod-tap { --kind-color: #2e7d32; }
+/* Mod+ stays plain ink: the "+" in its label already says it's a combo. */
+.kind-mods { --kind-color: var(--ink); }
 
 /* One compact legend row under the keyboard, set off by a rule and a
    "凡例" label like the cheat sheet's own legend. */
@@ -890,8 +894,8 @@ button.draft-summary:hover { background: #ffe8dc; }
 .editor-key.is-transparent { color: var(--key-border); }
 .editor-key.is-draft { border: 1.5px dashed var(--accent); background: #fff4ee; }
 .editor-key.is-draft.is-selected { box-shadow: 0 0 0 2px var(--accent); }
-/* Changed-from-default keys get only the corner dot; borders are reserved
-   for selection and unwritten drafts. */
+/* Keys that differ from GitHub latest get only the corner dot; borders are
+   reserved for selection and unwritten drafts. */
 .editor-key.is-changed::after {
   content: "";
   position: absolute;
@@ -900,7 +904,7 @@ button.draft-summary:hover { background: #ffe8dc; }
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--nums);
+  background: var(--changed);
   box-shadow: 0 0 0 1px var(--card);
 }
 
@@ -918,8 +922,16 @@ button.draft-summary:hover { background: #ffe8dc; }
 }
 /* LT/MO/MT color the hold label; TO and mods wraps color the main label. */
 .editor-key[class*="kind-"] .editor-key-sub { color: var(--kind-color); }
-.editor-key.kind-to .editor-key-main,
-.editor-key.kind-mods .editor-key-main { color: var(--kind-color); }
+.editor-key.kind-to .editor-key-main { color: var(--kind-color); }
+/* ...and that colored label is boxed like the legend's .kind-legend-sample. */
+.editor-key:is(.kind-layer-tap, .kind-momentary, .kind-mod-tap) .editor-key-sub,
+.editor-key.kind-to .editor-key-main {
+  max-width: calc(100% - 4px);
+  padding: 0 4px;
+  border: 1px solid var(--kind-color);
+  border-radius: 5px;
+  line-height: 1.3;
+}
 
 .key-picker-root { margin-bottom: 4px; }
 
