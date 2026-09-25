@@ -16,13 +16,12 @@ test("reproduces plain keycodes", () => {
 test("prefers kerigokbd.h's own KG_* alias over expanding a composed value", () => {
   // These are kerigokbd.h's own #define aliases, so the exporter should
   // reproduce that exact short token rather than the much longer
-  // LT(KGL_EXT, KC_ESC) / MO(KGL_NUM) / TO(KGL_MAIN) / LALT_T(JP_MHEN) /
-  // LWIN_T(JP_HENK) / A(KC_PSCR) it would otherwise expand to.
+  // LT(KGL_EXT, KC_ESC) / LT(KGL_NUM, JP_MHEN) / TO(KGL_MAIN) /
+  // RWIN_T(JP_HENK) / A(KC_PSCR) it would otherwise expand to.
   assert.equal(formatKeycodeToken(0x4329), "KG_ESC");
-  assert.equal(formatKeycodeToken(0x5221), "KG_NUM");
+  assert.equal(formatKeycodeToken(0x418b), "KG_NUM");
   assert.equal(formatKeycodeToken(0x5200), "KG_MAIN");
-  assert.equal(formatKeycodeToken(0x248b), "KG_LALT");
-  assert.equal(formatKeycodeToken(0x288a), "KG_L4");
+  assert.equal(formatKeycodeToken(0x388a), "KG_RWIN");
   assert.equal(formatKeycodeToken(0x0446), "KG_APRS");
 });
 
@@ -30,6 +29,9 @@ test("falls back to expanding the value when no KG_* alias matches it", () => {
   // C(KC_Z) is used inline in kerigokbd's keymap.c -- there's no KG_*
   // alias for it, so it must still expand correctly.
   assert.equal(formatKeycodeToken(0x011d), "C(KC_Z)");
+  // MO(KGL_NUM) was KG_NUM's old definition (now commented out in
+  // kerigokbd.h), so it no longer has an alias either.
+  assert.equal(formatKeycodeToken(0x5221), "MO(KGL_NUM)");
 });
 
 test("unknown values fall back to a hex literal instead of throwing", () => {
