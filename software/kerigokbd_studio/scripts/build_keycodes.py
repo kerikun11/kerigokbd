@@ -458,8 +458,10 @@ def collect_group_entries(
     return entries
 
 
-# Presentation labels for kerigokbd's pointing-device custom keycodes.
+# Presentation labels for implemented kerigokbd custom keycodes.
 KERIGOKBD_CUSTOM_LABELS = {
+    "KG_WCAD": "Win/CAD",
+    "KG_ATAB": "Alt/Alt+Tab",
     "KG_SCRL": "Scroll", "KG_ZOOM": "Zoom",
     "KG_MSL": "M⬅", "KG_MSD": "M⬇", "KG_MSU": "M⬆", "KG_MSR": "M➡",
     "KG_MWLL": "W⬅", "KG_MWLD": "W⬇", "KG_MWLU": "W⬆", "KG_MWLR": "W➡",
@@ -468,7 +470,7 @@ KERIGOKBD_CUSTOM_LABELS = {
 
 def parse_kerigokbd_custom_keycodes(header_text: str) -> dict[str, str]:
     """Resolve kerigokbd.h's `enum kerigokbd_keycodes { NAME = EXPR, ... }`
-    aliases down to their QK_KB_N base symbol, so QK_KB_1 can be displayed
+    aliases down to their QK_KB_N base symbol, so QK_KB_10 can be displayed
     as its friendlier alias KG_SCRL."""
     header_text = strip_line_comments(header_text)
     match = re.search(r"enum\s+kerigokbd_keycodes\s*\{([^}]*)\}", header_text, re.S)
@@ -522,8 +524,8 @@ def main() -> None:
         exclude_values.add(item["value"])
     entries += collect_group_entries(registry, ("kb",), "kerigokbd", exclude_values)
 
-    # Only the pointing-device custom keycodes (QK_KB_1..10) are meaningful
-    # to assign from the editor; QK_KB_0 is unused by kerigokbd.c. Prefer
+    # Only custom keycodes with configured presentation labels are meaningful
+    # to assign from the editor. Prefer
     # kerigokbd.h's own friendlier aliases (KG_SCRL, KG_MSL, ...) over the
     # generic QK_KB_N symbol.
     base_symbol_by_alias = parse_kerigokbd_custom_keycodes(KERIGOKBD_HEADER.read_text(encoding="utf-8"))
@@ -535,9 +537,7 @@ def main() -> None:
         if alias:
             entry["symbol"] = alias
             entry["label"] = KERIGOKBD_CUSTOM_LABELS[alias]
-    # kerigokbd.c only ever defines behaviour for QK_KB_1..10 (aliased above
-    # to KG_*); QK_KB_0 and QK_KB_11..31 are reserved/unused and would be
-    # dead assignments if offered in the picker.
+    # Hide reserved slots that have no implemented KG_* alias.
     entries = [e for e in entries if e["category"] != "kerigokbd" or e["symbol"].startswith("KG_")]
 
     japanese_entries = [

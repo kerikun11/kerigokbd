@@ -37,3 +37,14 @@ test("invalid expressions report a reason", () => {
   assert.throws(() => parse("0x10000"), /範囲/);
   assert.throws(() => parse("FOO(KC_A)"), /未対応/);
 });
+
+// Custom actions must retain their public VIA number, not their internal Mod-Tap.
+test("KG_WCAD is assignable as its stable custom keycode", () => {
+  assert.equal(parse("KG_WCAD"), 0x7e00);
+  assert.throws(() => parse("LWIN_T(KG_WCAD)"), /基本キー/);
+});
+
+test("KG_ATAB is assignable as its custom keycode", () => {
+  assert.equal(parse("KG_ATAB"), 0x7e01);
+  assert.throws(() => parse("LALT_T(KG_ATAB)"), /基本キー/);
+});

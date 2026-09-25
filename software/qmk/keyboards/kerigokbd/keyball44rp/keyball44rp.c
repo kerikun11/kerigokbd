@@ -14,7 +14,8 @@ void pointing_device_init_kb(void) {
 
 bool is_mouse_record_kb(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case QK_KB_0 ... QK_KB_1:
+        case KG_POINTING_SCROLL:
+        case KG_POINTING_ZOOM:
             return true;
     }
     return is_mouse_record_user(keycode, record);
@@ -123,7 +124,7 @@ report_mouse_t pointing_device_task_kb(report_mouse_t mouse_report) {
     return pointing_device_task_user(mouse_report);
 }
 
-bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+bool process_record_kerigokbd(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case KG_POINTING_SCROLL:
             scroll_mode = record->event.pressed;
@@ -135,7 +136,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
             break;
     }
 
-    return process_record_user(keycode, record);
+    return true;
 }
 
 layer_state_t layer_state_set_kb(layer_state_t state) {

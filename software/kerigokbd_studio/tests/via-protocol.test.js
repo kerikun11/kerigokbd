@@ -127,3 +127,13 @@ test("keymapByteOffset matches quantum/nvm/eeprom/nvm_dynamic_keymap.c's formula
   assert.equal(keymapByteOffset(0, 1, 0, matrixRows, matrixCols), matrixCols * 2);
   assert.equal(keymapByteOffset(1, 0, 0, matrixRows, matrixCols), matrixRows * matrixCols * 2);
 });
+
+test("VIA v13 round-trips KG_WCAD without replacing it with an internal Mod-Tap", async () => {
+  const { exchange } = createMockKeyboard({ matrixRows: 8, matrixCols: 7, layerCount: 7, protocolVersion: 0x000d });
+  const client = createViaClient(exchange);
+  assert.equal(await client.getProtocolVersion(), 0x000d);
+  await client.setKeycode(2, 3, 4, 0x7e00);
+  assert.equal(await client.getKeycode(2, 3, 4), 0x7e00);
+  const layer = await readLayerKeycodes(client, 2, 8, 7);
+  assert.equal(layer[3][4], 0x7e00);
+});

@@ -523,7 +523,7 @@ static uint16_t untracked_mouse_keycode_(uint16_t keycode) {
     return KC_NO;
 }
 
-bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
+bool process_record_kerigokbd(uint16_t keycode, keyrecord_t *record) {
     uint16_t mouse_keycode = untracked_mouse_keycode_(keycode);
     if (mouse_keycode != KC_NO) {
         if (record->event.pressed) {
@@ -543,7 +543,7 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         set_zoom_mode_(record->event.pressed);
         cancel_trackpad_gestures_();
     }
-    return process_record_user(keycode, record);
+    return true;
 }
 
 layer_state_t layer_state_set_kb(layer_state_t state) {

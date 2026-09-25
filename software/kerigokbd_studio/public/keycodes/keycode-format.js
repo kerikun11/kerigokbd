@@ -102,6 +102,15 @@ export function describeKeycode(value, { modLabelStyle = "text", symbolStyle = "
   // registered-entry preference c-source-writer.js's formatKeycodeToken
   // uses for the exported C source.
   const registeredEntry = canonicalEntryForValue(value);
+  if (registeredEntry?.symbol === "KG_WCAD") {
+    return {
+      main: modLabelStyle === "text" ? "CAD" : "Ctrl+Alt+Del",
+      sub: modLabelStyle === "text" ? "LWIN" : "Win",
+    };
+  }
+  if (registeredEntry?.symbol === "KG_ATAB") {
+    return { main: "Alt+Tab", sub: modLabelStyle === "text" ? "LALT" : "Alt" };
+  }
   if (registeredEntry) return { main: basicLabel(value, symbolStyle), sub: null };
 
   switch (descriptor.kind) {

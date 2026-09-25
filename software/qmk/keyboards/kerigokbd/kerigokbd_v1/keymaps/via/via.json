@@ -9,6 +9,108 @@
     "menus": [
         "qmk_rgb_matrix"
     ],
+    "customKeycodes": [
+        {
+            "name": "KG_WCAD",
+            "title": "Tap: Ctrl+Alt+Delete; hold: Left Win",
+            "shortName": "Win/CAD"
+        },
+        {
+            "name": "KG_ATAB",
+            "title": "Tap: Alt+Tab; hold: Left Alt",
+            "shortName": "Alt/Alt+Tab"
+        },
+        {
+            "name": "Reserved 2",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 3",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 4",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 5",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 6",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 7",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 8",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 9",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 10",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 11",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 12",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 13",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 14",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 15",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 16",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 17",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 18",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 19",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        }
+    ],
     "layouts": {
         "keymap": [
             [ { "x": 3 }, "0,3", { "x": 7 }, "4,3" ],

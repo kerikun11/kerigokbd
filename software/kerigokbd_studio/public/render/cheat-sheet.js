@@ -62,6 +62,9 @@ function appendOverlay(cell, className, text, { extraClass, sizeByLength = true 
     span.append("Back", document.createElement("br"), "Space");
   } else if (text === "Alt+PrSc") {
     span.append("Alt+", document.createElement("br"), "PrSc");
+  } else if (text === "Ctrl+Alt+Del") {
+    span.classList.add("is-cad");
+    span.append("Ctrl+Alt", document.createElement("br"), "+Del");
   } else {
     span.textContent = text;
   }

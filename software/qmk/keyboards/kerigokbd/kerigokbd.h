@@ -44,20 +44,26 @@ enum kerigokbd_layers {
 
 /* Custom Keycodes */
 enum kerigokbd_keycodes {
+    // Left Win on hold, Ctrl+Alt+Del on tap. Keep the VIA keycode number stable.
+    KG_LWIN_T_LCTL_LALT_DEL = QK_KB_0,
+    // Left Alt on hold, Alt+Tab on tap.
+    KG_LALT_T_LALT_TAB = QK_KB_1,
     // Pointing Device Keycodes
-    KG_POINTING_SCROLL = QK_KB_1,
-    KG_POINTING_ZOOM   = QK_KB_2,
+    KG_POINTING_SCROLL = QK_KB_10,
+    KG_POINTING_ZOOM   = QK_KB_11,
     // Mouse keycodes that do not enter AutoMouseLayer.
-    KG_MOUSE_LEFT        = QK_KB_3,
-    KG_MOUSE_DOWN        = QK_KB_4,
-    KG_MOUSE_UP          = QK_KB_5,
-    KG_MOUSE_RIGHT       = QK_KB_6,
-    KG_MOUSE_WHEEL_LEFT  = QK_KB_7,
-    KG_MOUSE_WHEEL_DOWN  = QK_KB_8,
-    KG_MOUSE_WHEEL_UP    = QK_KB_9,
-    KG_MOUSE_WHEEL_RIGHT = QK_KB_10,
+    KG_MOUSE_LEFT        = QK_KB_12,
+    KG_MOUSE_DOWN        = QK_KB_13,
+    KG_MOUSE_UP          = QK_KB_14,
+    KG_MOUSE_RIGHT       = QK_KB_15,
+    KG_MOUSE_WHEEL_LEFT  = QK_KB_16,
+    KG_MOUSE_WHEEL_DOWN  = QK_KB_17,
+    KG_MOUSE_WHEEL_UP    = QK_KB_18,
+    KG_MOUSE_WHEEL_RIGHT = QK_KB_19,
 
     // aliases
+    KG_WCAD = KG_LWIN_T_LCTL_LALT_DEL,
+    KG_ATAB = KG_LALT_T_LALT_TAB,
     KG_SCRL = KG_POINTING_SCROLL,
     KG_ZOOM = KG_POINTING_ZOOM,
     KG_MSL  = KG_MOUSE_LEFT,
@@ -69,3 +75,6 @@ enum kerigokbd_keycodes {
     KG_MWLU = KG_MOUSE_WHEEL_UP,
     KG_MWLR = KG_MOUSE_WHEEL_RIGHT,
 };
+
+// Model-specific key processing, called by the common process_record_kb().
+bool process_record_kerigokbd(uint16_t keycode, keyrecord_t *record);

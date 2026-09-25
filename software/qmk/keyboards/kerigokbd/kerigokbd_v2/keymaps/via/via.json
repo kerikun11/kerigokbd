@@ -9,6 +9,108 @@
     "menus": [
         "qmk_rgb_matrix"
     ],
+    "customKeycodes": [
+        {
+            "name": "KG_WCAD",
+            "title": "Tap: Ctrl+Alt+Delete; hold: Left Win",
+            "shortName": "Win/CAD"
+        },
+        {
+            "name": "KG_ATAB",
+            "title": "Tap: Alt+Tab; hold: Left Alt",
+            "shortName": "Alt/Alt+Tab"
+        },
+        {
+            "name": "Reserved 2",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 3",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 4",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 5",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 6",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 7",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 8",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Reserved 9",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
+        },
+        {
+            "name": "Scroll",
+            "title": "Pointing device scroll mode",
+            "shortName": "Scroll"
+        },
+        {
+            "name": "Zoom",
+            "title": "Pointing device zoom mode (KERIgoKBD v2)",
+            "shortName": "Zoom"
+        },
+        {
+            "name": "Mouse Left",
+            "title": "Mouse left without AutoMouseLayer",
+            "shortName": "M←"
+        },
+        {
+            "name": "Mouse Down",
+            "title": "Mouse down without AutoMouseLayer",
+            "shortName": "M↓"
+        },
+        {
+            "name": "Mouse Up",
+            "title": "Mouse up without AutoMouseLayer",
+            "shortName": "M↑"
+        },
+        {
+            "name": "Mouse Right",
+            "title": "Mouse right without AutoMouseLayer",
+            "shortName": "M→"
+        },
+        {
+            "name": "Wheel Left",
+            "title": "Wheel left without AutoMouseLayer",
+            "shortName": "W←"
+        },
+        {
+            "name": "Wheel Down",
+            "title": "Wheel down without AutoMouseLayer",
+            "shortName": "W↓"
+        },
+        {
+            "name": "Wheel Up",
+            "title": "Wheel up without AutoMouseLayer",
+            "shortName": "W↑"
+        },
+        {
+            "name": "Wheel Right",
+            "title": "Wheel right without AutoMouseLayer",
+            "shortName": "W→"
+        }
+    ],
     "layouts": {
         "keymap": [
             [ { "x": 3 }, "0,3", { "x": 7 }, "4,3" ],

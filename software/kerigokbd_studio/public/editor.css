@@ -535,6 +535,8 @@ button.draft-summary:hover { background: #ffe8dc; }
   white-space: nowrap;
 }
 .cheat-key-main.is-long { font-size: 13px; }
+/* Keep the two-line shortcut above the centered Extra-layer label. */
+.cheat-key-main.is-cad { font-size: 11px; line-height: 1.15; }
 /* Kanji/kana glyphs read larger than Latin text at the same font-size, so
    Japanese labels (半角/全角, 変換, 無変換) step down an extra notch past
    .is-long to stay visually balanced against the Latin labels around them. */

@@ -85,7 +85,7 @@ test("modLabelStyle: 'word' never adds an L/R prefix on a mod-tap either, unlike
 });
 
 test("strips the known symbol prefix for every category, not just KC_", () => {
-  assert.equal(describeKeycode(0x7e01).main, "SCRL"); // KG_SCRL (QK_KB_1)
+  assert.equal(describeKeycode(0x7e0a).main, "SCRL"); // KG_SCRL (QK_KB_10)
   assert.equal(describeKeycode(0x7842).main, "TOGG"); // RM_TOGG
   assert.equal(describeKeycode(0xcf).main, "LEFT"); // MS_LEFT
   assert.equal(describeKeycode(0x7c00).main, "BOOT"); // QK_BOOT
@@ -93,4 +93,14 @@ test("strips the known symbol prefix for every category, not just KC_", () => {
 
 test("unknown value falls back to a hex label instead of throwing", () => {
   assert.deepEqual(describeKeycode(0x5aaa), { main: "0x5AAA", sub: null });
+});
+
+test("KG_WCAD displays its fixed tap and hold actions", () => {
+  assert.deepEqual(describeKeycode(0x7e00), { main: "CAD", sub: "LWIN" });
+  assert.deepEqual(describeKeycode(0x7e00, { modLabelStyle: "word" }), { main: "Ctrl+Alt+Del", sub: "Win" });
+});
+
+test("KG_ATAB displays Alt+Tab on tap and Alt on hold", () => {
+  assert.deepEqual(describeKeycode(0x7e01), { main: "Alt+Tab", sub: "LALT" });
+  assert.deepEqual(describeKeycode(0x7e01, { modLabelStyle: "word" }), { main: "Alt+Tab", sub: "Alt" });
 });
