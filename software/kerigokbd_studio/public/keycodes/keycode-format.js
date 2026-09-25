@@ -78,7 +78,7 @@ function basicLabel(value, symbolStyle) {
   return entry.symbol.replace(KNOWN_SYMBOL_PREFIXES, "");
 }
 
-function layerName(layerIndex) {
+export function layerName(layerIndex) {
   const layer = layerAt(layerIndex);
   return layer ? layerDisplayName(layer.symbol) : `L${layerIndex}`;
 }
@@ -132,4 +132,14 @@ export function describeKeycode(value, { modLabelStyle = "text", symbolStyle = "
     default:
       return { main: `0x${value.toString(16).toUpperCase().padStart(4, "0")}`, sub: null };
   }
+}
+
+/** One-line Japanese summary of a keycode for lists and the picker (e.g. "Z (長押し: Num)"). */
+export function keycodeSummary(value) {
+  if (value === undefined) return "-";
+  const { main, sub, empty, transparent } = describeKeycode(value);
+  if (empty) return "なし";
+  if (transparent) return "▽ (下のレイヤーと同じ)";
+  if (!main && sub) return `押している間 ${sub} (MO)`;
+  return [main, sub && `(長押し: ${sub})`].filter(Boolean).join(" ");
 }

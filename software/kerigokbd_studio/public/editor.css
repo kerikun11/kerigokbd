@@ -88,47 +88,81 @@ h1 {
 
 .settings-pane {
   background: #f5f6f2;
+  padding: 12px 20px 14px;
 }
 
-.settings-pane > .pane-title {
-  margin-bottom: 16px;
-  line-height: 1.2;
-}
-
-/* Three purpose-grouped columns -- デバイス (talks to the keyboard),
-   表示 (what the cheat sheet shows), 編集 (enter the edit screen) -- rather
-   than one flat row of unrelated controls. */
-.settings-groups {
+/* Pane title on the left, the 表示 / 編集 mode switch on the right. */
+.pane-header {
   display: flex;
-  flex-wrap: wrap;
-  gap: 28px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
 }
+.pane-header .pane-title { margin: 0; line-height: 1.2; }
 
-.settings-group {
-  flex: 1 1 260px;
-  min-width: 220px;
+.mode-switch {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--key-border);
+  border-radius: 999px;
+  background: var(--key);
 }
-
-.settings-group-title {
-  margin: 0 0 10px;
+.mode-switch-button {
+  min-width: 72px;
+  padding: 4px 14px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
   font-size: 12px;
   font-weight: 700;
-  color: var(--ink);
+}
+.mode-switch-button:not(.is-active):hover { color: var(--ink); }
+.mode-switch-button.is-active { background: var(--ink); color: var(--card); }
+
+/* Purpose-grouped columns: デバイス (shared, always first) followed by the
+   current mode's own groups -- 表示/書き出し for the cheat sheet,
+   書き出し・初期化 for the editor. */
+/* A fixed three-column grid, so デバイス keeps the same position and width
+   in both modes even when the edit mode has fewer groups. */
+.settings-groups {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.settings-group { min-width: 0; }
+.settings-group[hidden] { display: none; }
+
+.settings-group-title {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: .04em;
 }
 
 .settings-group-body {
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  gap: 10px;
+  gap: 8px;
 }
 
-.device-actions, .edit-actions {
+/* Two buttons sharing one row (connect/reload, PNG copy/save, the two
+   destructive overwrites) -- half the height of stacking them. */
+.button-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.edit-actions {
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
-.device-actions button, .edit-actions button { width: 100%; }
+.button-pair button, .button-slot button, .edit-actions > button { width: 100%; }
 .device-action-status { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
 .device-action-status:empty { display: none; }
 
@@ -141,17 +175,13 @@ h1 {
   letter-spacing: .06em;
 }
 
-/* Full width, matching every other settings-pane button (device-actions,
-   edit-actions, png-export-buttons below) -- a consistent one-button-per-row
-   layout throughout the pane rather than this one sized to its own text. */
-.mode-action { display: flex; }
-.mode-action-button { width: 100%; }
 
-/* Per-layer show/hide switches. */
+/* Per-layer show/hide switches, all on one row. */
 .layer-toggles {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
+  gap: 8px 16px;
+  padding: 6px 0;
 }
 .layer-toggle {
   display: flex;
@@ -200,68 +230,63 @@ h1 {
 .layer-toggle input:checked + .toggle-track.toggle-extra { background: var(--escape); border-color: var(--escape); }
 .layer-toggle input:checked + .toggle-track.toggle-mouse { background: var(--auto-mouse); border-color: var(--auto-mouse); }
 
-.png-export-row {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-/* Stacked full-width, matching device-actions/edit-actions/mode-action --
-   a consistent one-button-per-row layout throughout the pane rather than
-   this one pair sized to its own text. */
-.png-export-buttons { display: flex; flex-direction: column; gap: 8px; }
-.png-export-buttons button { width: 100%; }
 .png-export-status { margin: 0; font-size: 12px; color: var(--muted); }
+.png-export-status:empty { display: none; }
 
-.keyboard-selector {
+/* Keyboard model and connection status share the first row. */
+.device-row {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
-  color: var(--muted);
 }
-
-.keyboard-selector select {
-  font: inherit;
+.keyboard-select {
+  flex: 1;
+  min-width: 0;
   padding: 6px 10px;
-  border-radius: 8px;
   border: 1px solid var(--key-border);
+  border-radius: 9px;
   background: var(--key);
   color: var(--ink);
-}
-
-.connection-bar {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
-  align-items: center;
-  gap: 10px 8px;
-  padding: 12px;
-  border-radius: 12px;
-  background: var(--key);
-  border: 1px solid var(--rule);
+  font: inherit;
   font-size: 13px;
+  font-weight: 600;
 }
+.keyboard-select:hover:not(:disabled) { border-color: var(--ink); }
 
-.connection-status { font-weight: 700; white-space: nowrap; }
-.connection-bar button { white-space: nowrap; }
-.connection-status.is-connected { color: var(--hold); }
-.connection-status.is-error { color: var(--danger); }
-.connection-status.is-connecting { color: var(--auto-mouse); }
-.connection-info,
-.connection-warning {
-  grid-column: 1 / -1;
-  min-width: 0;
-  line-height: 1.5;
-  overflow-wrap: anywhere;
-}
-.connection-info {
-  padding-top: 8px;
-  border-top: 1px solid var(--rule);
+/* Status pill: a colored dot plus the state name. */
+.connection-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--key);
   color: var(--muted);
   font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.connection-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.connection-status.is-connected { color: var(--hold); }
+.connection-status.is-connecting { color: var(--auto-mouse); }
+.connection-status.is-error { color: var(--danger); }
+.connection-info {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 .connection-info:empty { display: none; }
-.connection-device-ids { display: block; white-space: nowrap; }
-.connection-warning { color: var(--danger); }
+.connection-info.is-warning { color: var(--danger); }
 
 button {
   font: inherit;
@@ -271,19 +296,35 @@ button:disabled { cursor: not-allowed; opacity: .5; }
 
 .primary-button, .secondary-button, .danger-button {
   border-radius: 9px;
-  padding: 7px 14px;
+  padding: 6px 12px;
   border: 1px solid transparent;
   font-weight: 600;
   font-size: 13px;
+  white-space: nowrap;
+  transition: background .12s ease, border-color .12s ease, color .12s ease;
 }
 .primary-button { background: var(--ink); color: var(--card); }
 .secondary-button { background: var(--key); border-color: var(--key-border); color: var(--ink); }
 .danger-button { background: #fff; border-color: var(--danger); color: var(--danger); }
+.primary-button:hover:not(:disabled) { background: #3b3f39; }
+.secondary-button:hover:not(:disabled) { border-color: var(--ink); }
+.danger-button:hover:not(:disabled) { background: #fdf0f0; }
+button:focus-visible, select:focus-visible, input:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent), transparent 30%);
+  outline-offset: 2px;
+}
 
+/* Layer tabs on the left, the staged-edit controls on the right. */
+.edit-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
 .layer-tabs {
   display: flex;
   gap: 6px;
-  margin-bottom: 14px;
   flex-wrap: wrap;
 }
 
@@ -301,15 +342,100 @@ button:disabled { cursor: not-allowed; opacity: .5; }
   border-color: var(--ink);
   color: var(--card);
 }
+/* A layer holding staged (unwritten) edits. */
+.layer-tab.has-drafts::after {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  margin-left: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  vertical-align: middle;
+}
 
-.changed-legend {
+.draft-bar {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin: 0 0 10px;
-  font-size: 12px;
-  color: var(--muted);
+  gap: 8px;
+  flex-shrink: 0;
 }
+.draft-summary {
+  padding: 5px 10px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+button.draft-summary { border-color: var(--accent); background: #fff4ee; color: var(--accent); }
+button.draft-summary:hover { background: #ffe8dc; }
+.draft-summary.is-empty { color: var(--muted); font-weight: 600; }
+
+/* Latest write/sync message and the (collapsible) list of staged keys. */
+.draft-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin: -4px 0 12px;
+  padding: 8px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  background: var(--key);
+}
+.draft-panel[hidden] { display: none; }
+.draft-status { margin: 0; font-size: 12px; font-weight: 600; color: var(--ink); }
+/* Every staged key, each individually revertible; scrolls when a whole
+   keymap was carried over from the other half. */
+.draft-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: 160px;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+  list-style: none;
+}
+.draft-status + .draft-list { padding-top: 6px; border-top: 1px solid var(--rule); }
+.draft-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.draft-list-target {
+  padding: 2px 4px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 12px;
+  text-align: left;
+}
+.draft-list-target:hover { background: var(--page); color: var(--accent); }
+.draft-list-revert {
+  flex-shrink: 0;
+  padding: 2px 10px;
+  border: 1px solid var(--key-border);
+  border-radius: 7px;
+  background: var(--card);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 600;
+}
+.draft-list-revert:hover { border-color: var(--accent); color: var(--accent); }
+
+.draft-legend-sample {
+  width: 14px;
+  height: 10px;
+  border: 1.5px dashed var(--accent);
+  border-radius: 3px;
+  background: #fff4ee;
+  flex-shrink: 0;
+}
+
 .changed-legend-dot {
   width: 7px;
   height: 7px;
@@ -318,18 +444,43 @@ button:disabled { cursor: not-allowed; opacity: .5; }
   flex-shrink: 0;
 }
 
-.hold-legend {
+/* Colors for composed keycodes, shared by the edit view's keys, its legend
+   and the picker: LT blue, MO green, TO purple, MT amber, mods pink. */
+.kind-layer-tap { --kind-color: var(--func); }
+.kind-momentary { --kind-color: var(--hold); }
+.kind-to { --kind-color: var(--escape); }
+.kind-mod-tap { --kind-color: #b07800; }
+.kind-mods { --kind-color: var(--nums); }
+
+/* One compact legend row under the keyboard, set off by a rule and a
+   "凡例" label like the cheat sheet's own legend. */
+.edit-legend-section {
   display: flex;
   align-items: center;
-  gap: 6px;
-  margin: 0 0 10px;
-  font-size: 12px;
+  gap: 14px;
+  margin: 0 0 14px;
+  padding: 10px 0 0;
+  border-top: 1px solid var(--rule);
+}
+.edit-legend-section .legend-group-title { flex-shrink: 0; }
+.edit-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 11px;
   color: var(--muted);
 }
-.hold-legend-sample {
+.edit-legend li { display: flex; align-items: center; gap: 5px; }
+.kind-legend-sample {
+  padding: 1px 5px;
+  border: 1px solid var(--kind-color);
+  border-radius: 5px;
   font-size: 10px;
-  font-weight: 600;
-  color: var(--func);
+  font-weight: 700;
+  color: var(--kind-color);
   flex-shrink: 0;
 }
 
@@ -710,7 +861,7 @@ button:disabled { cursor: not-allowed; opacity: .5; }
 .keyboard-view {
   position: relative;
   width: 100%;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .editor-key {
@@ -736,7 +887,10 @@ button:disabled { cursor: not-allowed; opacity: .5; }
 .editor-key.is-loading { background: var(--rule); }
 .editor-key.is-empty { color: var(--muted); }
 .editor-key.is-transparent { color: var(--key-border); }
-.editor-key.is-changed { border-color: var(--nums); }
+.editor-key.is-draft { border: 1.5px dashed var(--accent); background: #fff4ee; }
+.editor-key.is-draft.is-selected { box-shadow: 0 0 0 2px var(--accent); }
+/* Changed-from-default keys get only the corner dot; borders are reserved
+   for selection and unwritten drafts. */
 .editor-key.is-changed::after {
   content: "";
   position: absolute;
@@ -761,10 +915,28 @@ button:disabled { cursor: not-allowed; opacity: .5; }
   font-weight: 600;
   color: var(--func);
 }
+/* LT/MO/MT color the hold label; TO and mods wraps color the main label. */
+.editor-key[class*="kind-"] .editor-key-sub { color: var(--kind-color); }
+.editor-key.kind-to .editor-key-main,
+.editor-key.kind-mods .editor-key-main { color: var(--kind-color); }
 
-.key-picker-root:not([hidden]) {
-  margin-bottom: 16px;
+.key-picker-root { margin-bottom: 4px; }
+
+/* Placeholder in the picker's spot: not connected, or no key selected. */
+.key-picker-notice {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 64px;
+  padding: 12px 16px;
+  border: 1px dashed var(--key-border);
+  border-radius: 14px;
+  color: var(--muted);
+  font-size: 13px;
+  text-align: center;
 }
+.key-picker-notice p { margin: 0; }
 
 .key-picker {
   border: 1px solid var(--rule);
@@ -801,6 +973,8 @@ button:disabled { cursor: not-allowed; opacity: .5; }
 .key-picker-tab.is-active { background: var(--ink); color: var(--card); }
 
 .key-picker-close {
+  flex-shrink: 0;
+  white-space: nowrap;
   border: none;
   background: transparent;
   color: var(--muted);
@@ -853,6 +1027,123 @@ button:disabled { cursor: not-allowed; opacity: .5; }
   color: var(--ink);
 }
 .key-picker-item:hover { border-color: var(--accent); color: var(--accent); }
+.key-picker-item:disabled:hover { border-color: var(--key-border); color: var(--ink); }
+/* The value this key currently shows (draft, else live). */
+.key-picker-item[class*="kind-"] { color: var(--kind-color); }
+.key-picker-item.is-current { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+
+.key-picker-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--card);
+}
+.key-picker-summary-text { margin: 0; font-size: 12px; font-weight: 600; }
+.key-picker-link {
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-size: 12px;
+  text-decoration: underline;
+  flex-shrink: 0;
+}
+
+.key-picker-hold {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--card);
+}
+.key-picker-hold-label {
+  min-width: 4.5em;
+  margin-right: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--kind-color, var(--ink));
+}
+.key-picker-chip {
+  border: 1px solid var(--key-border);
+  background: var(--key);
+  color: var(--muted);
+  border-radius: 999px;
+  padding: 3px 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+.key-picker-mods {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--rule);
+  background: var(--card);
+}
+.key-picker-mod {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.key-picker-mod input { accent-color: var(--nums); margin: 0; }
+/* 長押し type switch: なし | LT | MT, each active segment in its kind color. */
+.key-picker-segmented {
+  display: inline-flex;
+  padding: 2px;
+  border: 1px solid var(--key-border);
+  border-radius: 999px;
+  background: var(--key);
+}
+.key-picker-segment {
+  padding: 3px 12px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.key-picker-segment:not(.is-active):hover { color: var(--ink); }
+.key-picker-segment.is-active { background: var(--kind-color, var(--ink)); color: var(--card); }
+/* The chosen hold type's own options (layer chips / MT checkboxes). */
+.key-picker-hold-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 12px;
+  margin-left: 4px;
+  padding-left: 12px;
+  border-left: 1px solid var(--rule);
+}
+.key-picker-hold-options:not(.kind-mod-tap) { gap: 4px; }
+.key-picker-hold-options .key-picker-chip.is-active { background: var(--kind-color); border-color: var(--kind-color); }
+.key-picker-hold-options.kind-mod-tap .key-picker-mod input { accent-color: var(--kind-color); }
+
+.key-picker-any { display: flex; flex-direction: column; gap: 8px; }
+.key-picker-any-row { display: flex; gap: 8px; }
+.key-picker-any-input {
+  flex: 1;
+  padding: 7px 10px;
+  border: 1px solid var(--key-border);
+  border-radius: 9px;
+  background: var(--card);
+  color: var(--ink);
+  font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+  font-size: 13px;
+}
+.key-picker-any-input:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+.key-picker-any-preview { margin: 0; font-size: 12px; font-weight: 600; color: var(--ink); }
+.key-picker-any-preview.is-error { color: var(--danger); }
+.key-picker-chip.is-active { background: var(--func); border-color: var(--func); color: var(--card); }
+.key-picker-note { margin: 0; font-size: 12px; color: var(--muted); }
 
 .toolbar {
   display: flex;

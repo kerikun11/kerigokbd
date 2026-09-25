@@ -1,10 +1,12 @@
 // Per-layer show/hide switches for the cheat sheet, so a crowded key can be
-// decluttered down to just the layers someone cares about right now.
+// decluttered down to just the layers someone cares about right now. Short
+// layer names only (the group title says "表示するレイヤー"), so all four
+// fit on one row.
 const TOGGLES = [
-  { key: "nums", label: "Numレイヤを表示", colorClass: "toggle-nums" },
-  { key: "func", label: "Fnレイヤを表示", colorClass: "toggle-func" },
-  { key: "extra", label: "Extraレイヤを表示", colorClass: "toggle-extra" },
-  { key: "mouse", label: "Trackpadレイヤを表示", colorClass: "toggle-mouse" },
+  { key: "nums", label: "Num", colorClass: "toggle-nums" },
+  { key: "func", label: "Fn", colorClass: "toggle-func" },
+  { key: "extra", label: "Extra", colorClass: "toggle-extra" },
+  { key: "mouse", label: "Trackpad", colorClass: "toggle-mouse" },
 ];
 
 export function renderLayerToggles(container, { visibility, showMouseToggle }, onChange) {

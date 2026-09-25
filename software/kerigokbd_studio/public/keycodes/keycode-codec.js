@@ -101,3 +101,64 @@ export function encode(descriptor) {
     default: throw new Error(`Unknown descriptor kind: ${descriptor.kind}`);
   }
 }
+
+// LT(layer, kc) can only wrap a basic keycode (8 bits) and address layers
+// 0-15 (4 bits), per QMK's QK_LAYER_TAP packing.
+export const LAYER_TAP_MAX_LAYERS = 16;
+
+/** True if `value` fits as LT()'s tap keycode (KC_A..0xFF; not KC_NO/KC_TRNS or composed values). */
+export const isLayerTapKeycode = (value) => value >= 0x0004 && value <= 0x00ff;
+
+/** The layer this value switches to while held via LT(), or null if it isn't a layer-tap. */
+export function holdLayerOf(value) {
+  const descriptor = decode(value);
+  return descriptor.kind === "layerTap" ? descriptor.layer : null;
+}
+
+/** The basic keycode tapped by this value (itself, or LT()'s / MT()'s / a mods wrap's key), or null if there's none to keep. */
+export function tapKeycodeOf(value) {
+  const descriptor = decode(value);
+  if (descriptor.kind === "layerTap" || descriptor.kind === "mods" || descriptor.kind === "modTap") return descriptor.keycode;
+  if (descriptor.kind === "basic" && isLayerTapKeycode(value)) return value;
+  return null;
+}
+
+/**
+ * Rewraps this value's tap key with a new hold layer: LT(layer, tap), or
+ * the bare tap key for layer === null. Returns null when the value has no
+ * basic tap key to keep (MO(), KC_NO, a mod-tap, ...).
+ */
+export function withHoldLayer(value, layer) {
+  const tap = tapKeycodeOf(value);
+  if (tap === null) return null;
+  return layer === null ? tap : layerTap(layer, tap);
+}
+
+export const NO_MODS = Object.freeze({ ctrl: false, shift: false, alt: false, gui: false, right: false });
+
+/**
+ * How this value applies modifiers to its key: "with" for a mods wrap
+ * (LALT(KC_PSCR): sent together on every press), "tap" for a mod-tap
+ * (LALT_T(KC_A): the mods only while held, the key on tap), with the mods
+ * themselves; NO_MODS/"with" for anything else.
+ */
+export function wrapModsOf(value) {
+  const descriptor = decode(value);
+  if (descriptor.kind === "mods") return { mods: descriptor.mods, mode: "with" };
+  if (descriptor.kind === "modTap") return { mods: descriptor.mods, mode: "tap" };
+  return { mods: { ...NO_MODS }, mode: "with" };
+}
+
+/**
+ * Rewraps this value's tap key with `mods`, as a mods wrap (mode "with",
+ * e.g. LALT(tap)) or a mod-tap (mode "tap", e.g. LALT_T(tap)), or the bare
+ * tap key when no modifier is set. Like withHoldLayer, returns null when
+ * there's no basic tap key to keep. Neither can be combined with LT() in
+ * one QMK keycode, so this drops any hold layer.
+ */
+export function withMods(value, mods, mode = "with") {
+  const tap = tapKeycodeOf(value);
+  if (tap === null) return null;
+  if (isEmptyMods(mods)) return tap;
+  return encode({ kind: mode === "tap" ? "modTap" : "mods", mods, keycode: tap });
+}

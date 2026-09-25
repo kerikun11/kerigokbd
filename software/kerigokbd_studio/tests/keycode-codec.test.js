@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { decode, encode } from "../public/keycodes/keycode-codec.js";
+import { decode, encode, withHoldLayer, holdLayerOf, tapKeycodeOf, isLayerTapKeycode, withMods, wrapModsOf, NO_MODS } from "../public/keycodes/keycode-codec.js";
 
 // Real values pulled from kerigokbd.h / kerigokbd_v2's keymap.c, computed by
 // hand from QMK's documented bit-packing formulas, used here as ground
@@ -100,4 +100,41 @@ test("round-trips every basic (non-packed) 16-bit value not otherwise claimed by
     assert.equal(descriptor.kind, "basic");
     assert.equal(encode(descriptor), value);
   }
+});
+
+test("withHoldLayer wraps a basic key in LT() and unwraps it again", () => {
+  const lt = withHoldLayer(0x0029, 3); // KC_ESC -> LT(3, KC_ESC)
+  assert.equal(lt, 0x4329);
+  assert.equal(holdLayerOf(lt), 3);
+  assert.equal(tapKeycodeOf(lt), 0x0029);
+  assert.equal(withHoldLayer(lt, 1), 0x4129); // change the hold layer, keep the tap key
+  assert.equal(withHoldLayer(lt, null), 0x0029);
+});
+
+test("withHoldLayer leaves values without a basic tap key alone, and rewraps a mod-tap's key", () => {
+  assert.equal(withHoldLayer(0x0000, 1), null); // KC_NO
+  assert.equal(withHoldLayer(0x0001, 1), null); // KC_TRNS
+  assert.equal(withHoldLayer(0x5221, 2), null); // MO(1)
+  assert.equal(withHoldLayer(0x2229, 2), 0x4229); // LSFT_T(KC_ESC) -> LT(2, KC_ESC)
+  assert.equal(isLayerTapKeycode(0x0204), false); // S(KC_A)
+});
+
+test("withMods wraps a basic key in modifiers and unwraps it again", () => {
+  const altPscr = withMods(0x0046, { ...NO_MODS, alt: true }); // LALT(KC_PSCR)
+  assert.equal(altPscr, 0x0446);
+  assert.deepEqual(wrapModsOf(altPscr), { mods: { ...NO_MODS, alt: true }, mode: "with" });
+  assert.equal(withMods(altPscr, { ...NO_MODS, ctrl: true, shift: true }), 0x0346); // C(S(KC_PSCR))
+  assert.equal(withMods(altPscr, { ...NO_MODS, alt: true, right: true }), 0x1446); // RALT(KC_PSCR)
+  assert.equal(withMods(altPscr, NO_MODS), 0x0046);
+  assert.equal(withMods(0x4329, { ...NO_MODS, gui: true }), 0x0829); // LT(3, KC_ESC) -> LGUI(KC_ESC)
+  assert.equal(withMods(0x5221, { ...NO_MODS, gui: true }), null); // MO(1) has no tap key
+});
+
+test("withMods in tap mode builds a mod-tap and switches back to a mods wrap", () => {
+  const ctlA = withMods(0x0004, { ...NO_MODS, ctrl: true }, "tap"); // LCTL_T(KC_A)
+  assert.equal(ctlA, 0x2104);
+  assert.deepEqual(wrapModsOf(ctlA), { mods: { ...NO_MODS, ctrl: true }, mode: "tap" });
+  assert.equal(withMods(ctlA, { ...NO_MODS, shift: true, right: true }, "tap"), 0x3204); // RSFT_T(KC_A)
+  assert.equal(withMods(ctlA, { ...NO_MODS, ctrl: true }, "with"), 0x0104); // C(KC_A)
+  assert.equal(withMods(ctlA, NO_MODS, "tap"), 0x0004);
 });

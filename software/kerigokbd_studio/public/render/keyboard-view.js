@@ -1,4 +1,23 @@
 import { describeKeycode } from "../keycodes/keycode-format.js";
+import { decode } from "../keycodes/keycode-codec.js";
+import { canonicalEntryForValue } from "../keycodes/keycode-registry.js";
+
+// Composed keycodes get a kind-* class so LT/MO/TO/MT/mods read apart at a
+// glance; colors and the matching legend live in editor.css / index.html.
+const KIND_CLASSES = {
+  layerTap: "kind-layer-tap",
+  momentaryLayer: "kind-momentary",
+  toLayer: "kind-to",
+  modTap: "kind-mod-tap",
+  mods: "kind-mods",
+};
+
+function kindClass(value) {
+  // A composed value with its own registered symbol (JP_EXLM = S(KC_1), ...)
+  // is shown as that one key, so it isn't colored as a mods wrap.
+  if (canonicalEntryForValue(value)) return null;
+  return KIND_CLASSES[decode(value).kind] ?? null;
+}
 import { keyPosition, layoutExtent } from "./layout-geometry.js";
 
 /**
@@ -6,7 +25,7 @@ import { keyPosition, layoutExtent } from "./layout-geometry.js";
  * its previous contents. Every key is a clickable button; `onSelectKey` is
  * called with the key's index into layout.keys.
  */
-export function renderKeyboardView(container, { layout, keycodes, selectedKeyIndex, isPending, isChanged }, onSelectKey) {
+export function renderKeyboardView(container, { layout, keycodes, selectedKeyIndex, isPending, isChanged, isDraft }, onSelectKey) {
   const { columns, rows } = layoutExtent(layout);
   const unitX = 100 / columns;
   const unitY = 100 / rows;
@@ -42,6 +61,8 @@ export function renderKeyboardView(container, { layout, keycodes, selectedKeyInd
         subLabel.textContent = sub;
         button.append(subLabel);
       }
+      const kind = kindClass(value);
+      if (kind) button.classList.add(kind);
       if (empty) button.classList.add("is-empty");
       if (transparent) button.classList.add("is-transparent");
     }
@@ -51,8 +72,10 @@ export function renderKeyboardView(container, { layout, keycodes, selectedKeyInd
     if (keyIndex === selectedKeyIndex) button.classList.add("is-selected");
     const changed = isChanged?.(keyIndex) ?? false;
     if (changed) button.classList.add("is-changed");
+    const draft = isDraft?.(keyIndex) ?? false;
+    if (draft) button.classList.add("is-draft");
 
-    button.setAttribute("aria-label", `row ${row}, col ${col}${changed ? ", 初期状態から変更済み" : ""}`);
+    button.setAttribute("aria-label", `row ${row}, col ${col}${changed ? ", 初期状態から変更済み" : ""}${draft ? ", 未書き込み" : ""}`);
     button.addEventListener("click", () => onSelectKey(keyIndex));
     fragment.append(button);
   });

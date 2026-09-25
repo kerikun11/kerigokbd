@@ -85,49 +85,76 @@
           </div>
 
           <div id="edit-view" hidden>
-            <div id="layer-tabs" class="layer-tabs" role="tablist" aria-label="編集するレイヤー"></div>
+            <!-- Layer tabs and the staged-edit controls share one row, so the
+                 key picker below the keyboard stays close to the keys. -->
+            <div class="edit-toolbar">
+              <div id="layer-tabs" class="layer-tabs" role="tablist" aria-label="編集するレイヤー"></div>
+              <div id="draft-bar" class="draft-bar"></div>
+            </div>
+            <div id="draft-panel" class="draft-panel"></div>
             <div id="keyboard-view" class="keyboard-view" role="group" aria-label="キーボードレイアウト"></div>
-            <p class="changed-legend"><span class="changed-legend-dot" aria-hidden="true"></span>初期状態(ファームウェア書き込み時)から変更したキー</p>
-            <p class="hold-legend"><span class="hold-legend-sample">Fn</span>青字は、そのキーを長押ししたときの動作(レイヤー移動など)</p>
-            <div id="key-picker" class="key-picker-root" hidden></div>
+            <section class="edit-legend-section" aria-labelledby="edit-legend-title">
+              <h3 id="edit-legend-title" class="legend-group-title">凡例</h3>
+              <ul class="edit-legend">
+              <li><span class="changed-legend-dot" aria-hidden="true"></span>初期状態から変更</li>
+              <li><span class="draft-legend-sample" aria-hidden="true"></span>未書き込み</li>
+              <li class="kind-momentary"><span class="kind-legend-sample">MO</span>押している間レイヤー</li>
+              <li class="kind-layer-tap"><span class="kind-legend-sample">LT</span>長押しでレイヤー</li>
+              <li class="kind-mod-tap"><span class="kind-legend-sample">MT</span>長押しで修飾キー</li>
+              <li class="kind-to"><span class="kind-legend-sample">TO</span>レイヤー切り替え</li>
+              <li class="kind-mods"><span class="kind-legend-sample">Mod+</span>修飾キーと同時押し</li>
+              </ul>
+            </section>
+            <div id="key-picker" class="key-picker-root"></div>
           </div>
         </section>
 
         <aside class="settings-pane editor-card" aria-label="設定">
-          <h2 class="pane-title">設定</h2>
+          <div class="pane-header">
+            <h2 class="pane-title">設定</h2>
+            <div id="mode-action" class="mode-switch" role="radiogroup" aria-label="モード"></div>
+          </div>
+          <!-- デバイス is shared by both modes and stays in the first column;
+               the other groups are shown only in their data-mode (app.js). -->
           <div class="settings-groups">
-            <section class="settings-group" aria-labelledby="settings-group-display">
-              <h3 id="settings-group-display" class="settings-group-title">表示</h3>
-              <div class="settings-group-body">
-                <label class="keyboard-selector" for="keyboard-select">
-                  <span>キーボード</span>
-                  <select id="keyboard-select">
-                    <option value="kerigokbd_v2">KERIgoKBD v2</option>
-                    <option value="kerigokbd_v1">KERIgoKBD v1</option>
-                  </select>
-                </label>
-                <div id="layer-toggles" class="layer-toggles"></div>
-                <div class="png-export-row">
-                  <div id="png-export-buttons" class="png-export-buttons"></div>
-                  <p id="png-export-status" class="png-export-status" role="status" aria-live="polite"></p>
-                </div>
-              </div>
-            </section>
-
             <section class="settings-group" aria-labelledby="settings-group-device">
               <h3 id="settings-group-device" class="settings-group-title">デバイス</h3>
               <div class="settings-group-body">
-                <div id="connection-bar" class="connection-bar" role="status"></div>
-                <div id="device-actions" class="device-actions"></div>
+                <div class="device-row">
+                  <select id="keyboard-select" class="keyboard-select" aria-label="キーボード">
+                    <option value="kerigokbd_v2">KERIgoKBD v2</option>
+                    <option value="kerigokbd_v1">KERIgoKBD v1</option>
+                  </select>
+                  <span id="connection-status" class="connection-status" role="status"></span>
+                </div>
+                <div class="button-pair">
+                  <div id="connection-toggle" class="button-slot"></div>
+                  <div id="device-actions" class="button-slot"></div>
+                </div>
+                <p id="connection-info" class="connection-info"></p>
+                <p id="device-action-status" class="device-action-status" role="status" aria-live="polite"></p>
               </div>
             </section>
 
-            <section class="settings-group" aria-labelledby="settings-group-edit">
-              <h3 id="settings-group-edit" class="settings-group-title">編集</h3>
+            <section class="settings-group" data-mode="cheatSheet" aria-labelledby="settings-group-display">
+              <h3 id="settings-group-display" class="settings-group-title">表示するレイヤー</h3>
               <div class="settings-group-body">
-                <div id="mode-action" class="mode-action"></div>
+                <div id="layer-toggles" class="layer-toggles"></div>
+              </div>
+            </section>
+
+            <section class="settings-group" data-mode="cheatSheet" aria-labelledby="settings-group-png">
+              <h3 id="settings-group-png" class="settings-group-title">書き出し</h3>
+              <div class="settings-group-body">
+                <div id="png-export-buttons" class="button-pair"></div>
+                <p id="png-export-status" class="png-export-status" role="status" aria-live="polite"></p>
+              </div>
+            </section>
+
+            <section class="settings-group" data-mode="edit" aria-labelledby="settings-group-edit">
+              <h3 id="settings-group-edit" class="settings-group-title">書き出し・初期化</h3>
+              <div class="settings-group-body">
                 <div id="edit-actions" class="edit-actions"></div>
-                <p id="device-action-status" class="device-action-status" role="status" aria-live="polite"></p>
               </div>
             </section>
           </div>
