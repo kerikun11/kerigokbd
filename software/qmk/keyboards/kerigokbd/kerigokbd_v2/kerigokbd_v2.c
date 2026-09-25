@@ -9,7 +9,7 @@
 #endif
 
 void keyboard_pre_init_kb(void) {
-    setPinInputHigh(SPLIT_HAND_PIN);
+    gpio_set_pin_input_high(SPLIT_HAND_PIN);
     keyboard_pre_init_user();
 }
 
