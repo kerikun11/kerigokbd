@@ -18,6 +18,8 @@ import json
 import re
 from pathlib import Path
 
+import hjson
+
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[3]
 FIRMWARE_ROOT = REPOSITORY_ROOT / "software/qmk/firmware"
@@ -278,8 +280,8 @@ def load_keycode_registry() -> dict[int, dict[str, object]]:
     for filename in KEYCODE_SOURCE_FILES:
         path = KEYCODES_DIR / filename
         try:
-            data = json.loads(strip_line_comments(path.read_text(encoding="utf-8")))
-        except (OSError, json.JSONDecodeError) as error:
+            data = hjson.loads(path.read_text(encoding="utf-8"))
+        except (OSError, hjson.HjsonDecodeError) as error:
             raise ValueError(f"Failed to parse {path}: {error}") from error
         for hex_value, entry in data.get("keycodes", {}).items():
             merged[int(hex_value, 16)] = entry

@@ -12,7 +12,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TAB , KC_Q   , KC_W   , KC_E   , KC_R   , KC_T   ,          /**/          KC_Y   , KC_U   , KC_I   , KC_O   , KC_P   , KC_BSPC,
     KC_LCTL, KC_A   , KC_S   , KC_D   , KC_F   , KC_G   , KG_EXTL, /**/ KG_EXTR, KC_H   , KC_J   , KC_K   , KC_L   , JP_MINS, KC_ENT ,
     KC_LSFT, KC_Z   , KC_X   , KC_C   , KC_V   , KC_B   , KG_EXBL, /**/ KG_EXBR, KC_N   , KC_M   , JP_COMM, JP_DOT , JP_SLSH, KC_DEL ,
-                               KG_L4  , KG_LALT, KG_NUM , KG_ESC , /**/ KG_SPC , KG_FUN , KG_RWIN, KG_R4
+                               KG_LWIN, KG_LALT, KG_NUM , KG_ESC , /**/ KG_SPC , KG_FUN , KG_RWIN, KG_RALT
   ),
   [KGL_NUM] = LAYOUT_split_6_7_7_4( /* Numbers and Symbols Layer */
     _______, JP_EXLM, JP_DQUO, JP_HASH, JP_DLR , JP_PERC,          /**/          JP_AMPR, JP_QUOT, JP_EQL , JP_TILD, JP_PIPE, _______,
@@ -22,7 +22,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
   [KGL_FUN] = LAYOUT_split_6_7_7_4( /* Functions and Navigation Layer */
     _______, KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  ,          /**/          KG_MWLL, KG_MWLD, KG_MWLU, KG_MWLR, MS_BTN2, _______,
-    _______, JP_LPRN, JP_LCBR, JP_RCBR, JP_LBRC ,JP_RBRC, KC_F11 , /**/ MS_BTN3, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, JP_RPRN, _______,
+    _______, JP_LPRN, JP_LCBR, JP_RCBR, JP_LBRC, JP_RBRC, KC_F11 , /**/ MS_BTN3, KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, JP_RPRN, _______,
     KC_LSFT, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , KC_F12 , /**/ MS_BTN2, KG_MSL , KG_MSD , KG_MSU , KG_MSR , MS_BTN1, _______,
                                _______, _______, _______, _______, /**/ _______, _______, _______, _______
   ),

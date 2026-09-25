@@ -19,19 +19,15 @@ enum kerigokbd_layers {
 };
 
 /* Thumb Keys */
-// #define KG_L4 LWIN_T(JP_HENK)
-// #define KG_LALT LALT_T(JP_MHEN)
-// #define KG_NUM MO(KGL_NUM)
-#define KG_L4 KC_LWIN
+#define KG_LWIN KC_LWIN
 #define KG_LALT KC_LALT
 #define KG_NUM LT(KGL_NUM, JP_MHEN)
 #define KG_ESC LT(KGL_EXT, KC_ESC)
 
-#define KG_SPC KC_SPC
-// #define KG_FUN MO(KGL_FUN)
+#define KG_SPC LSFT_T(KC_SPC)
 #define KG_FUN LT(KGL_FUN, JP_HENK)
-#define KG_RWIN RWIN_T(JP_HENK)
-#define KG_R4 RSFT_T(MS_BTN1)
+#define KG_RWIN KC_RWIN
+#define KG_RALT KC_RALT
 
 /* Central Extra Keys */
 #define KG_EXTL LT(KGL_RES, KC_PGUP)  //< Central Extra Key (Top Left)

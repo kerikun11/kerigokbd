@@ -17,11 +17,11 @@ test("prefers kerigokbd.h's own KG_* alias over expanding a composed value", () 
   // These are kerigokbd.h's own #define aliases, so the exporter should
   // reproduce that exact short token rather than the much longer
   // LT(KGL_EXT, KC_ESC) / LT(KGL_NUM, JP_MHEN) / TO(KGL_MAIN) /
-  // RWIN_T(JP_HENK) / A(KC_PSCR) it would otherwise expand to.
+  // RWIN_T(KC_HOME) / A(KC_PSCR) it would otherwise expand to.
   assert.equal(formatKeycodeToken(0x4329), "KG_ESC");
   assert.equal(formatKeycodeToken(0x418b), "KG_NUM");
   assert.equal(formatKeycodeToken(0x5200), "KG_MAIN");
-  assert.equal(formatKeycodeToken(0x388a), "KG_RWIN");
+  assert.equal(formatKeycodeToken(0x384a), "KG_EXTR");
   assert.equal(formatKeycodeToken(0x0446), "KG_APRS");
 });
 
