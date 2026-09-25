@@ -69,15 +69,11 @@ static inline void keyfunc_set_color(uint8_t index, rgb_t color) {
 
 static inline bool is_keycode_special(uint16_t keycode) {
     if (IS_MODIFIER_KEYCODE(keycode)) return true; //< Ctrl, Alt, Shift, Win
+    if (IS_QK_MOD_TAP(keycode)) return true;       //< Mod-Tap (hold: Ctrl, Alt, Shift, Win)
     switch (keycode) {
         case KC_ENTER ... KC_SPACE: //< ENT, ESC, BSPC, TAB, SPC
         case KC_DEL:
         case KC_KP_ENTER:
-        case KG_L4:
-        case KG_LALT:
-        case KG_ESC:
-        case KG_RWIN:
-        case KG_R4:
             return true;
     }
     return false;
@@ -101,7 +97,22 @@ static inline bool is_keycode_symbol(uint16_t keycode) {
     return false;
 }
 
+static inline int8_t keyfunc_hold_layer(uint16_t keycode) {
+    if (IS_QK_MOMENTARY(keycode)) return QK_MOMENTARY_GET_LAYER(keycode);
+    if (IS_QK_LAYER_TAP(keycode)) return QK_LAYER_TAP_GET_LAYER(keycode);
+    return -1;
+}
+
 static inline rgb_t keyfunc_color_for_keycode(uint16_t keycode, const rgb_t *colors) {
+    /* Layer Hold (MO/LT) */
+    switch (keyfunc_hold_layer(keycode)) {
+        case KGL_NUM:
+            return colors[KFI_MAGENTA];
+        case KGL_FUN:
+            return colors[KFI_CYAN];
+    }
+    /* Layer-Tap (tap: ESC) */
+    if (IS_QK_LAYER_TAP(keycode) && QK_LAYER_TAP_GET_TAP_KEYCODE(keycode) == KC_ESC) return colors[KFI_YELLOW];
     /* Special */
     if (is_keycode_special(keycode)) return colors[KFI_GREEN];
     /* Symbol */
@@ -119,12 +130,10 @@ static inline rgb_t keyfunc_color_for_keycode(uint16_t keycode, const rgb_t *col
             return colors[KFI_BLUE];
         /* Number */
         case KC_1 ... KC_0:
-        case KG_NUM:
         case KG_TNUM:
             return colors[KFI_MAGENTA];
         /* Function */
         case KC_F1 ... KC_F12:
-        case KG_FUN:
         case KG_TFUN:
             return colors[KFI_CYAN];
         /* Arrow */
@@ -167,11 +176,17 @@ static inline rgb_t keyfunc_color_for_keycode(uint16_t keycode, const rgb_t *col
         case KG_POINTING_ZOOM:
             return colors[KFI_CYAN];
         /* To Keypad Layer */
-        case KG_TESC:
+        case KG_TEXT:
             return colors[KFI_ORANGE];
         /* To Main Layer */
         case KG_MAIN:
             return colors[KFI_BLUE];
+        /* EXT keys */
+        case KG_EXTL:
+        case KG_EXBL:
+        case KG_EXTR:
+        case KG_EXBR:
+            return colors[KFI_GREEN];
         /* Other */
         default:
             return colors[KFI_WHITE];
@@ -179,6 +194,8 @@ static inline rgb_t keyfunc_color_for_keycode(uint16_t keycode, const rgb_t *col
 }
 
 static bool keyfunc(effect_params_t *params) {
+    RGB_MATRIX_USE_LIMITS(led_min, led_max);
+
     static rgb_t    led_colors[RGB_MATRIX_LED_COUNT];
     static uint32_t cached_layer_state = UINT32_MAX;
     static uint8_t  cached_brightness  = UINT8_MAX;
@@ -204,9 +221,9 @@ static bool keyfunc(effect_params_t *params) {
         cached_brightness  = cur_brightness;
     }
 
-    for (uint8_t i = 0; i < RGB_MATRIX_LED_COUNT; i++)
+    for (uint8_t i = led_min; i < led_max; i++)
         keyfunc_set_color(i, led_colors[i]);
-    return false;
+    return rgb_matrix_check_finished_leds(led_max);
 }
 
 #endif // RGB_MATRIX_CUSTOM_EFFECT_IMPLS

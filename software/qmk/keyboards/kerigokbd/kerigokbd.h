@@ -19,13 +19,17 @@ enum kerigokbd_layers {
 };
 
 /* Thumb Keys */
-#define KG_L4 LWIN_T(JP_HENK)
-#define KG_LALT LALT_T(JP_MHEN)
-#define KG_NUM MO(KGL_NUM)
+// #define KG_L4 LWIN_T(JP_HENK)
+// #define KG_LALT LALT_T(JP_MHEN)
+// #define KG_NUM MO(KGL_NUM)
+#define KG_L4 KC_LWIN
+#define KG_LALT KC_LALT
+#define KG_NUM LT(KGL_NUM, JP_MHEN)
 #define KG_ESC LT(KGL_EXT, KC_ESC)
 
 #define KG_SPC KC_SPC
-#define KG_FUN MO(KGL_FUN)
+// #define KG_FUN MO(KGL_FUN)
+#define KG_FUN LT(KGL_FUN, JP_HENK)
 #define KG_RWIN RWIN_T(JP_HENK)
 #define KG_R4 RSFT_T(MS_BTN1)
 
@@ -39,7 +43,7 @@ enum kerigokbd_layers {
 #define KG_MAIN TO(KGL_MAIN) // TO_MAIN
 #define KG_TNUM TO(KGL_NUM)  // TO_NUM
 #define KG_TFUN TO(KGL_FUN)  // TO_FUN
-#define KG_TESC TO(KGL_EXT)  // TO_ESC
+#define KG_TEXT TO(KGL_EXT)  // TO_EXT
 #define KG_APRS A(KC_PSCR)
 
 /* Custom Keycodes */
