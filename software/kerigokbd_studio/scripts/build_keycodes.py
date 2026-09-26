@@ -578,7 +578,7 @@ def main() -> None:
         for index, (symbol, description) in enumerate(zip(layer_names, layer_descriptions))
     ]
 
-    # kerigokbd.h's own `#define KG_X ...` aliases (KG_ESC, KG_NUM, KG_EXTL,
+    # kerigokbd.h's own `#define KG_X ...` aliases (KG_ESC, KG_NUM, KG_CTTL,
     # ...) are what the real keymap.c actually uses for composed values like
     # LT()/MO()/mod-taps -- without preferring them, the editor's "export to
     # keymap.c" feature would expand every one of these back into its much

@@ -18,13 +18,13 @@ enum keyfunc_category {
     KFC_ALPHA,           //< A-Z
     KFC_NUMBER,          //< 1-0, Keypad 1-0
     KFC_FUNCTION,        //< F1-F12
-    KFC_LAYER_NUM,       //< MO/LT(KGL_NUM), KG_TNUM
-    KFC_LAYER_FUN,       //< MO/LT(KGL_FUN), KG_TFUN
+    KFC_LAYER_NUM,       //< MO/LT(KGL_NUM), KG_TO_N
+    KFC_LAYER_FUN,       //< MO/LT(KGL_FUN), KG_TO_F
     KFC_LAYER_ESC,       //< LT(*, KC_ESC)
-    KFC_LAYER_EXT,       //< KG_TEXT
-    KFC_LAYER_MAIN,      //< KG_MAIN
+    KFC_LAYER_EXT,       //< KG_TO_E
+    KFC_LAYER_MAIN,      //< KG_TO_M
     KFC_MODIFIER,        //< Modifiers, Mod-Tap, Enter/Esc/BS/Tab/Space/Del
-    KFC_EXTRA,           //< Central Extra Keys (KG_EX**)
+    KFC_CENTER,          //< Central Keys (KG_CT**)
     KFC_SYMBOL,          //< Symbols
     KFC_ARROW,           //< Arrows
     KFC_ALT_NUM,         //< Alt+1-0

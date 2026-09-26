@@ -19,8 +19,8 @@ enum kerigokbd_layers {
 };
 
 /* Thumb Keys */
-#define KG_LWIN KC_LWIN
-#define KG_LALT KC_LALT
+#define KG_LWIN KG_WCAD
+#define KG_LALT KG_ATAB
 #define KG_NUM LT(KGL_NUM, JP_MHEN)
 #define KG_ESC LT(KGL_EXT, KC_ESC)
 
@@ -29,17 +29,17 @@ enum kerigokbd_layers {
 #define KG_RWIN KC_RWIN
 #define KG_RALT KC_RALT
 
-/* Central Extra Keys */
-#define KG_EXTL LT(KGL_RES, KC_PGUP)  //< Central Extra Key (Top Left)
-#define KG_EXBL LT(KGL_CONF, KC_PGDN) //< Central Extra Key (Bottom Left)
-#define KG_EXTR RWIN_T(KC_HOME)       //< Central Extra Key (Top Right)
-#define KG_EXBR LT(KGL_CONF, KC_END)  //< Central Extra Key (Bottom Right)
+/* Central Keys */
+#define KG_CTTL LT(KGL_RES, KC_PGUP)  //< Central Key (Top Left)
+#define KG_CTBL LT(KGL_CONF, KC_PGDN) //< Central Key (Bottom Left)
+#define KG_CTTR RWIN_T(KC_HOME)       //< Central Key (Top Right)
+#define KG_CTBR LT(KGL_CONF, KC_END)  //< Central Key (Bottom Right)
 
 /* Aliases */
-#define KG_MAIN TO(KGL_MAIN) // TO_MAIN
-#define KG_TNUM TO(KGL_NUM)  // TO_NUM
-#define KG_TFUN TO(KGL_FUN)  // TO_FUN
-#define KG_TEXT TO(KGL_EXT)  // TO_EXT
+#define KG_TO_M TO(KGL_MAIN) // TO_MAIN
+#define KG_TO_N TO(KGL_NUM)  // TO_NUM
+#define KG_TO_F TO(KGL_FUN)  // TO_FUN
+#define KG_TO_E TO(KGL_EXT)  // TO_EXT
 #define KG_APRS A(KC_PSCR)
 
 /* Custom Keycodes */

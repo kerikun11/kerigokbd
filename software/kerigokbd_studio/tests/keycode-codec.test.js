@@ -37,7 +37,7 @@ test("KG_NUM = MO(KGL_NUM)", () => {
   assert.equal(encode({ kind: "momentaryLayer", layer: KGL_NUM }), value);
 });
 
-test("KG_MAIN = TO(KGL_MAIN)", () => {
+test("KG_TO_M = TO(KGL_MAIN)", () => {
   const value = 0x5200;
   assert.deepEqual(decode(value), { kind: "toLayer", layer: KGL_MAIN });
   assert.equal(encode({ kind: "toLayer", layer: KGL_MAIN }), value);

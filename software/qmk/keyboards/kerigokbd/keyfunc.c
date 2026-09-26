@@ -48,7 +48,7 @@ static const rgb_t keyfunc_palette[KFC_COUNT] = {
     [KFC_LAYER_EXT]       = KF_YELLOW,   //
     [KFC_LAYER_MAIN]      = KF_BLUE,     //
     [KFC_MODIFIER]        = KF_GREEN,    //
-    [KFC_EXTRA]           = KF_GREEN,    //
+    [KFC_CENTER]          = KF_GREEN,    //
     [KFC_SYMBOL]          = KF_YELLOW,   //
     [KFC_ARROW]           = KF_ORANGE,   //
     [KFC_ALT_NUM]         = KF_ORANGE,   //
@@ -140,13 +140,13 @@ static uint8_t keyfunc_category(uint16_t keycode) {
         case KC_F1 ... KC_F12:
             return KFC_FUNCTION;
         /* To Layer */
-        case KG_TNUM:
+        case KG_TO_N:
             return KFC_LAYER_NUM;
-        case KG_TFUN:
+        case KG_TO_F:
             return KFC_LAYER_FUN;
-        case KG_TEXT:
+        case KG_TO_E:
             return KFC_LAYER_EXT;
-        case KG_MAIN:
+        case KG_TO_M:
             return KFC_LAYER_MAIN;
         /* Arrow */
         case KC_RIGHT ... KC_UP:
@@ -181,12 +181,12 @@ static uint8_t keyfunc_category(uint16_t keycode) {
         /* Alt+Num */
         case A(KC_1)... A(KC_0):
             return KFC_ALT_NUM;
-        /* Central Extra Keys */
-        case KG_EXTL:
-        case KG_EXBL:
-        case KG_EXTR:
-        case KG_EXBR:
-            return KFC_EXTRA;
+        /* Central Keys */
+        case KG_CTTL:
+        case KG_CTBL:
+        case KG_CTTR:
+        case KG_CTBR:
+            return KFC_CENTER;
         /* Other */
         default:
             return KFC_OTHER;

@@ -20,8 +20,8 @@ test("prefers kerigokbd.h's own KG_* alias over expanding a composed value", () 
   // RWIN_T(KC_HOME) / A(KC_PSCR) it would otherwise expand to.
   assert.equal(formatKeycodeToken(0x4329), "KG_ESC");
   assert.equal(formatKeycodeToken(0x418b), "KG_NUM");
-  assert.equal(formatKeycodeToken(0x5200), "KG_MAIN");
-  assert.equal(formatKeycodeToken(0x384a), "KG_EXTR");
+  assert.equal(formatKeycodeToken(0x5200), "KG_TO_M");
+  assert.equal(formatKeycodeToken(0x384a), "KG_CTTR");
   assert.equal(formatKeycodeToken(0x0446), "KG_APRS");
 });
 

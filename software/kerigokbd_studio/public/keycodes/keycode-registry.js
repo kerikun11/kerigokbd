@@ -2,7 +2,7 @@ import { KEYCODE_DATA } from "../generated/keycodes.js";
 
 export const KEYCODES = KEYCODE_DATA.keycodes;
 export const LAYERS = KEYCODE_DATA.layers;
-// kerigokbd.h's own `#define KG_X ...` aliases (KG_ESC, KG_NUM, KG_EXTL, ...),
+// kerigokbd.h's own `#define KG_X ...` aliases (KG_ESC, KG_NUM, KG_CTTL, ...),
 // keyed by the exact numeric value they resolve to. These are the tokens
 // kerigokbd's real keymap.c actually uses for composed values (layer-taps,
 // mod-taps, layer switches), so the C exporter prefers them over spelling
