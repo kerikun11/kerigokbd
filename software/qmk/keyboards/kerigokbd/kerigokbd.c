@@ -2,7 +2,11 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
 #include "kerigokbd.h"
+#include "keyfunc.h"
 #include "keymap_introspection.h"
+#ifdef VIA_ENABLE
+#    include "via.h"
+#endif
 #ifdef ENCODER_MAP_ENABLE
 #    include "encoder.h"
 #endif
@@ -89,3 +93,26 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
     }
     return process_record_kerigokbd(keycode, record) && process_record_user(keycode, record);
 }
+
+void keyboard_post_init_kb(void) {
+    keyfunc_init();
+    keyboard_post_init_user();
+}
+
+void housekeeping_task_kb(void) {
+    keyfunc_task();
+    housekeeping_task_user();
+}
+
+#ifdef VIA_ENABLE
+bool via_command_kb(uint8_t *data, uint8_t length) {
+    switch (data[0]) {
+        case id_dynamic_keymap_set_keycode:
+        case id_dynamic_keymap_reset:
+        case id_dynamic_keymap_set_buffer:
+            keyfunc_keymap_changed();
+            break;
+    }
+    return false; // leave the command itself to VIA
+}
+#endif

@@ -8,3 +8,6 @@ LAYER_LOCK_ENABLE = yes
 
 # Debounce: per-key eager (global defer reorders near-simultaneous presses by matrix position)
 DEBOUNCE_TYPE = sym_eager_pk
+
+# Key Function LED Categories (keyfunc.c): shared by rgb_matrix_user.inc, synced to the slave half
+SRC += keyfunc.c
