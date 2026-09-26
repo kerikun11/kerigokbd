@@ -12,10 +12,15 @@ const KIND_CLASSES = {
   mods: "kind-mods",
 };
 
+// kerigokbd.h's custom tap/hold keys: a modifier on hold and a shortcut on
+// tap, labelled like MT (tap on top, modifier below) in keycode-format.js.
+const CUSTOM_MOD_TAP_SYMBOLS = new Set(["KG_WCAD", "KG_ATAB"]);
+
 function kindClass(value) {
   // A composed value with its own registered symbol (JP_EXLM = S(KC_1), ...)
   // is shown as that one key, so it isn't colored as a mods wrap.
-  if (canonicalEntryForValue(value)) return null;
+  const entry = canonicalEntryForValue(value);
+  if (entry) return CUSTOM_MOD_TAP_SYMBOLS.has(entry.symbol) ? KIND_CLASSES.modTap : null;
   return KIND_CLASSES[decode(value).kind] ?? null;
 }
 import { keyPosition, layoutExtent } from "./layout-geometry.js";
