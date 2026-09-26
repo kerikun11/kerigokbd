@@ -18,6 +18,7 @@ const DESCRIPTIONS = {
   // special
   KC_NO: "何もしない",
   KC_TRANSPARENT: "下のレイヤーと同じ",
+  QK_LLCK: "今のレイヤーを固定する(もう一度押す、またはそのレイヤーのMO/LTキーで解除)",
   QK_BOOT: "ブートローダーモードに入る(ファームウェア書き込み用)",
 
   // Japanese layout symbols and keys

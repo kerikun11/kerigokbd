@@ -67,6 +67,7 @@ const PRINTABLE_SYMBOL_LABELS = {
   // JIS IME keys read better as their actual Japanese key-top labels than
   // as QMK's ZKHK/HENK/MHEN suffixes.
   JP_ZKHK: "半角/全角", JP_HENK: "変換", JP_MHEN: "無変換",
+  QK_LLCK: "Lock",
 };
 
 function basicLabel(value, symbolStyle) {

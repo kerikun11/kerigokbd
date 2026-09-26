@@ -40,6 +40,7 @@ KEYCODE_SOURCE_FILES = (
     "keycodes_0.0.1_quantum.hjson",
     "keycodes_0.0.2_quantum.hjson",
     "keycodes_0.0.3_quantum.hjson",
+    "keycodes_0.0.6_quantum.hjson",  # QK_LAYER_LOCK (LAYER_LOCK_ENABLE in rules.mk)
     "keycodes_0.0.2_kb.hjson",
     "keycodes_0.0.1_lighting.hjson",
     "keycodes_0.0.4_lighting.hjson",
@@ -89,7 +90,7 @@ NUMPAD = [
 ]
 JAPANESE = None  # filled in from keymap_japanese.h below
 LAYER_ACTION_BASE_SYMBOLS = ("KC_NO",)  # layer actions are composed, not looked up
-SPECIAL = ["KC_NO", "KC_TRANSPARENT", "QK_BOOT"]
+SPECIAL = ["KC_NO", "KC_TRANSPARENT", "QK_LLCK", "QK_BOOT"]
 
 CATEGORY_ALLOWLIST = {
     "letters_numbers": LETTERS_NUMBERS,
@@ -284,6 +285,10 @@ def load_keycode_registry() -> dict[int, dict[str, object]]:
         except (OSError, hjson.HjsonDecodeError) as error:
             raise ValueError(f"Failed to parse {path}: {error}") from error
         for hex_value, entry in data.get("keycodes", {}).items():
+            # "!delete!" is QMK's marker for a value a later version removed.
+            if entry == "!delete!":
+                merged.pop(int(hex_value, 16), None)
+                continue
             merged[int(hex_value, 16)] = entry
     return merged
 
