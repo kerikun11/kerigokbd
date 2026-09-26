@@ -100,3 +100,35 @@ test("stageKeymap carries another keymap over as drafts against the live values"
     { layer: 0, keyIndex: 1, value: 0x0006 },
   ]);
 });
+
+test("swapKeys stages each key with the other's shown value", () => {
+  const store = new KeymapStore();
+  store.setLayout("test", layout, defaults);
+  store.setLayerKeycodes(0, [0x0004, 0x0005]);
+  store.setLayerKeycodes(1, [0x0006, 0x0007]);
+  assert.equal(store.swapKeys({ layer: 0, keyIndex: 0 }, { layer: 1, keyIndex: 1 }), true);
+  assert.equal(store.effectiveKeycodeAt(0, 0), 0x0007);
+  assert.equal(store.effectiveKeycodeAt(1, 1), 0x0004);
+  assert.equal(store.keycodeAt(0, 0), 0x0004); // the device is untouched until written
+  // Swapping back leaves nothing to write.
+  store.swapKeys({ layer: 0, keyIndex: 0 }, { layer: 1, keyIndex: 1 });
+  assert.deepEqual(store.draftEntries(), []);
+});
+
+test("swapKeys uses a key's staged edit, not its live value", () => {
+  const store = new KeymapStore();
+  store.setLayout("test", layout, defaults);
+  store.setLayerKeycodes(0, [0x0004, 0x0005]);
+  store.setDraft(0, 0, 0x0008);
+  store.swapKeys({ layer: 0, keyIndex: 0 }, { layer: 0, keyIndex: 1 });
+  assert.equal(store.effectiveKeycodeAt(0, 0), 0x0005);
+  assert.equal(store.effectiveKeycodeAt(0, 1), 0x0008);
+});
+
+test("swapKeys does nothing when a key hasn't been read yet", () => {
+  const store = new KeymapStore();
+  store.setLayout("test", layout, defaults);
+  store.setLayerKeycodes(0, [0x0004, 0x0005]);
+  assert.equal(store.swapKeys({ layer: 0, keyIndex: 0 }, { layer: 3, keyIndex: 0 }), false);
+  assert.deepEqual(store.draftEntries(), []);
+});

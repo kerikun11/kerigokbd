@@ -896,6 +896,8 @@ button.draft-summary:hover { background: #ffe8dc; }
 .editor-key.is-transparent { color: var(--key-border); }
 .editor-key.is-draft { border: 1.5px dashed var(--accent); background: #fff4ee; }
 .editor-key.is-draft.is-selected { box-shadow: 0 0 0 2px var(--accent); }
+/* The key waiting for its swap partner (交換). */
+.editor-key.is-swap-source { border-color: var(--ink); box-shadow: 0 0 0 2px var(--ink); }
 /* Keys that differ from GitHub latest get only the corner dot; borders are
    reserved for selection and unwritten drafts. */
 .editor-key.is-changed::after {
@@ -1057,6 +1059,17 @@ button.draft-summary:hover { background: #ffe8dc; }
   background: var(--card);
 }
 .key-picker-summary-text { margin: 0; font-size: 12px; font-weight: 600; }
+.key-picker-summary-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+.key-picker-swap {
+  padding: 3px 12px;
+  border: 1px solid var(--key-border);
+  border-radius: 999px;
+  background: var(--key);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 600;
+}
+.key-picker-swap:hover { border-color: var(--ink); }
 .key-picker-link {
   border: none;
   background: transparent;

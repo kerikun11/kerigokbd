@@ -19,6 +19,7 @@ import { layerIndexBySymbol } from "./keycodes/keycode-registry.js";
 import { decode, holdLayerOf, withHoldLayer, wrapModsOf, withMods, isEmptyMods, NO_MODS } from "./keycodes/keycode-codec.js";
 import { momentaryLayer } from "./keycodes/keycode-values.js";
 import { formatKeycodeToken } from "./export/c-source-writer.js";
+import { keycodeSummary, layerName } from "./keycodes/keycode-format.js";
 
 const requiredElement = (selector) => {
   const element = document.querySelector(selector);
@@ -69,6 +70,8 @@ let deviceBusy = false;
 let viewMode = "cheatSheet"; // "cheatSheet" (default landing) | "edit"
 let draftStatus = "";
 let draftListOpen = false;
+// While choosing a swap partner (交換): the key to swap, as { layer, keyIndex }.
+let swapSource = null;
 // The picker's 長押し action ({type: "none" | "lt" | "mt" | "mo", layer, mods}) and
 // 同時押し modifiers, re-derived from the selected key's value whenever a
 // different key is selected. The two are mutually exclusive: QMK can't
@@ -123,6 +126,7 @@ function populateKeyboardSelect() {
 }
 
 function selectKeyboard(keyboardId) {
+  swapSource = null;
   store.setLayout(keyboardId, loadLayout(keyboardId), loadDefaults(keyboardId));
 }
 
@@ -236,6 +240,33 @@ async function reloadFromDevice() {
 }
 
 /** Stages a picked value for the selected key -- nothing is written until 実機に書き込む. */
+function startSwap() {
+  swapSource = { layer: store.activeLayer, keyIndex: store.selectedKeyIndex };
+  store.setSelectedKeyIndex(null);
+}
+
+function cancelSwap() {
+  swapSource = null;
+  render();
+}
+
+/** Keyboard click: finishes a pending swap, else toggles the selection. */
+function clickKey(keyIndex) {
+  if (!swapSource) {
+    // Clicking the selected key again deselects it.
+    store.setSelectedKeyIndex(keyIndex === store.selectedKeyIndex ? null : keyIndex);
+    return;
+  }
+  const source = swapSource;
+  swapSource = null;
+  if (source.layer === store.activeLayer && source.keyIndex === keyIndex) {
+    render(); // clicking the source again cancels
+    return;
+  }
+  store.swapKeys(source, { layer: store.activeLayer, keyIndex });
+  store.setSelectedKeyIndex(keyIndex);
+}
+
 function stageSelectedKey(value) {
   draftStatus = "";
   store.setDraft(store.activeLayer, store.selectedKeyIndex, value);
@@ -540,12 +571,12 @@ function render() {
       layout: store.layout,
       keycodes: store.layout.keys.map((_, keyIndex) => store.effectiveKeycodeAt(store.activeLayer, keyIndex)),
       selectedKeyIndex: store.selectedKeyIndex,
+      swapSourceIndex: swapSource?.layer === store.activeLayer ? swapSource.keyIndex : null,
       isPending: (row, col) => store.isPending(store.activeLayer, row, col),
       isChangedFromLatest: (keyIndex) => store.isChangedFromLatest(store.activeLayer, keyIndex),
       isDraft: (keyIndex) => store.hasDraft(store.activeLayer, keyIndex),
     },
-    // Clicking the selected key again deselects it.
-    (keyIndex) => store.setSelectedKeyIndex(keyIndex === store.selectedKeyIndex ? null : keyIndex),
+    clickKey,
   );
 
   renderDraftBar({ bar: elements.draftBar, panel: elements.draftPanel }, {
@@ -611,6 +642,7 @@ function render() {
         onChangeWithMods: changeWithMods,
         onChangeAnyText: (text) => { pickerAnyText = text; },
         onRevertKey: () => store.clearDraft(layer, keyIndex),
+        onStartSwap: startSwap,
         onSelectCategory: (category) => {
           pickerCategory = category;
           render();
@@ -620,7 +652,17 @@ function render() {
     );
   } else {
     pickerSelectionId = null;
-    if (store.connectionState !== "connected") {
+    if (swapSource && store.connectionState !== "connected") swapSource = null;
+    if (swapSource) {
+      const [row, col] = store.layout.keys[swapSource.keyIndex].matrix;
+      const value = keycodeSummary(store.effectiveKeycodeAt(swapSource.layer, swapSource.keyIndex));
+      renderKeyPickerNotice(elements.keyPicker, {
+        message: `${layerName(swapSource.layer)} / row ${row}, col ${col}（${value}）と交換するキーをクリックしてください。レイヤーを切り替えて別のレイヤーのキーとも交換できます。`,
+        actionLabel: "交換を中止 (Esc)",
+        onAction: cancelSwap,
+        secondary: true,
+      });
+    } else if (store.connectionState !== "connected") {
       renderKeyPickerNotice(elements.keyPicker, {
         message: "実機に接続すると、キーの割り当てを編集できます。",
         actionLabel: HidTransport.isSupported() && store.connectionState !== "connecting" ? "実機に接続" : null,
@@ -662,18 +704,28 @@ store.addEventListener("change", render);
 // or a dialog deselects the key being edited. Captured on pointerdown, so
 // the check sees the DOM before any click handler re-renders it.
 const KEEP_SELECTION_AREAS = ".editor-key, #key-picker, #draft-bar, #draft-panel, #dialog-root";
+// ...and, while choosing a swap partner, cancels the swap -- except on the
+// layer tabs, which pick the partner's layer.
+const KEEP_SWAP_AREAS = `${KEEP_SELECTION_AREAS}, #layer-tabs`;
 document.addEventListener("pointerdown", (event) => {
-  if (viewMode !== "edit" || store.selectedKeyIndex === null) return;
-  if (event.target instanceof Element && event.target.closest(KEEP_SELECTION_AREAS)) return;
+  if (viewMode !== "edit") return;
+  const target = event.target instanceof Element ? event.target : null;
+  if (swapSource) {
+    if (!target?.closest(KEEP_SWAP_AREAS)) cancelSwap();
+    return;
+  }
+  if (store.selectedKeyIndex === null) return;
+  if (target?.closest(KEEP_SELECTION_AREAS)) return;
   store.setSelectedKeyIndex(null);
 }, true);
 
 // Esc deselects the key being edited (unless a dialog is open, which
 // handles its own dismissal).
 document.addEventListener("keydown", (event) => {
-  if (event.key !== "Escape" || viewMode !== "edit" || store.selectedKeyIndex === null) return;
+  if (event.key !== "Escape" || viewMode !== "edit") return;
   if (elements.dialogRoot.childElementCount) return;
-  store.setSelectedKeyIndex(null);
+  if (swapSource) cancelSwap();
+  else if (store.selectedKeyIndex !== null) store.setSelectedKeyIndex(null);
 });
 
 populateKeyboardSelect();

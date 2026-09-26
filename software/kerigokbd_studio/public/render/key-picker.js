@@ -117,7 +117,7 @@ function renderEntryGrid(container, { category, wrap, currentValue }, onPickValu
 }
 
 /** "Selected key: live value -> staged value" summary, plus a per-key revert. */
-function renderSelectionSummary({ selection }, { onRevertKey }) {
+function renderSelectionSummary({ selection }, { onRevertKey, onStartSwap }) {
   const summary = document.createElement("div");
   summary.className = "key-picker-summary";
   const text = document.createElement("p");
@@ -131,15 +131,24 @@ function renderSelectionSummary({ selection }, { onRevertKey }) {
   text.textContent = selection.draftValue === undefined
     ? `${position}：${withDescription(selection.liveValue)}`
     : `${position}：${withDescription(selection.liveValue)} → ${withDescription(selection.draftValue)}（未書き込み）`;
-  summary.append(text);
+  const actions = document.createElement("div");
+  actions.className = "key-picker-summary-actions";
   if (selection.draftValue !== undefined) {
     const revert = document.createElement("button");
     revert.type = "button";
     revert.className = "key-picker-link";
     revert.textContent = "このキーの変更を取り消す";
     revert.addEventListener("click", onRevertKey);
-    summary.append(revert);
+    actions.append(revert);
   }
+  const swap = document.createElement("button");
+  swap.type = "button";
+  swap.className = "key-picker-swap";
+  swap.textContent = "交換";
+  swap.title = "このキーと別のキーの割り当てを入れ替えます";
+  swap.addEventListener("click", onStartSwap);
+  actions.append(swap);
+  summary.append(text, actions);
   return summary;
 }
 
@@ -359,7 +368,7 @@ export function renderKeyPicker(container, state, handlers) {
  * connected, or no key selected), so the area never appears/disappears
  * and pushes the page around.
  */
-export function renderKeyPickerNotice(container, { message, actionLabel, onAction }) {
+export function renderKeyPickerNotice(container, { message, actionLabel, onAction, secondary = false }) {
   const notice = document.createElement("div");
   notice.className = "key-picker-notice";
   const text = document.createElement("p");
@@ -368,7 +377,7 @@ export function renderKeyPickerNotice(container, { message, actionLabel, onActio
   if (actionLabel) {
     const button = document.createElement("button");
     button.type = "button";
-    button.className = "primary-button";
+    button.className = secondary ? "secondary-button" : "primary-button";
     button.textContent = actionLabel;
     button.addEventListener("click", onAction);
     notice.append(button);

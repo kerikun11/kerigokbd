@@ -30,7 +30,7 @@ import { keyPosition, layoutExtent } from "./layout-geometry.js";
  * its previous contents. Every key is a clickable button; `onSelectKey` is
  * called with the key's index into layout.keys.
  */
-export function renderKeyboardView(container, { layout, keycodes, selectedKeyIndex, isPending, isChangedFromLatest, isDraft }, onSelectKey) {
+export function renderKeyboardView(container, { layout, keycodes, selectedKeyIndex, swapSourceIndex = null, isPending, isChangedFromLatest, isDraft }, onSelectKey) {
   const { columns, rows } = layoutExtent(layout);
   const unitX = 100 / columns;
   const unitY = 100 / rows;
@@ -77,6 +77,7 @@ export function renderKeyboardView(container, { layout, keycodes, selectedKeyInd
     const [row, col] = key.matrix;
     if (isPending?.(row, col)) button.classList.add("is-pending");
     if (keyIndex === selectedKeyIndex) button.classList.add("is-selected");
+    if (keyIndex === swapSourceIndex) button.classList.add("is-swap-source");
     const changedFromLatest = isChangedFromLatest?.(keyIndex) ?? false;
     if (changedFromLatest) button.classList.add("is-changed");
     const draft = isDraft?.(keyIndex) ?? false;

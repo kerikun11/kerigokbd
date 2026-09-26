@@ -115,6 +115,23 @@ export class KeymapStore extends EventTarget {
     this.#notify();
   }
 
+  /**
+   * Stages two keys' shown values (draft, else live) swapped with each other,
+   * e.g. { layer: 0, keyIndex: 3 } and { layer: 1, keyIndex: 7 }. Returns
+   * false (staging nothing) if either key hasn't been read yet.
+   */
+  swapKeys(a, b) {
+    const valueA = this.effectiveKeycodeAt(a.layer, a.keyIndex);
+    const valueB = this.effectiveKeycodeAt(b.layer, b.keyIndex);
+    if (valueA === undefined || valueB === undefined) return false;
+    for (const [{ layer, keyIndex }, value] of [[a, valueB], [b, valueA]]) {
+      if (value === this.keycodeAt(layer, keyIndex)) this.drafts.delete(draftId(layer, keyIndex));
+      else this.drafts.set(draftId(layer, keyIndex), value);
+    }
+    this.#notify();
+    return true;
+  }
+
   clearDraft(layerIndex, keyIndex) {
     this.drafts.delete(draftId(layerIndex, keyIndex));
     this.#notify();
