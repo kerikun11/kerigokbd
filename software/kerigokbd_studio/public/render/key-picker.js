@@ -4,6 +4,7 @@ import { LAYER_TAP_MAX_LAYERS, isLayerTapKeycode, isEmptyMods, encode, decode } 
 import { keycodeSummary as keycodeText, layerName } from "../keycodes/keycode-format.js";
 import { parseKeycodeExpression } from "../keycodes/keycode-parse.js";
 import { formatKeycodeToken } from "../export/c-source-writer.js";
+import { keycodeDescription } from "../keycodes/keycode-description.js";
 
 // Layer-switching actions are composed on the fly rather than looked up,
 // since they depend on how many layers *this* device reports, not on a
@@ -122,9 +123,14 @@ function renderSelectionSummary({ selection }, { onRevertKey }) {
   const text = document.createElement("p");
   text.className = "key-picker-summary-text";
   const position = `${layerName(selection.layer)} / row ${selection.row}, col ${selection.col}`;
+  // Each value followed by what it actually does, e.g. "CIRC（「^」(キャレット)）".
+  const withDescription = (value) => {
+    const description = keycodeDescription(value);
+    return description ? `${keycodeText(value)}（${description}）` : keycodeText(value);
+  };
   text.textContent = selection.draftValue === undefined
-    ? `${position}：${keycodeText(selection.liveValue)}`
-    : `${position}：${keycodeText(selection.liveValue)} → ${keycodeText(selection.draftValue)}（未書き込み）`;
+    ? `${position}：${withDescription(selection.liveValue)}`
+    : `${position}：${withDescription(selection.liveValue)} → ${withDescription(selection.draftValue)}（未書き込み）`;
   summary.append(text);
   if (selection.draftValue !== undefined) {
     const revert = document.createElement("button");

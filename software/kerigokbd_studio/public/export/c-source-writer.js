@@ -9,10 +9,9 @@
 // what the real keymap.c actually uses. For anything else, the output is
 // functionally equivalent but not always byte-for-byte identical in style:
 // mod combos are emitted as nested C(S(...)) calls rather than QMK's LCS()-
-// style shorthands, and GUI mod-taps not covered by a KG_* alias are
-// emitted as LGUI_T()/RGUI_T() rather than an LWIN_T()/RWIN_T() spelling --
-// both compile to the exact same keycode, so this only affects how an
-// unaliased mod-tap reads.
+// style shorthands. The GUI modifier is spelled WIN (RWIN(), LWIN_T(),
+// RWIN_T()) like kerigokbd's own keymap.c, not QMK's GUI names -- both
+// compile to the exact same keycode.
 
 import { decode } from "../keycodes/keycode-codec.js";
 import { canonicalEntryForValue, layerAt, macroAliasForValue } from "../keycodes/keycode-registry.js";
@@ -34,9 +33,9 @@ function formatModWrap(mods, innerSymbol, { rightFns, leftFns }) {
 }
 
 const LEFT_MOD_FNS = { ctrl: "C", shift: "S", alt: "A", gui: "G" };
-const RIGHT_MOD_FNS = { ctrl: "RCTL", shift: "RSFT", alt: "RALT", gui: "RGUI" };
-const LEFT_MOD_TAP_FNS = { ctrl: "LCTL_T", shift: "LSFT_T", alt: "LALT_T", gui: "LGUI_T" };
-const RIGHT_MOD_TAP_FNS = { ctrl: "RCTL_T", shift: "RSFT_T", alt: "RALT_T", gui: "RGUI_T" };
+const RIGHT_MOD_FNS = { ctrl: "RCTL", shift: "RSFT", alt: "RALT", gui: "RWIN" };
+const LEFT_MOD_TAP_FNS = { ctrl: "LCTL_T", shift: "LSFT_T", alt: "LALT_T", gui: "LWIN_T" };
+const RIGHT_MOD_TAP_FNS = { ctrl: "RCTL_T", shift: "RSFT_T", alt: "RALT_T", gui: "RWIN_T" };
 
 function layerSymbol(layerIndex) {
   return layerAt(layerIndex)?.symbol ?? `/* layer ${layerIndex} */`;

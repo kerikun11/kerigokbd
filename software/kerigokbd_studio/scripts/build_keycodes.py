@@ -397,6 +397,12 @@ def parse_layer_descriptions(header_text: str) -> list[str]:
 
 
 def label_for(symbol: str, entry: dict[str, object] | None) -> str:
+    # QMK calls the Windows key "GUI" ("Left GUI"); this editor says Win
+    # everywhere, like kerigokbd's keymap.c (KC_LWIN).
+    return _label_for(symbol, entry).replace("GUI", "Win")
+
+
+def _label_for(symbol: str, entry: dict[str, object] | None) -> str:
     if entry is not None:
         label = entry.get("label")
         if label:
