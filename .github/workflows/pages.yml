@@ -31,6 +31,9 @@ jobs:
           fetch-depth: 0
           submodules: true
 
+      - name: Install Python dependencies
+        run: pip3 install hjson # build_keycodes.py reads QMK's hjson keycode files
+
       - name: Generate keymap data
         run: |
           python3 software/kerigokbd_studio/scripts/build_layout.py
