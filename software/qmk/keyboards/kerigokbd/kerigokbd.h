@@ -24,7 +24,7 @@ enum kerigokbd_layers {
 #define KG_NUM LT(KGL_NUM, JP_MHEN)
 #define KG_ESC LT(KGL_EXT, KC_ESC)
 
-#define KG_SPC LSFT_T(KC_SPC)
+#define KG_SPC KC_SPC // LSFT_T(KC_SPC)
 #define KG_FUN LT(KGL_FUN, JP_HENK)
 #define KG_RWIN KC_RWIN
 #define KG_RALT KC_RALT
