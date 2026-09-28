@@ -18,8 +18,15 @@
         "extrakey": true,
         "mousekey": true,
         "nkro": true,
-        "rgb_matrix": true,
-        "encoder": true
+        "layer_lock": true,
+        "encoder": true,
+        "rgb_matrix": true
+    },
+    "build": {
+        "debounce_type": "sym_eager_pk"
+    },
+    "tapping": {
+        "hold_on_other_key_press": true
     },
     "host_language": "japanese",
     "dynamic_keymap": {
@@ -40,7 +47,6 @@
         ]
     },
     "bootmagic": {
-        "enabled": true,
         "matrix": [ 0, 1 ]
     },
     "split": {

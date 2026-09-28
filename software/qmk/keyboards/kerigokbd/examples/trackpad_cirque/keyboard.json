@@ -15,8 +15,15 @@
         "console": true,
         "extrakey": true,
         "mousekey": true,
-        "rgb_matrix": true,
-        "pointing_device": true
+        "layer_lock": true,
+        "pointing_device": true,
+        "rgb_matrix": true
+    },
+    "build": {
+        "debounce_type": "sym_eager_pk"
+    },
+    "tapping": {
+        "hold_on_other_key_press": true
     },
     "matrix_pins": {
         "direct": [ [ "GP1", "GP2", "GP3", "GP4", "GP5" ] ]

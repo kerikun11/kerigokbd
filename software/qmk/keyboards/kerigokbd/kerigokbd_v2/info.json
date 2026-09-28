@@ -12,13 +12,20 @@
     },
     "features": {
         "bootmagic": true,
-        "command": true,
-        "console": true,
-        "mousekey": true,
+        "command": false,
+        "console": false,
         "extrakey": true,
+        "mousekey": true,
+        "nkro": true,
+        "layer_lock": true,
         "pointing_device": true,
-        "rgb_matrix": true,
-        "nkro": true
+        "rgb_matrix": true
+    },
+    "build": {
+        "debounce_type": "sym_eager_pk"
+    },
+    "tapping": {
+        "hold_on_other_key_press": true
     },
     "host_language": "japanese",
     "dynamic_keymap": {
@@ -33,7 +40,6 @@
         ]
     },
     "bootmagic": {
-        "enabled": true,
         "matrix": [ 0, 1 ]
     },
     "split": {
