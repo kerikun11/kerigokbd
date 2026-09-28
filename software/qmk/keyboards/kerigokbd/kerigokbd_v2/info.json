@@ -8,7 +8,7 @@
     "bootloader_instructions": "Turn the power on with pressing Q or P.",
     "usb": {
         "vid": "0x1209",
-        "pid": "0xE501"
+        "pid": "0xE502"
     },
     "features": {
         "bootmagic": true,

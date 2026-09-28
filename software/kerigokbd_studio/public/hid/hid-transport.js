@@ -5,8 +5,11 @@
 
 import { RAW_REPORT_SIZE } from "./via-protocol.js";
 
-// KERIgoKBD's USB VID/PID (software/qmk/keyboards/kerigokbd/*/info.json).
-export const KERIGOKBD_USB_FILTER = { vendorId: 0x1209, productId: 0xe501 };
+// KERIgoKBD's USB VID/PIDs (software/qmk/keyboards/kerigokbd/*/info.json).
+export const KERIGOKBD_USB_FILTERS = [
+  { vendorId: 0x1209, productId: 0xe501 }, // KERIgoKBD v1
+  { vendorId: 0x1209, productId: 0xe502 }, // KERIgoKBD v2
+];
 // QMK's raw HID usage page/id (tmk_core/protocol/usb_descriptor.h), shared
 // by VIA and this editor -- both talk to the same RAW_ENABLE interface.
 const VIA_USAGE_PAGE = 0xff60;
@@ -39,7 +42,7 @@ export class HidTransport extends EventTarget {
   async requestAndOpen() {
     if (!HidTransport.isSupported()) throw new HidUnsupportedError();
     const [device] = await navigator.hid.requestDevice({
-      filters: [{ ...KERIGOKBD_USB_FILTER, usagePage: VIA_USAGE_PAGE, usage: VIA_USAGE }],
+      filters: KERIGOKBD_USB_FILTERS.map((filter) => ({ ...filter, usagePage: VIA_USAGE_PAGE, usage: VIA_USAGE })),
     });
     if (!device) throw new Error("No device was selected.");
     await this.#open(device);
@@ -50,8 +53,9 @@ export class HidTransport extends EventTarget {
     if (!HidTransport.isSupported()) throw new HidUnsupportedError();
     const devices = await navigator.hid.getDevices();
     const device = devices.find(
-      (candidate) => candidate.vendorId === KERIGOKBD_USB_FILTER.vendorId
-        && candidate.productId === KERIGOKBD_USB_FILTER.productId
+      (candidate) => KERIGOKBD_USB_FILTERS.some(
+        (filter) => candidate.vendorId === filter.vendorId && candidate.productId === filter.productId,
+      )
         && candidate.collections.some((collection) => collection.usagePage === VIA_USAGE_PAGE && collection.usage === VIA_USAGE),
     );
     if (!device) return false;
