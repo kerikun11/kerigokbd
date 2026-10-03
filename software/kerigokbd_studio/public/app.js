@@ -10,16 +10,15 @@ import { renderKeyPicker, renderKeyPickerNotice } from "./render/key-picker.js";
 import { renderDraftBar } from "./render/draft-bar.js";
 import { renderDeviceActions, renderEditActions, renderExportDialog, renderConfirmDialog } from "./render/toolbar.js";
 import { renderModeAction } from "./render/mode-action.js";
-import { renderCheatSheet } from "./render/cheat-sheet.js";
-import { renderLayerToggles } from "./render/layer-toggles.js";
+import { renderCheatSheetPanel } from "./render/cheat-sheet-panel.js";
 import { renderPngExportControls } from "./render/png-export-controls.js";
-import { formatKeymapCSource } from "./export/c-source-writer.js";
-import { renderElementToCanvas, canvasToPngBlob, downloadBlob, copyBlobToClipboard } from "./export/png-export.js";
-import { layerIndexBySymbol } from "./keycodes/keycode-registry.js";
-import { decode, holdLayerOf, withHoldLayer, wrapModsOf, withMods, isEmptyMods, NO_MODS } from "./keycodes/keycode-codec.js";
+import { formatKeymapCSource, formatKeycodeToken } from "./export/c-source-writer.js";
+import { downloadBlob, copyBlobToClipboard } from "./export/png-export.js";
+import { renderCheatSheetPng } from "./export/cheat-sheet-png.js";
+import { withHoldLayer, withMods, NO_MODS } from "./keycodes/keycode-codec.js";
 import { momentaryLayer } from "./keycodes/keycode-values.js";
-import { formatKeycodeToken } from "./export/c-source-writer.js";
 import { keycodeSummary, layerName } from "./keycodes/keycode-format.js";
+import { NO_HOLD, pickerWrapOf, isSettingUpHold } from "./state/picker-wrap.js";
 
 const requiredElement = (selector) => {
   const element = document.querySelector(selector);
@@ -72,25 +71,11 @@ let draftStatus = "";
 let draftListOpen = false;
 // While choosing a swap partner (交換): the key to swap, as { layer, keyIndex }.
 let swapSource = null;
-// The picker's 長押し action ({type: "none" | "lt" | "mt" | "mo", layer, mods}) and
-// 同時押し modifiers, re-derived from the selected key's value whenever a
-// different key is selected. The two are mutually exclusive: QMK can't
-// encode LT()/MT() and a mods wrap in one keycode.
-const NO_HOLD = Object.freeze({ type: "none", layer: null, mods: NO_MODS });
+// The picker's 長押し / 同時押し state (see state/picker-wrap.js),
+// re-derived from the selected key's value whenever a different key is
+// selected.
 let pickerHold = NO_HOLD;
 let pickerWithMods = { ...NO_MODS };
-
-/** The picker's 長押し / 同時押し state that describes an existing keycode. */
-function pickerWrapOf(value) {
-  if (value === undefined) return { hold: NO_HOLD, withMods: { ...NO_MODS } };
-  const layer = holdLayerOf(value);
-  if (layer !== null) return { hold: { ...NO_HOLD, type: "lt", layer }, withMods: { ...NO_MODS } };
-  const descriptor = decode(value);
-  if (descriptor.kind === "momentaryLayer") return { hold: { ...NO_HOLD, type: "mo", layer: descriptor.layer }, withMods: { ...NO_MODS } };
-  const { mods, mode } = wrapModsOf(value);
-  if (mode === "tap") return { hold: { ...NO_HOLD, type: "mt", mods }, withMods: { ...NO_MODS } };
-  return { hold: NO_HOLD, withMods: mods };
-}
 // The Any tab's expression text, seeded from the selected key's value (and
 // re-seeded when that value changes, unless the person has edited the text).
 let pickerAnyText = "";
@@ -98,21 +83,6 @@ let pickerAnySeed = "";
 let pickerSelectionId = null;
 // Per-layer show/hide for the cheat sheet.
 const cheatSheetVisibility = { nums: true, func: true, extra: true, mouse: true };
-
-/**
- * One layer's keycode, per key index, preferring the live value read from
- * the device but falling back to the firmware-flashed default so the cheat
- * sheet is still useful before a device is ever connected. Returns
- * undefined for a layer this keyboard/layout doesn't have at all.
- */
-function cheatSheetLayerKeycodes(layerSymbol) {
-  const layerIndex = layerIndexBySymbol(layerSymbol);
-  if (layerIndex < 0 || layerIndex >= store.layout.layerCount) return undefined;
-  const live = store.layers[layerIndex];
-  const defaults = store.defaults?.layers?.[layerIndex];
-  if (!live && !defaults) return undefined;
-  return store.layout.keys.map((_, keyIndex) => live?.[keyIndex] ?? defaults?.[keyIndex]);
-}
 
 function populateKeyboardSelect() {
   elements.keyboardSelect.replaceChildren(
@@ -239,7 +209,7 @@ async function reloadFromDevice() {
   await runDeviceAction(() => syncEngine.reloadAllLayers(), "実機から再読込しています…");
 }
 
-/** Stages a picked value for the selected key -- nothing is written until 実機に書き込む. */
+/** 交換: remembers the selected key, then waits for its partner to be clicked. */
 function startSwap() {
   swapSource = { layer: store.activeLayer, keyIndex: store.selectedKeyIndex };
   store.setSelectedKeyIndex(null);
@@ -267,6 +237,7 @@ function clickKey(keyIndex) {
   store.setSelectedKeyIndex(keyIndex);
 }
 
+/** Stages a value for the selected key -- nothing is written until 実機に書き込む. */
 function stageSelectedKey(value) {
   draftStatus = "";
   store.setDraft(store.activeLayer, store.selectedKeyIndex, value);
@@ -279,9 +250,7 @@ function stageSelectedKey(value) {
  * chosen yet), so that choice isn't lost.
  */
 function pickSelectedKey(value) {
-  const settingUp = (pickerHold.type === "lt" && pickerHold.layer === null)
-    || (pickerHold.type === "mt" && isEmptyMods(pickerHold.mods));
-  if (!settingUp) ({ hold: pickerHold, withMods: pickerWithMods } = pickerWrapOf(value));
+  if (!isSettingUpHold(pickerHold)) ({ hold: pickerHold, withMods: pickerWithMods } = pickerWrapOf(value));
   stageSelectedKey(value);
 }
 
@@ -343,12 +312,21 @@ function extraLayersNote() {
   return `実機のレイヤー${written === last ? written : `${written}〜${last}`}は変更されません。`;
 }
 
-async function updateToLatestLayout() {
-  if (deviceBusy || store.connectionState !== "connected") return;
+/**
+ * Whether a whole-device action (reload, reset, update) may start now:
+ * connected, nothing else running, and no single-key write still in flight.
+ */
+function deviceActionAllowed() {
+  if (deviceBusy || store.connectionState !== "connected") return false;
   if (store.pendingKeys.size) {
     elements.deviceActionStatus.textContent = "キーの書き込み完了後に再試行してください。";
-    return;
+    return false;
   }
+  return true;
+}
+
+async function updateToLatestLayout() {
+  if (!deviceActionAllowed()) return;
   deviceBusy = true;
   render();
   const progress = (message) => { elements.deviceActionStatus.textContent = message; };
@@ -393,11 +371,7 @@ async function resetToFirmwareDefaults() {
 const draftsNote = () => (store.drafts.size ? `（未書き込みの変更${store.drafts.size}件を含む）` : "");
 
 async function runDeviceAction(action, message) {
-  if (deviceBusy || store.connectionState !== "connected") return;
-  if (store.pendingKeys.size) {
-    elements.deviceActionStatus.textContent = "キーの書き込み完了後に再試行してください。";
-    return;
-  }
+  if (!deviceActionAllowed()) return;
   deviceBusy = true;
   render();
   elements.deviceActionStatus.textContent = message;
@@ -413,72 +387,23 @@ async function runDeviceAction(action, message) {
 }
 
 /**
- * Builds the offscreen "poster" version of the cheat sheet for PNG export:
- * the same .editor-card styling (padding, rounded corners, shadow) the page
- * itself uses, plus the keyboard name/layout version header stripped out of
- * the on-page layout -- so the exported image is self-describing rather
- * than a bare key grid with no keyboard/version label.
- */
-function buildPngExportCard() {
-  const card = document.createElement("div");
-  card.className = "editor-card png-export-card";
-  const paneStyle = getComputedStyle(elements.cheatSheetContainer.closest(".editor-card"));
-  const horizontalPadding = parseFloat(paneStyle.paddingLeft) + parseFloat(paneStyle.paddingRight);
-  card.style.width = `${elements.cheatSheetContainer.getBoundingClientRect().width + horizontalPadding}px`;
-
-  const heading = document.createElement("div");
-  heading.className = "section-heading";
-  const title = document.createElement("h1");
-  title.textContent = elements.keyboardName.textContent;
-  const version = document.createElement("p");
-  version.className = "layout-version";
-  version.textContent = elements.layoutVersion.textContent;
-  heading.append(title, version);
-
-  const content = elements.cheatSheetContainer.cloneNode(true);
-  content.hidden = false;
-  content.removeAttribute("id");
-  content.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
-
-  card.append(heading, content);
-  return card;
-}
-
-/**
  * Rasterizes the current cheat sheet to PNG and hands the resulting blob to
  * `perform` (copy to clipboard, or trigger a download), reporting progress
  * and errors through the status line next to the PNG buttons.
  */
 async function runPngExport({ perform, successMessage, errorMessage }) {
   elements.pngExportStatus.textContent = "PNGを生成しています…";
-  // A page-background "stage" padded around the card, just enough for the
-  // card's own drop shadow to fall off into instead of being clipped
-  // exactly at the card's edge (which would read as an odd flat line) --
-  // not a wide frame of empty space around the actual content.
-  // The off-screen positioning goes on a separate outer wrapper, never on
-  // the stage itself: renderElementToCanvas clones whatever element it's
-  // given verbatim, and a cloned `position: fixed; left: -9999px` would
-  // carry its offset into the exported image too, rendering blank.
-  const stage = document.createElement("div");
-  stage.style.padding = "16px";
-  stage.style.background = "#f3f0e8";
-  stage.append(buildPngExportCard());
-  const offscreen = document.createElement("div");
-  offscreen.style.position = "fixed";
-  offscreen.style.top = "0";
-  offscreen.style.left = "-9999px";
-  offscreen.append(stage);
-  document.body.append(offscreen);
   try {
-    const canvas = await renderElementToCanvas(stage, { background: "#f3f0e8" });
-    const blob = await canvasToPngBlob(canvas);
+    const blob = await renderCheatSheetPng({
+      container: elements.cheatSheetContainer,
+      title: elements.keyboardName.textContent,
+      layoutVersion: elements.layoutVersion.textContent,
+    });
     await perform(blob);
     elements.pngExportStatus.textContent = successMessage;
   } catch (error) {
     console.error(error);
     elements.pngExportStatus.textContent = errorMessage;
-  } finally {
-    offscreen.remove();
   }
 }
 
@@ -506,43 +431,14 @@ function render() {
   elements.editView.hidden = viewMode !== "edit";
   elements.cheatSheetContainer.hidden = viewMode !== "cheatSheet";
 
-  renderLayerToggles(
-    elements.layerToggles,
-    { visibility: cheatSheetVisibility, showMouseToggle: Boolean(store.layout.trackpad) },
-    (key, checked) => {
-      cheatSheetVisibility[key] = checked;
-      render();
-    },
-  );
-  elements.cheatLegendNumsItem.hidden = !cheatSheetVisibility.nums;
-  elements.cheatLegendFuncItem.hidden = !cheatSheetVisibility.func;
-  elements.cheatLegendExtraItem.hidden = !cheatSheetVisibility.extra;
-  elements.cheatLegendMouseItem.hidden = !store.layout.trackpad || !cheatSheetVisibility.mouse;
-  // Mouse click/move keycodes (MS_BTN*, KG_MSL/D/U/R, KG_MWLL/D/U/R) live on
-  // the Fn layer on every keyboard, trackpad or not -- only the Trackpad
-  // group's scroll/zoom modes are specific to the trackpad-only Auto Mouse
-  // layer, so that's the sole group gated on store.layout.trackpad.
-  elements.iconLegendMouseGroup.hidden = false;
-  elements.iconLegendTrackpadGroup.hidden = !store.layout.trackpad;
-  // The sample-key legend image's own corner labels follow the exact same
-  // visibility rules as the text legend items above.
-  elements.cheatGuideNums.hidden = elements.cheatLegendNumsItem.hidden;
-  elements.cheatGuideFunc.hidden = elements.cheatLegendFuncItem.hidden;
-  elements.cheatGuideExtra.hidden = elements.cheatLegendExtraItem.hidden;
-  elements.cheatGuideMouse.hidden = elements.cheatLegendMouseItem.hidden;
-
-  const layerCount = Math.min(store.layerCount ?? 0, store.layout.layerCount);
-
-  if (viewMode === "cheatSheet") {
-    renderCheatSheet(elements.cheatSheetView, {
-      layout: store.layout,
-      main: cheatSheetLayerKeycodes("KGL_MAIN"),
-      nums: cheatSheetVisibility.nums ? cheatSheetLayerKeycodes("KGL_NUM") : undefined,
-      func: cheatSheetVisibility.func ? cheatSheetLayerKeycodes("KGL_FUN") : undefined,
-      extra: cheatSheetVisibility.extra ? cheatSheetLayerKeycodes("KGL_EXT") : undefined,
-      mouse: store.layout.trackpad && cheatSheetVisibility.mouse ? cheatSheetLayerKeycodes("KGL_AM") : undefined,
-    });
-  }
+  renderCheatSheetPanel(elements, {
+    store,
+    visibility: cheatSheetVisibility,
+    visible: viewMode === "cheatSheet",
+  }, (key, checked) => {
+    cheatSheetVisibility[key] = checked;
+    render();
+  });
 
   renderPngExportControls(elements.pngExportButtons, {
     onCopy: () => runPngExport({
@@ -557,6 +453,7 @@ function render() {
     }),
   });
 
+  const layerCount = Math.min(store.layerCount ?? 0, store.layout.layerCount);
   renderLayerTabs(elements.layerTabs, {
     layerCount,
     activeLayer: store.activeLayer,

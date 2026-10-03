@@ -15,7 +15,7 @@ import { keycodeDescription } from "../keycodes/keycode-description.js";
 // with the key (LALT(KC_PSCR)); any basic key from the category grids then
 // gets wrapped in whichever is active. The Any tab takes a raw value or a
 // keymap.c-style expression for everything else.
-// `kind` matches the keyboard view's kind-* colors (see editor.css). MO is
+// `kind` matches the keyboard view's kind-* colors (see edit.css). MO is
 // assigned from the 長押し row instead.
 const LAYER_ACTIONS = [
   { name: "TO", description: "切り替え", compose: toLayer, kind: "to" },

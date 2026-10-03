@@ -3,7 +3,7 @@ import { decode } from "../keycodes/keycode-codec.js";
 import { canonicalEntryForValue } from "../keycodes/keycode-registry.js";
 
 // Composed keycodes get a kind-* class so LT/MO/TO/MT/mods read apart at a
-// glance; colors and the matching legend live in editor.css / index.html.
+// glance; colors and the matching legend live in edit.css / index.html.
 const KIND_CLASSES = {
   layerTap: "kind-layer-tap",
   momentaryLayer: "kind-momentary",
@@ -58,7 +58,7 @@ export function renderKeyboardView(container, { layout, keycodes, selectedKeyInd
       const { main, sub, empty, transparent } = describeKeycode(value);
       const mainLabel = document.createElement("span");
       mainLabel.className = "editor-key-main";
-      // The TO box (editor.css) already says "switch to", so drop the
+      // The TO box (edit.css) already says "switch to", so drop the
       // shared label's leading arrow here (the cheat sheet keeps it).
       mainLabel.textContent = decode(value).kind === "toLayer" ? main.replace(/^→/, "") : main;
       button.append(mainLabel);

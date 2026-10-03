@@ -51,7 +51,7 @@ function appendOverlay(cell, className, text, { extraClass, sizeByLength = true 
     span.classList.add("has-icon");
     span.append(createIcon(icon.icon));
     if (icon.arrow) {
-      // A plain element, not a bare text node, so editor.css can pull it
+      // A plain element, not a bare text node, so cheat-sheet.css can pull it
       // right up against the icon (a raw text node can't be targeted).
       const arrow = document.createElement("span");
       arrow.className = "icon-arrow";
@@ -109,13 +109,13 @@ function createTrackpadElement(trackpad, unitX, unitY, { showTrackpadLayer }) {
 
 /**
  * Renders the whole keyboard read-only, with every relevant layer's action
- * on each key shown at once: Main near the top, Extra vertically centered
+ * on each key shown at once: Main near the top, Extra just above center
  * (its own "Escape reference" slot), Num bottom-left, Fn bottom-right,
- * Trackpad bottom-center -- only on keyboards with a trackpad -- and Hold
- * along the very bottom edge with a divider line above it, at a fixed
- * position regardless of what else is on the key (editor.css shifts
- * Num/Fn/Trackpad up out of its way via the .has-hold class rather than
- * this module tracking layout). A layer that's toggled off (passed as
+ * Trackpad centered one row above them -- only on keyboards with a
+ * trackpad -- and Hold along the very bottom edge with a divider line above
+ * it, at a fixed position regardless of what else is on the key (cheat-sheet.css
+ * shifts the other bottom rows up out of its way via the .has-hold class
+ * rather than this module tracking layout). A layer that's toggled off (passed as
  * undefined) also drops the Hold labels that name it.
  */
 export function renderCheatSheet(container, { layout, main, nums, func, extra, mouse }) {
@@ -158,7 +158,7 @@ export function renderCheatSheet(container, { layout, main, nums, func, extra, m
     appendOverlay(cell, "cheat-key-main-shift", described.mainShift);
     appendOverlay(cell, "cheat-key-extra", described.extra);
     const hold = described.holdColor && !shownLayers[described.holdColor] ? null : described.hold;
-    if (hold) cell.classList.add("has-hold"); // shifts Num/Fn/Trackpad up, see editor.css
+    if (hold) cell.classList.add("has-hold"); // shifts Num/Fn/Trackpad up, see cheat-sheet.css
     appendOverlay(cell, "cheat-key-nums", described.nums);
     appendOverlay(cell, "cheat-key-func", described.func);
     appendOverlay(cell, "cheat-key-mouse", described.mouse);

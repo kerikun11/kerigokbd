@@ -1,0 +1,366 @@
+/* Cheat-sheet (早見表) mode: the read-only keyboard and its legend. */
+
+.cheat-sheet-view {
+  position: relative;
+  width: 100%;
+  margin-bottom: 16px;
+}
+
+.cheat-key {
+  /* Shared vertical rhythm for the bottom label rows (see below). */
+  --hold-bottom: 2px;
+  --hold-line: 13px;
+  --label-row: 13px;
+  --label-bottom: 4px;
+  position: absolute;
+  background: var(--key);
+  border: 1px solid var(--key-border);
+  border-radius: 9px;
+  box-shadow: var(--key-shadow);
+  color: var(--ink);
+  overflow: hidden;
+  transform: rotate(var(--rotation, 0deg));
+  transform-origin: top left;
+}
+.cheat-key.is-empty { color: var(--muted); }
+.cheat-key.is-transparent { color: var(--key-border); }
+
+/* Absolute corners: Main near the top, Extra just above center (its own
+   "Escape reference" slot), then up from the bottom edge in fixed rows:
+     Hold      -- the very bottom, with a divider above it (only if present)
+     Num / Fn  -- --label-bottom, left and right
+     Trackpad  -- one --label-row above Num/Fn, centered
+   Hold's position never moves -- when it's present, .has-hold raises
+   --label-bottom past it and every row above follows, instead of Hold
+   moving down to meet them.
+
+   One font-size scale throughout, with a single ".is-long" step-down (set
+   in cheat-sheet.js whenever a label is 2+ characters) so a lone digit or
+   symbol reads large while a word like "Reserved" still fits -- rather
+   than every corner having its own unrelated size. */
+.cheat-key-main {
+  position: absolute;
+  top: 4px;
+  left: 3px;
+  right: 3px;
+  overflow: hidden;
+  font-size: 16px;
+  font-weight: 700;
+  /* 1.1 was too tight and clipped descenders (e.g. "PgUp"'s g) against this
+     box's own overflow:hidden -- 1.3 leaves enough room to draw them fully. */
+  line-height: 1.3;
+  text-align: center;
+  white-space: nowrap;
+}
+.cheat-key-main.is-long { font-size: 13px; }
+/* Keep the two-line shortcut above the centered Extra-layer label. */
+.cheat-key-main.is-cad { font-size: 11px; line-height: 1.15; }
+/* Kanji/kana glyphs read larger than Latin text at the same font-size, so
+   Japanese labels (半角/全角, 変換, 無変換) step down an extra notch past
+   .is-long to stay visually balanced against the Latin labels around them. */
+.cheat-key-main.is-japanese { font-size: 11px; }
+.cheat-key-main-shift {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  opacity: .55;
+}
+.cheat-key-extra,
+.cheat-key-nums,
+.cheat-key-func,
+.cheat-key-mouse {
+  position: absolute;
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.cheat-key-extra.is-long,
+.cheat-key-nums.is-long,
+.cheat-key-func.is-long,
+.cheat-key-mouse.is-long { font-size: 10px; }
+.cheat-key-extra {
+  /* A little above center, leaving room for the raised Mouse row below. */
+  top: 45%;
+  left: 3px;
+  right: 3px;
+  transform: translateY(-50%);
+  color: var(--escape);
+  text-align: center;
+}
+.cheat-key-nums,
+.cheat-key-func {
+  bottom: var(--label-bottom);
+  max-width: 44%;
+}
+.cheat-key-nums { left: 4px; color: var(--nums); text-align: left; }
+.cheat-key-func { right: 4px; color: var(--func); text-align: right; }
+/* With the opposite corner empty, a long label (e.g. "無変換") can take the
+   whole row instead of being cut to "無…" at 44%. */
+.cheat-key:not(:has(.cheat-key-func)) .cheat-key-nums,
+.cheat-key:not(:has(.cheat-key-nums)) .cheat-key-func {
+  max-width: calc(100% - 8px);
+}
+.cheat-key-mouse {
+  left: 50%;
+  /* Its own row above Num/Fn, so a long Num or Fn label (e.g. "無変換")
+     can't run into it. */
+  bottom: calc(var(--label-bottom) + var(--label-row));
+  transform: translateX(-50%);
+  max-width: 28%;
+  color: var(--auto-mouse);
+  text-align: center;
+}
+/* Room for the fixed Hold row (and its 1px divider) along the very bottom. */
+.cheat-key.has-hold {
+  --label-bottom: calc(var(--hold-bottom) + var(--hold-line) + 1px);
+}
+/* Hold is always this one size, on every key and the trackpad alike --
+   never shrunk by .is-long, since "Reserved"/"Trackpad" already read fine
+   at this size and shrinking only Hold out of step with everything else
+   would undo the "one shared scale" this block is built around. */
+.cheat-key-hold,
+.cheat-trackpad-hold {
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+}
+.cheat-key-hold {
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  bottom: var(--hold-bottom);
+  overflow: hidden;
+  border-top: 1px solid var(--rule);
+  color: var(--hold);
+  line-height: var(--hold-line);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+/* A Hold that jumps to Num/Fn/Extra is colored to match that layer. */
+.cheat-key-hold.hold-nums { color: var(--nums); }
+.cheat-key-hold.hold-func { color: var(--func); }
+.cheat-key-hold.hold-extra { color: var(--escape); }
+
+/* The trackpad circle (kerigokbd_v2 only), replacing the two matrix
+   positions it physically covers. */
+.cheat-trackpad {
+  position: absolute;
+  aspect-ratio: 1;
+  border: 1px solid var(--key-border);
+  border-bottom-width: 3px;
+  border-radius: 50%;
+  background: var(--key);
+  box-shadow: var(--key-shadow);
+  color: var(--muted);
+  overflow: hidden;
+}
+/* The left-click icon just sits at the circle's own center -- no need to
+   share a box with the "Trackpad" label anymore (that's its own
+   top-aligned element above). */
+.cheat-trackpad-main {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  /* Base for its icon's 1.15em (see .operation-icon) -- same rendered
+     size as every other key's icon, not the oversized default it inherits
+     from the surrounding page otherwise. */
+  font-size: 11px;
+}
+.cheat-trackpad-main .operation-icon {
+  color: var(--auto-mouse);
+}
+/* Top-aligned, matching every ordinary key's Main label sitting at the top
+   of its card. */
+.cheat-trackpad-label {
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 10%;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .03em;
+}
+.cheat-trackpad-hold {
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  bottom: 6%;
+  border-top: 1px solid var(--rule);
+  color: var(--auto-mouse);
+  line-height: 13px;
+}
+
+.cheat-key-nums.has-icon,
+.cheat-key-func.has-icon,
+.cheat-key-extra.has-icon,
+.cheat-key-mouse.has-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+}
+.cheat-key-func.has-icon { justify-content: flex-end; }
+.cheat-key-extra.has-icon,
+.cheat-key-mouse.has-icon { justify-content: center; }
+.cheat-key .operation-icon-emphasized {
+  width: 1.35em;
+  height: 1.35em;
+}
+
+.legend {
+  margin-top: 4px;
+  padding-top: 14px;
+  border-top: 1px solid var(--rule);
+}
+/* Each category has one vertical list; wrap whole groups on narrow screens. */
+.legend-groups {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 10px 14px;
+}
+.legend-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.legend-group[hidden] {
+  display: none;
+}
+.legend-group-title {
+  margin: 0;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+/* The キー group's own text list sits beside the sample key image rather
+   than stacked underneath it -- the image is tall and narrow, so a row
+   puts its spare vertical space to use instead of pushing the text down. */
+.legend-key-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+/* A small sample key card showing where each overlay lands on a real key
+   -- Main top-center, Extra/Trackpad stacked centered below it, Num/Fn side
+   by side at the bottom, Hold along the very bottom edge -- the same corner
+   layout as the real cheat-key cards, just a fixed size since there's no
+   keyboard grid to size it against here. */
+.legend-key-guide {
+  position: relative;
+  flex: 0 0 auto;
+  width: 70px;
+  height: 74px;
+  border: 1px solid var(--key-border);
+  border-bottom-width: 3px;
+  border-radius: 9px;
+  background: var(--key);
+  box-shadow: var(--key-shadow);
+  color: var(--ink);
+  font-weight: 750;
+}
+.legend-key-guide span { position: absolute; display: block; line-height: 1; }
+.guide-main {
+  top: 7px;
+  left: 50%;
+  font-size: 10px;
+  transform: translateX(-50%);
+}
+.guide-extra {
+  top: 19px;
+  left: 50%;
+  color: var(--escape);
+  font-size: 10px;
+  transform: translateX(-50%);
+}
+.guide-mouse {
+  bottom: 31px;
+  left: 50%;
+  color: var(--auto-mouse);
+  font-size: 10px;
+  transform: translateX(-50%);
+}
+.guide-nums,
+.guide-func {
+  bottom: 18px;
+  font-size: 10px;
+  letter-spacing: -.03em;
+}
+.guide-nums { left: 5px; color: var(--nums); }
+.guide-func { right: 5px; color: var(--func); }
+.guide-hold {
+  right: 5px;
+  bottom: 2px;
+  left: 5px;
+  border-top: 1px solid var(--rule);
+  color: var(--hold);
+  font-size: 10px;
+  line-height: 13px !important;
+  text-align: center;
+}
+
+.cheat-sheet-legend {
+  display: grid;
+  align-items: start;
+  grid-template-columns: repeat(2, max-content);
+  gap: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.cheat-legend-column {
+  display: grid;
+  grid-template-columns: max-content max-content;
+  gap: 6px;
+}
+.cheat-legend-main { color: var(--ink); }
+.cheat-legend-hold { color: var(--hold); }
+.cheat-legend-item {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
+  align-items: center;
+  column-gap: 6px;
+}
+.cheat-legend-item[hidden],
+.legend-key-guide span[hidden] { display: none; }
+.cheat-legend-item b { font-size: 11px; font-weight: 700; }
+.cheat-legend-nums { color: var(--nums); }
+.cheat-legend-func { color: var(--func); }
+.cheat-legend-extra { color: var(--escape); }
+.cheat-legend-mouse { color: var(--auto-mouse); }
+
+/* Side-by-side pair of .icon-legend-row lists (used by the マウス group's
+   click/move split) rather than one tall stacked column. */
+.icon-legend-columns {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+.icon-legend-row {
+  display: grid;
+  grid-template-columns: max-content;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.icon-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.icon-legend-item .operation-icon {
+  width: 1.3em;
+  height: 1.3em;
+  color: var(--ink);
+}

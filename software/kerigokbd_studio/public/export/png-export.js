@@ -5,21 +5,25 @@
 // drawing API would mean re-deriving every position, font size and icon
 // this app already computed once for the live cheat sheet. Instead, this
 // clones the already-rendered element into a standalone SVG (via
-// <foreignObject>, with the stylesheet and icon defs inlined so it doesn't
+// <foreignObject>, with the page's stylesheets and icon defs inlined so it doesn't
 // depend on the surrounding page) and draws *that* onto a canvas -- the
 // same DOM/CSS the browser already rendered on screen, captured as-is.
 
-const STYLESHEET_HREF = "editor.css";
 const SVG_NS = "http://www.w3.org/2000/svg";
 const XHTML_NS = "http://www.w3.org/1999/xhtml";
 
 let cachedCssText = null;
 
+/** Every <link rel="stylesheet"> on the page, concatenated in cascade order. */
 async function loadStylesheetText() {
   if (cachedCssText !== null) return cachedCssText;
-  const response = await fetch(STYLESHEET_HREF);
-  if (!response.ok) throw new Error(`Failed to load ${STYLESHEET_HREF}: ${response.status}`);
-  cachedCssText = await response.text();
+  const hrefs = [...document.querySelectorAll('link[rel="stylesheet"]')].map((link) => link.getAttribute("href"));
+  const texts = await Promise.all(hrefs.map(async (href) => {
+    const response = await fetch(href);
+    if (!response.ok) throw new Error(`Failed to load ${href}: ${response.status}`);
+    return response.text();
+  }));
+  cachedCssText = texts.join("\n");
   return cachedCssText;
 }
 

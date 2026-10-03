@@ -1,0 +1,419 @@
+/* Page-wide tokens, layout, settings pane, buttons, icons, dialogs and footer. */
+
+/* Color/spacing tokens shared by the whole stylesheet below. */
+:root {
+  color-scheme: light;
+  --page: #f3f0e8;
+  --ink: #20231f;
+  --muted: #6d706a;
+  --card: #fbfaf6;
+  --key: #fffefa;
+  --key-border: #bbb9af;
+  --rule: rgb(85 82 70 / 13%);
+  --nums: #d52b82;
+  --func: #168fbd;
+  --auto-mouse: #8754b3;
+  --hold: #278554;
+  --escape: #d49a00;
+  --pending: #d49a00;
+  --changed: #d32f2f; /* edit view: key differs from GitHub latest */
+  --accent: #e35e35;
+  --danger: #c23b3b;
+  --shadow: 0 18px 50px rgb(50 47 36 / 10%);
+  --key-shadow: 0 3px 7px rgb(45 43 34 / 8%);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-width: 1212px;
+  background: var(--page);
+  color: var(--ink);
+  font-family: Inter, "Noto Sans JP", "Hiragino Kaku Gothic ProN", system-ui, sans-serif;
+}
+
+/* Fixed width rather than fluid, so the key layout renders at a consistent,
+   comfortable physical size regardless of window width. */
+main {
+  width: 1180px;
+  margin: 0 auto;
+  padding: 24px 0 28px;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(20px, 2.4vw, 25px);
+  line-height: 1.2;
+  letter-spacing: -.03em;
+}
+
+.editor-card {
+  background: var(--card);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  /* Compensate for the space above and below the visible text glyphs. */
+  padding: 16px 20px 18px;
+}
+
+/* Title and version share one row (version right-aligned via
+   justify-content) instead of stacking onto a second line, so the title
+   pane stays short -- a plain two-line heading pushed the whole card down
+   for no informational gain. */
+.section-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+
+.layout-version {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 650;
+  letter-spacing: .025em;
+  white-space: nowrap;
+}
+
+/* Layout pane (the key layout itself, cheat sheet or editor) comes first
+   and Settings sits below it, full-width -- the screen isn't wide enough
+   to spare a side column for it without shrinking the key layout. */
+.app-panes {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.layout-pane { width: 100%; }
+
+.settings-pane {
+  background: #f5f6f2;
+  padding: 12px 20px 14px;
+}
+
+/* Pane title on the left, the 表示 / 編集 mode switch on the right. */
+.pane-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+.pane-header .pane-title { margin: 0; line-height: 1.2; }
+
+.mode-switch {
+  display: inline-flex;
+  padding: 3px;
+  border: 1px solid var(--key-border);
+  border-radius: 999px;
+  background: var(--key);
+}
+.mode-switch-button {
+  min-width: 72px;
+  padding: 4px 14px;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+}
+.mode-switch-button:not(.is-active):hover { color: var(--ink); }
+.mode-switch-button.is-active { background: var(--ink); color: var(--card); }
+
+/* Purpose-grouped columns: デバイス (shared, always first) followed by the
+   current mode's own groups -- 表示/書き出し for the cheat sheet,
+   書き出し・初期化 for the editor. */
+/* A fixed three-column grid, so デバイス keeps the same position and width
+   in both modes even when the edit mode has fewer groups. */
+.settings-groups {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+
+.settings-group { min-width: 0; }
+.settings-group[hidden] { display: none; }
+
+.settings-group-title {
+  margin: 0 0 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  letter-spacing: .04em;
+}
+
+.settings-group-body {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
+/* Two buttons sharing one row (connect/reload, PNG copy/save, the two
+   destructive overwrites) -- half the height of stacking them. */
+.button-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+}
+.edit-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.button-pair button, .button-slot button, .edit-actions > button { width: 100%; }
+.device-action-status { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.5; overflow-wrap: anywhere; }
+.device-action-status:empty { display: none; }
+
+.pane-title {
+  margin: 0 0 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+
+/* Per-layer show/hide switches, all on one row. */
+.layer-toggles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding: 6px 0;
+}
+.layer-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  cursor: pointer;
+}
+.layer-toggle input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.toggle-track {
+  position: relative;
+  width: 34px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 1px solid var(--key-border);
+  border-radius: 999px;
+  background: var(--key);
+  transition: background .15s ease, border-color .15s ease;
+}
+.toggle-track span {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 1px 3px rgb(32 35 31 / 24%);
+  transition: transform .15s ease;
+}
+.layer-toggle input:checked + .toggle-track span { transform: translateX(14px); }
+.layer-toggle input:focus-visible + .toggle-track {
+  outline: 3px solid color-mix(in srgb, var(--accent), transparent 65%);
+  outline-offset: 2px;
+}
+.toggle-nums { border-color: var(--key-border); }
+.layer-toggle input:checked + .toggle-track.toggle-nums { background: var(--nums); border-color: var(--nums); }
+.layer-toggle input:checked + .toggle-track.toggle-func { background: var(--func); border-color: var(--func); }
+.layer-toggle input:checked + .toggle-track.toggle-extra { background: var(--escape); border-color: var(--escape); }
+.layer-toggle input:checked + .toggle-track.toggle-mouse { background: var(--auto-mouse); border-color: var(--auto-mouse); }
+
+.png-export-status { margin: 0; font-size: 12px; color: var(--muted); }
+.png-export-status:empty { display: none; }
+
+/* Keyboard model and connection status share the first row. */
+.device-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.keyboard-select {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 10px;
+  border: 1px solid var(--key-border);
+  border-radius: 9px;
+  background: var(--key);
+  color: var(--ink);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+}
+.keyboard-select:hover:not(:disabled) { border-color: var(--ink); }
+
+/* Status pill: a colored dot plus the state name. */
+.connection-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  background: var(--key);
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.connection-status::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.connection-status.is-connected { color: var(--hold); }
+.connection-status.is-connecting { color: var(--pending); }
+.connection-status.is-error { color: var(--danger); }
+.connection-info {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.connection-info:empty { display: none; }
+.connection-info.is-warning { color: var(--danger); }
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+button:disabled { cursor: not-allowed; opacity: .5; }
+
+.primary-button, .secondary-button, .danger-button {
+  border-radius: 9px;
+  padding: 6px 12px;
+  border: 1px solid transparent;
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  transition: background .12s ease, border-color .12s ease, color .12s ease;
+}
+.primary-button { background: var(--ink); color: var(--card); }
+.secondary-button { background: var(--key); border-color: var(--key-border); color: var(--ink); }
+.danger-button { background: #fff; border-color: var(--danger); color: var(--danger); }
+.primary-button:hover:not(:disabled) { background: #3b3f39; }
+.secondary-button:hover:not(:disabled) { border-color: var(--ink); }
+.danger-button:hover:not(:disabled) { background: #fdf0f0; }
+button:focus-visible, select:focus-visible, input:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent), transparent 30%);
+  outline-offset: 2px;
+}
+
+/* Arrow characters (⬅⬇⬆➡) and numpad digits carry a lot of built-in
+   left-side bearing in most fonts, so even a 0 flex-gap still reads as a
+   wide gap next to the icon -- pull it in past that padding explicitly. */
+.icon-arrow {
+  margin-left: -3px;
+}
+
+.operation-icon {
+  width: 1.15em;
+  height: 1.15em;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.svg-definitions {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.source-footer {
+  margin-top: 16px;
+  text-align: right;
+  font-size: 13px;
+}
+.source-footer a { color: var(--muted); text-underline-offset: 3px; }
+.source-footer a:hover { color: var(--ink); }
+
+.dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgb(20 20 15 / 45%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  z-index: 10;
+}
+
+.dialog {
+  background: var(--card);
+  border-radius: 14px;
+  box-shadow: var(--shadow);
+  padding: 20px 22px;
+  width: min(720px, 100%);
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.dialog h2 { margin: 0; font-size: 16px; }
+.dialog-note { margin: 0; color: var(--muted); font-size: 12px; }
+/* The Yes/No popups (update-to-latest, reset) don't need the export
+   dialog's wide textarea-sized card. */
+.confirm-dialog { width: min(420px, 100%); }
+.export-dialog-textarea {
+  flex: 1;
+  min-height: 320px;
+  font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+  font-size: 12px;
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--key-border);
+  background: var(--key);
+  color: var(--ink);
+  resize: vertical;
+}
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.footer-divider {
+  height: 0;
+  margin: 10px 0 8px;
+  border: 0;
+  border-top: 1px solid var(--rule);
+}
+.copyright {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: .025em;
+  text-align: left;
+  transform: translateY(1px);
+}
