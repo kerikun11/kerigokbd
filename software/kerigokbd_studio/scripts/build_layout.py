@@ -25,7 +25,7 @@ TRACKPAD_GEOMETRY = {"x": 10.125, "y": 3.15, "width": 1.75, "height": 1.75}
 # keyball44rp's right trackball (config.h: POINTING_DEVICE_RIGHT), over the
 # two right thumb keys VIA hides when "Ball availability" is "Right".
 TRACKBALL_REPLACED_MATRIXES = ((7, 2), (7, 3))
-TRACKBALL_GEOMETRY = {"x": 12.0, "y": 3.05, "width": 2.0, "height": 2.0}
+TRACKBALL_GEOMETRY = {"x": 11.3, "y": 3.05, "width": 2.0, "height": 2.0}
 
 # "layoutOptions" picks a VIA layout option's choice by option index
 # (unlisted options use choice 0, VIA's own default).

@@ -15,6 +15,11 @@ export function rotatePoint(x, y, originX, originY, degrees) {
   };
 }
 
+// The gap between neighboring keys, in key units on both axes -- so a 1u
+// key is drawn square (a percentage of the container's width vs height
+// would differ per axis, since the keyboard is much wider than tall).
+export const KEY_GAP = 0.08;
+
 export function keyPosition(key) {
   return rotatePoint(key.x, key.y, key.rotationX, key.rotationY, key.rotation);
 }

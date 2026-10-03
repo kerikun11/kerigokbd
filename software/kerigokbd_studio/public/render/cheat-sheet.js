@@ -1,4 +1,4 @@
-import { keyPosition, layoutExtent } from "./layout-geometry.js";
+import { KEY_GAP, keyPosition, layoutExtent } from "./layout-geometry.js";
 import { describeCheatSheetKey } from "../keycodes/cheat-sheet-labels.js";
 import { iconForLabel, compoundIconsForLabel } from "../keycodes/cheat-sheet-icons.js";
 import { layerDisplayName } from "../keycodes/keycode-registry.js";
@@ -139,8 +139,8 @@ export function renderCheatSheet(container, { layout, main, nums, func, extra, m
     cell.className = "cheat-key";
     cell.style.left = `${(position.x - originX) * unitX}%`;
     cell.style.top = `${(position.y - originY) * unitY}%`;
-    cell.style.width = `${key.width * unitX - 0.6}%`;
-    cell.style.height = `${key.height * unitY - 0.8}%`;
+    cell.style.width = `${(key.width - KEY_GAP) * unitX}%`;
+    cell.style.height = `${(key.height - KEY_GAP) * unitY}%`;
     if (key.rotation) {
       cell.style.setProperty("--rotation", `${key.rotation}deg`);
       cell.classList.add("is-rotated");

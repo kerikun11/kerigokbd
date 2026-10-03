@@ -23,7 +23,7 @@ function kindClass(value) {
   if (entry) return CUSTOM_MOD_TAP_SYMBOLS.has(entry.symbol) ? KIND_CLASSES.modTap : null;
   return KIND_CLASSES[decode(value).kind] ?? null;
 }
-import { keyPosition, layoutExtent } from "./layout-geometry.js";
+import { KEY_GAP, keyPosition, layoutExtent } from "./layout-geometry.js";
 
 /**
  * Renders the physical keyboard for one layer into `container`, replacing
@@ -44,8 +44,8 @@ export function renderKeyboardView(container, { layout, keycodes, selectedKeyInd
     button.className = "editor-key";
     button.style.left = `${(position.x - originX) * unitX}%`;
     button.style.top = `${(position.y - originY) * unitY}%`;
-    button.style.width = `${key.width * unitX - 0.6}%`;
-    button.style.height = `${key.height * unitY - 0.8}%`;
+    button.style.width = `${(key.width - KEY_GAP) * unitX}%`;
+    button.style.height = `${(key.height - KEY_GAP) * unitY}%`;
     if (key.rotation) {
       button.style.setProperty("--rotation", `${key.rotation}deg`);
       button.classList.add("is-rotated");
