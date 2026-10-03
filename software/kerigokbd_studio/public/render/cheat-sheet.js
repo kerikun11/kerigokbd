@@ -79,7 +79,7 @@ function appendOverlay(cell, className, text, { extraClass, sizeByLength = true 
  * (VIA has no trackpad-specific settings), so this is cheat-sheet-only; the
  * edit view still shows both matrix positions as ordinary keys.
  */
-function createTrackpadElement(trackpad, unitX, unitY) {
+function createTrackpadElement(trackpad, unitX, unitY, { showTrackpadLayer }) {
   const element = document.createElement("div");
   element.className = "cheat-trackpad";
   element.style.left = `${trackpad.x * unitX}%`;
@@ -94,11 +94,16 @@ function createTrackpadElement(trackpad, unitX, unitY) {
   label.className = "cheat-trackpad-label";
   label.textContent = "Trackpad";
 
-  const hold = document.createElement("div");
-  hold.className = "cheat-trackpad-hold";
-  hold.textContent = "Trackpad";
-
-  element.append(main, label, hold);
+  element.append(label);
+  // The click icon and Hold both describe the Trackpad layer, so they follow
+  // its show/hide toggle; the "Trackpad" name itself always stays.
+  if (showTrackpadLayer) {
+    element.append(main);
+    const hold = document.createElement("div");
+    hold.className = "cheat-trackpad-hold";
+    hold.textContent = "Trackpad";
+    element.append(hold);
+  }
   return element;
 }
 
@@ -110,7 +115,8 @@ function createTrackpadElement(trackpad, unitX, unitY) {
  * along the very bottom edge with a divider line above it, at a fixed
  * position regardless of what else is on the key (editor.css shifts
  * Num/Fn/Trackpad up out of its way via the .has-hold class rather than
- * this module tracking layout).
+ * this module tracking layout). A layer that's toggled off (passed as
+ * undefined) also drops the Hold labels that name it.
  */
 export function renderCheatSheet(container, { layout, main, nums, func, extra, mouse }) {
   const { columns, rows } = layoutExtent(layout);
@@ -118,6 +124,8 @@ export function renderCheatSheet(container, { layout, main, nums, func, extra, m
   const unitY = 100 / rows;
   container.style.aspectRatio = `${columns} / ${rows}`;
 
+  // Keyed by cheat-sheet-labels.js's holdColor names.
+  const shownLayers = { nums: Boolean(nums), func: Boolean(func), extra: Boolean(extra) };
   const trackpadMatrixIds = new Set((layout.trackpad?.replaces ?? []).map(([row, col]) => `${row},${col}`));
 
   const fragment = document.createDocumentFragment();
@@ -149,11 +157,12 @@ export function renderCheatSheet(container, { layout, main, nums, func, extra, m
     if (described.transparent) cell.classList.add("is-transparent");
     appendOverlay(cell, "cheat-key-main-shift", described.mainShift);
     appendOverlay(cell, "cheat-key-extra", described.extra);
-    if (described.hold) cell.classList.add("has-hold"); // shifts Num/Fn/Trackpad up, see editor.css
+    const hold = described.holdColor && !shownLayers[described.holdColor] ? null : described.hold;
+    if (hold) cell.classList.add("has-hold"); // shifts Num/Fn/Trackpad up, see editor.css
     appendOverlay(cell, "cheat-key-nums", described.nums);
     appendOverlay(cell, "cheat-key-func", described.func);
     appendOverlay(cell, "cheat-key-mouse", described.mouse);
-    appendOverlay(cell, "cheat-key-hold", described.hold, {
+    appendOverlay(cell, "cheat-key-hold", hold, {
       extraClass: described.holdColor ? `hold-${described.holdColor}` : null,
       sizeByLength: false,
     });
@@ -161,7 +170,7 @@ export function renderCheatSheet(container, { layout, main, nums, func, extra, m
     fragment.append(cell);
   });
 
-  if (layout.trackpad) fragment.append(createTrackpadElement(layout.trackpad, unitX, unitY));
+  if (layout.trackpad) fragment.append(createTrackpadElement(layout.trackpad, unitX, unitY, { showTrackpadLayer: Boolean(mouse) }));
 
   container.replaceChildren(fragment);
 }

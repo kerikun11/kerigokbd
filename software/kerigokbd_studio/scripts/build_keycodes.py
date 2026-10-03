@@ -401,7 +401,16 @@ def parse_layer_descriptions(header_text: str) -> list[str]:
     return descriptions
 
 
+# Labels the editor shows differently from QMK's own. "Transparent" is too
+# wide for a picker button; ▽ matches how keycode-format.js draws it on keys.
+LABEL_OVERRIDES = {
+    "KC_TRANSPARENT": "▽",
+}
+
+
 def label_for(symbol: str, entry: dict[str, object] | None) -> str:
+    if symbol in LABEL_OVERRIDES:
+        return LABEL_OVERRIDES[symbol]
     # QMK calls the Windows key "GUI" ("Left GUI"); this editor says Win
     # everywhere, like kerigokbd's keymap.c (KC_LWIN).
     return _label_for(symbol, entry).replace("GUI", "Win")
