@@ -1,6 +1,6 @@
 // Copyright 2025 KERI's Lab
 // SPDX-License-Identifier: GPL-2.0-or-later
-// keymap.c for Keyball44 RP2040
+// keymap.c for KERIgoKBD Keyball44
 
 #include QMK_KEYBOARD_H
 #include "kerigokbd.h"

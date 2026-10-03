@@ -11,7 +11,7 @@ export const KERIGOKBD_USB_FILTERS = [
   { vendorId: 0x1209, productId: 0xe501 }, // KERIgoKBD v1
   { vendorId: 0x1209, productId: 0xe502 }, // KERIgoKBD v2
   { vendorId: 0x4653, productId: 0x0004 }, // KERIgoKBD Corne V4
-  { vendorId: 0x5957, productId: 0x0400 }, // Keyball44 RP2040
+  { vendorId: 0x5957, productId: 0x0400 }, // KERIgoKBD Keyball44
 ];
 // QMK's raw HID usage page/id (tmk_core/protocol/usb_descriptor.h), shared
 // by VIA and this editor -- both talk to the same RAW_ENABLE interface.

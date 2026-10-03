@@ -1,6 +1,6 @@
 # KERIgoKBD Studio
 
-- KERIgoKBD v1/v2・KERIgoKBD Corne V4・Keyball44 RP2040の各レイヤーのキーマップを一枚の早見表として表示しつつ、実機に接続した状態でリアルタイムに編集できるWebアプリ(WebHID + QMK VIAプロトコル)。
+- KERIgoKBD v1/v2・KERIgoKBD Corne V4・KERIgoKBD Keyball44の各レイヤーのキーマップを一枚の早見表として表示しつつ、実機に接続した状態でリアルタイムに編集できるWebアプリ(WebHID + QMK VIAプロトコル)。
 - GitHub Pagesで公開中: <https://www.kerislab.jp/kerigokbd/>
 
 ## 主な機能

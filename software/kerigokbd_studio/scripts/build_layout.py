@@ -41,7 +41,6 @@ KEYBOARD_CONFIGS = {
         },
     },
     "keyball44rp": {
-        "name": "Keyball44 RP2040",  # keyboard.json's keyboard_name is "Keyball44_RP2040"
         "layerCount": 7,
         "layoutOptions": {0: 1},  # Ball availability: Right
         "trackpad": {
@@ -189,7 +188,7 @@ def build_layout(keyboard_id: str) -> dict[str, object]:
 
     return {
         "id": keyboard_id,
-        "keyboard": config.get("name", info["keyboard_name"]),
+        "keyboard": info["keyboard_name"],
         "layoutName": layout_name,
         "matrixRows": matrix_rows,
         "matrixCols": matrix_cols,

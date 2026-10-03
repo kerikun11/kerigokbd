@@ -1,6 +1,6 @@
 // Copyright 2025 KERI's Lab
 // SPDX-License-Identifier: GPL-2.0-or-later
-// config.h for Keyball RP2040
+// config.h for KERIgoKBD Keyball44
 
 #pragma once
 
