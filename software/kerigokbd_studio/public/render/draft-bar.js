@@ -4,8 +4,8 @@ import { keycodeSummary, layerName } from "../keycodes/keycode-format.js";
  * The edit view's staged-edit controls, split in two:
  * - `bar` (right of the layer tabs): how many edits are waiting, a toggle
  *   for their list, and the explicit すべて破棄 / 実機に書き込む -- the only
- *   ways a staged edit is dropped or reaches the device. 実機に書き込む is
- *   always pressable; the caller reports why nothing was written.
+ *   ways a staged edit is dropped or reaches the device. Both are disabled
+ *   while there's nothing staged.
  * - `panel` (full width under that row): the latest status message and,
  *   when opened, every staged key with its own 取り消す.
  */
@@ -38,7 +38,7 @@ export function renderDraftBar({ bar, panel }, { drafts, busy, status, listOpen 
   writeButton.type = "button";
   writeButton.className = "primary-button";
   writeButton.textContent = draftCount > 0 ? `実機に書き込む (${draftCount})` : "実機に書き込む";
-  writeButton.disabled = busy;
+  writeButton.disabled = busy || draftCount === 0;
   writeButton.addEventListener("click", handlers.onWrite);
   bar.replaceChildren(summary, discardButton, writeButton);
 

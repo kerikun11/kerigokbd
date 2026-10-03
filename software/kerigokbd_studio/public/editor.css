@@ -566,7 +566,8 @@ button.draft-summary:hover { background: #ffe8dc; }
 .cheat-key-func.is-long,
 .cheat-key-mouse.is-long { font-size: 10px; }
 .cheat-key-extra {
-  top: 50%;
+  /* A little above center, leaving room for the raised Mouse row below. */
+  top: 45%;
   left: 3px;
   right: 3px;
   transform: translateY(-50%);
@@ -580,9 +581,17 @@ button.draft-summary:hover { background: #ffe8dc; }
 }
 .cheat-key-nums { left: 4px; color: var(--nums); text-align: left; }
 .cheat-key-func { right: 4px; color: var(--func); text-align: right; }
+/* With the opposite corner empty, a long label (e.g. "無変換") can take the
+   whole row instead of being cut to "無…" at 44%. */
+.cheat-key:not(:has(.cheat-key-func)) .cheat-key-nums,
+.cheat-key:not(:has(.cheat-key-nums)) .cheat-key-func {
+  max-width: calc(100% - 8px);
+}
 .cheat-key-mouse {
   left: 50%;
-  bottom: 4px;
+  /* Raised one line above the Num/Fn row so a long Num or Fn label
+     (e.g. "無変換") can't run into it. */
+  bottom: 17px;
   transform: translateX(-50%);
   max-width: 28%;
   color: var(--auto-mouse);
@@ -590,9 +599,11 @@ button.draft-summary:hover { background: #ffe8dc; }
 }
 /* Room for the fixed Hold row along the very bottom. */
 .cheat-key.has-hold .cheat-key-nums,
-.cheat-key.has-hold .cheat-key-func,
-.cheat-key.has-hold .cheat-key-mouse {
+.cheat-key.has-hold .cheat-key-func {
   bottom: 16px;
+}
+.cheat-key.has-hold .cheat-key-mouse {
+  bottom: 29px;
 }
 /* Hold is always this one size, on every key and the trackpad alike --
    never shrunk by .is-long, since "Reserved"/"Trackpad" already read fine

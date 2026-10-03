@@ -194,9 +194,9 @@ syncEngine.onKeymapMismatch = async (diffCount) => {
 };
 
 /**
- * The draft bar's 実機に書き込む is always pressable, so every outcome --
- * including "nothing to do" -- is reported, both in the draft bar and in
- * the デバイス group's status line.
+ * Every outcome is reported, both in the draft bar and in the デバイス
+ * group's status line. The draft bar disables 実機に書き込む while nothing is
+ * staged, but the "nothing to do" guard stays as a safety net.
  */
 async function writeDrafts() {
   if (deviceBusy) return;
