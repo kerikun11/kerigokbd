@@ -23,6 +23,7 @@ bool is_mouse_record_kb(uint16_t keycode, keyrecord_t *record) {
 #    endif
 
 #    define SCROLL_DIVISOR 16.0f
+#    define ZOOM_DIVISOR SCROLL_DIVISOR
 
 #    define POINTER_ACCEL 0.22f
 #    define SCROLL_ACCEL 0.10f
@@ -37,8 +38,12 @@ typedef struct {
 } axis_accum_t;
 
 static bool scroll_mode = false;
+// KG_POINTING_ZOOM held: vertical ball movement is sent as Ctrl+wheel (zoom),
+// like kerigokbd_v2's trackpad. Takes priority over scroll_mode.
+static bool zoom_mode = false;
 
-static axis_accum_t move_accum         = {0};
+static axis_accum_t move_accum = {0};
+// Shared by scroll and zoom, which never run at the same time.
 static axis_accum_t scroll_speed_accum = {0};
 static axis_accum_t scroll_step_accum  = {0};
 
@@ -104,17 +109,48 @@ static void apply_scroll_mode_(report_mouse_t *report) {
     int8_t sx = accum_scale_(&scroll_speed_accum.x, report->x, scale);
     int8_t sy = accum_scale_(&scroll_speed_accum.y, report->y, scale);
 
-    report->h = -accum_div_(&scroll_step_accum.x, sx, SCROLL_DIVISOR);
-    report->v = -accum_div_(&scroll_step_accum.y, sy, SCROLL_DIVISOR);
+    report->h = accum_div_(&scroll_step_accum.x, sx, SCROLL_DIVISOR);
+    report->v = accum_div_(&scroll_step_accum.y, sy, SCROLL_DIVISOR);
 
     report->x = 0;
     report->y = 0;
 }
 
+static void apply_zoom_mode_(report_mouse_t *report) {
+    float scale = calc_accel_scale_(report->x, report->y, SCROLL_ACCEL, SCROLL_SCALE_MIN, SCROLL_SCALE_MAX);
+
+    int8_t sy = accum_scale_(&scroll_speed_accum.y, report->y, scale);
+
+    report->h = 0;
+    report->v = -accum_div_(&scroll_step_accum.y, sy, ZOOM_DIVISOR);
+
+    report->x = 0;
+    report->y = 0;
+}
+
+static void clear_scroll_accum_(void) {
+    clear_axis_accum(&scroll_speed_accum);
+    clear_axis_accum(&scroll_step_accum);
+}
+
+static void set_zoom_mode_(bool active) {
+    if (zoom_mode == active) return;
+    zoom_mode = active;
+    clear_scroll_accum_();
+    if (active) {
+        add_weak_mods(MOD_BIT(KC_LCTL));
+    } else {
+        del_weak_mods(MOD_BIT(KC_LCTL));
+    }
+    send_keyboard_report();
+}
+
 report_mouse_t pointing_device_task_kb(report_mouse_t mouse_report) {
     apply_pointer_accel_(&mouse_report);
 
-    if (scroll_mode) {
+    if (zoom_mode) {
+        apply_zoom_mode_(&mouse_report);
+    } else if (scroll_mode) {
         apply_scroll_mode_(&mouse_report);
     } else {
         clear_axis_accum(&scroll_speed_accum);
@@ -130,9 +166,11 @@ bool process_record_kerigokbd(uint16_t keycode, keyrecord_t *record) {
             scroll_mode = record->event.pressed;
 
             if (!scroll_mode) {
-                clear_axis_accum(&scroll_speed_accum);
-                clear_axis_accum(&scroll_step_accum);
+                clear_scroll_accum_();
             }
+            break;
+        case KG_POINTING_ZOOM:
+            set_zoom_mode_(record->event.pressed);
             break;
     }
 
@@ -142,6 +180,7 @@ bool process_record_kerigokbd(uint16_t keycode, keyrecord_t *record) {
 layer_state_t layer_state_set_kb(layer_state_t state) {
     if (get_highest_layer(state) != AUTO_MOUSE_DEFAULT_LAYER) {
         scroll_mode = false;
+        set_zoom_mode_(false);
 
         clear_axis_accum(&move_accum);
         clear_axis_accum(&scroll_speed_accum);

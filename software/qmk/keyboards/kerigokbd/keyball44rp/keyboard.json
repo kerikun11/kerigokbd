@@ -29,7 +29,7 @@
         "hold_on_other_key_press": true
     },
     "dynamic_keymap": {
-        "layer_count": 6
+        "layer_count": 7
     },
     "diode_direction": "COL2ROW",
     "matrix_pins": {

@@ -7,6 +7,9 @@
 #ifdef VIA_ENABLE
 #    include "via.h"
 #endif
+#ifdef MOUSEKEY_ENABLE
+#    include "mousekey.h"
+#endif
 
 // Only input processing uses these Mod-Taps. EEPROM/VIA retain the public
 // custom keycodes, which also distinguish them from ordinary Win/Delete
@@ -51,6 +54,46 @@ static const custom_mod_tap_t *custom_mod_tap_for_record(uint16_t keycode, keyre
     return custom && custom->mod_tap == keycode ? custom : NULL;
 }
 
+#ifdef MOUSEKEY_ENABLE
+// KG_MS* / KG_MWL*: the same as MS_* movement/wheel keys, but routed through
+// mousekey directly, so (unlike MS_*) they don't enter the AutoMouseLayer.
+static uint16_t untracked_mouse_keycode(uint16_t keycode) {
+    switch (keycode) {
+        case KG_MOUSE_LEFT:
+            return MS_LEFT;
+        case KG_MOUSE_DOWN:
+            return MS_DOWN;
+        case KG_MOUSE_UP:
+            return MS_UP;
+        case KG_MOUSE_RIGHT:
+            return MS_RGHT;
+        case KG_MOUSE_WHEEL_LEFT:
+            return MS_WHLL;
+        case KG_MOUSE_WHEEL_DOWN:
+            return MS_WHLD;
+        case KG_MOUSE_WHEEL_UP:
+            return MS_WHLU;
+        case KG_MOUSE_WHEEL_RIGHT:
+            return MS_WHLR;
+    }
+    return KC_NO;
+}
+
+static bool process_untracked_mouse_key(uint16_t keycode, keyrecord_t *record) {
+    uint16_t mouse_keycode = untracked_mouse_keycode(keycode);
+    if (mouse_keycode == KC_NO) {
+        return true;
+    }
+    if (record->event.pressed) {
+        mousekey_on((uint8_t)mouse_keycode);
+    } else {
+        mousekey_off((uint8_t)mouse_keycode);
+    }
+    mousekey_send();
+    return false;
+}
+#endif
+
 __attribute__((weak)) bool process_record_kerigokbd(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
@@ -69,6 +112,11 @@ bool process_record_kb(uint16_t keycode, keyrecord_t *record) {
         }
         return true; // Standard QMK Mod-Tap handles modifier press/release.
     }
+#ifdef MOUSEKEY_ENABLE
+    if (!process_untracked_mouse_key(keycode, record)) {
+        return false;
+    }
+#endif
     return process_record_kerigokbd(keycode, record) && process_record_user(keycode, record);
 }
 
