@@ -18,9 +18,9 @@ import { keycodeDescription } from "../keycodes/keycode-description.js";
 // `kind` matches the keyboard view's kind-* colors (see editor.css). MO is
 // assigned from the 長押し row instead.
 const LAYER_ACTIONS = [
-  { label: "切り替え (TO)", compose: toLayer, kind: "to" },
-  { label: "デフォルトに設定 (DF)", compose: defaultLayer },
-  { label: "トグル (TG)", compose: toggleLayer },
+  { name: "TO", description: "切り替え", compose: toLayer, kind: "to" },
+  { name: "DF", description: "デフォルトに設定", compose: defaultLayer },
+  { name: "TG", description: "トグル", compose: toggleLayer },
 ];
 
 const WRAP_ONLY_BASIC_TITLE = "LT・MT・修飾キー付きの割り当てには基本キーのみ指定できます";
@@ -65,38 +65,34 @@ function pickerButton(label, { title, current, disabled, kind, onClick }) {
 }
 
 function renderLayerActionGrid(container, { layerCount, wrap, currentValue }, onPickValue) {
-  const list = document.createElement("div");
-  list.className = "layer-action-list";
   const wrapping = isWrapping(wrap);
   if (wrapping) {
     const note = document.createElement("p");
     note.className = "key-picker-note";
     note.textContent = "LT・MT・同時押しとレイヤー動作は組み合わせられません。長押しを「なし」、同時押しをすべてオフにしてから選んでください。";
-    list.append(note);
+    container.append(note);
   }
-  for (let layerIndex = 0; layerIndex < layerCount; layerIndex++) {
-    const group = document.createElement("div");
-    group.className = "layer-action-group";
-    const heading = document.createElement("h4");
-    heading.className = "layer-action-heading";
-    heading.textContent = layerName(layerIndex);
-    group.append(heading);
-
-    const row = document.createElement("div");
-    row.className = "layer-action-row";
-    for (const action of LAYER_ACTIONS) {
+  // One flat grid like the other categories, one button per action x layer
+  // (TO(Main), DF(Num), ...), grouped by action so each runs in order.
+  const grid = document.createElement("div");
+  grid.className = "key-picker-grid";
+  for (const action of LAYER_ACTIONS) {
+    for (let layerIndex = 0; layerIndex < layerCount; layerIndex++) {
       const value = action.compose(layerIndex);
-      row.append(pickerButton(action.label, {
+      const layer = layerName(layerIndex);
+      const button = pickerButton(action.name, {
+        title: `${layer}レイヤーに${action.description} (${action.name})`,
         current: value === currentValue,
         disabled: wrapping,
         kind: action.kind,
         onClick: () => onPickValue(value),
-      }));
+      });
+      // Two lines ("TO" / "(Main)") so a long layer name fits the 72px cell.
+      button.append(document.createElement("br"), `(${layer})`);
+      grid.append(button);
     }
-    group.append(row);
-    list.append(group);
   }
-  container.append(list);
+  container.append(grid);
 }
 
 function renderEntryGrid(container, { category, wrap, currentValue }, onPickValue) {

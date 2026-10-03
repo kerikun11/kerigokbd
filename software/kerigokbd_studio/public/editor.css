@@ -816,7 +816,6 @@ button.draft-summary:hover { background: #ffe8dc; }
   border-top: 1px solid var(--rule);
   color: var(--hold);
   font-size: 10px;
-  font-weight: 500;
   line-height: 13px !important;
   text-align: center;
 }
@@ -1021,29 +1020,6 @@ button.draft-summary:hover { background: #ffe8dc; }
   grid-template-columns: repeat(auto-fill, minmax(72px, 1fr));
   gap: 6px;
 }
-.layer-action-list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-.layer-action-group {
-  border: 1px solid var(--rule);
-  border-radius: 10px;
-  padding: 8px 10px;
-  background: var(--card);
-}
-.layer-action-heading {
-  margin: 0 0 6px;
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--func);
-}
-.layer-action-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-.layer-action-row .key-picker-item { flex: 1 1 120px; }
 
 .key-picker-item {
   border: 1px solid var(--key-border);
@@ -1183,6 +1159,7 @@ button.draft-summary:hover { background: #ffe8dc; }
 .key-picker-any-preview.is-error { color: var(--danger); }
 .key-picker-chip.is-active { background: var(--func); border-color: var(--func); color: var(--card); }
 .key-picker-note { margin: 0; font-size: 12px; color: var(--muted); }
+.key-picker-note + .key-picker-grid { margin-top: 8px; }
 
 .toolbar {
   display: flex;
