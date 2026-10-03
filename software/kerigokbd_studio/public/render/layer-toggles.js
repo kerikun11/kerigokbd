@@ -6,10 +6,10 @@ const TOGGLES = [
   { key: "nums", label: "Num", colorClass: "toggle-nums" },
   { key: "func", label: "Fn", colorClass: "toggle-func" },
   { key: "extra", label: "Extra", colorClass: "toggle-extra" },
-  { key: "mouse", label: "Trackpad", colorClass: "toggle-mouse" },
+  { key: "mouse", label: null, colorClass: "toggle-mouse" }, // mouseLabel
 ];
 
-export function renderLayerToggles(container, { visibility, showMouseToggle }, onChange) {
+export function renderLayerToggles(container, { visibility, showMouseToggle, mouseLabel = "Trackpad" }, onChange) {
   const fragment = document.createDocumentFragment();
   for (const { key, label, colorClass } of TOGGLES) {
     if (key === "mouse" && !showMouseToggle) continue;
@@ -28,7 +28,7 @@ export function renderLayerToggles(container, { visibility, showMouseToggle }, o
     track.append(document.createElement("span"));
 
     const text = document.createElement("span");
-    text.textContent = label;
+    text.textContent = label ?? mouseLabel;
 
     wrapper.append(input, track, text);
     fragment.append(wrapper);

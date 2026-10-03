@@ -1,4 +1,4 @@
-import { layerIndexBySymbol } from "../keycodes/keycode-registry.js";
+import { layerIndexBySymbol, layerDisplayName } from "../keycodes/keycode-registry.js";
 import { renderCheatSheet } from "./cheat-sheet.js";
 import { renderLayerToggles } from "./layer-toggles.js";
 
@@ -24,8 +24,18 @@ function layerKeycodes(store, layerSymbol) {
  * `visibility` is {nums, func, extra, mouse}; `onToggle(key, checked)`.
  */
 export function renderCheatSheetPanel(elements, { store, visibility, visible }, onToggle) {
-  const hasTrackpad = Boolean(store.layout.trackpad);
-  renderLayerToggles(elements.layerToggles, { visibility, showMouseToggle: hasTrackpad }, onToggle);
+  const { trackpad } = store.layout;
+  const hasTrackpad = Boolean(trackpad);
+  const mouseLayerName = layerDisplayName("KGL_AM");
+  renderLayerToggles(elements.layerToggles, { visibility, showMouseToggle: hasTrackpad, mouseLabel: mouseLayerName }, onToggle);
+  if (hasTrackpad) {
+    // Named after this keyboard's device: "Trackball操作中", "トラックボール", ...
+    elements.cheatLegendMouseName.textContent = mouseLayerName;
+    elements.cheatLegendMouseText.textContent = `${trackpad.label}${trackpad.activeText}のキーマップ`;
+    elements.cheatGuideMouse.textContent = mouseLayerName;
+    elements.iconLegendTrackpadGroup.setAttribute("aria-label", trackpad.labelJa);
+    elements.iconLegendTrackpadTitle.textContent = trackpad.labelJa;
+  }
 
   const shown = {
     nums: visibility.nums,

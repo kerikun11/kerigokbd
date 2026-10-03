@@ -9,7 +9,8 @@ export const LAYERS = KEYCODE_DATA.layers;
 // the same value out as e.g. `LT(KGL_EXT, KC_ESC)`.
 export const MACRO_ALIASES = KEYCODE_DATA.macroAliases;
 
-// Display names for layers.
+// Display names for layers. KGL_AM is named after the keyboard's pointing
+// device (setPointingLayerName).
 const LAYER_DISPLAY_NAMES = {
   KGL_MAIN: "Main", KGL_NUM: "Num", KGL_FUN: "Fn", KGL_EXT: "Extra",
   KGL_RES: "Reserved", KGL_CONF: "Config", KGL_AM: "Trackpad",
@@ -72,6 +73,11 @@ export const macroAliasForValue = (value) => macroAliasByValue.get(value);
 export const entriesByCategory = (category) => KEYCODES.filter((entry) => entry.category === category);
 
 export const layerDisplayName = (layerSymbol) => LAYER_DISPLAY_NAMES[layerSymbol] ?? layerSymbol;
+
+/** Names the KGL_AM layer after the selected keyboard's pointing device ("Trackpad" / "Trackball"). */
+export function setPointingLayerName(name) {
+  LAYER_DISPLAY_NAMES.KGL_AM = name ?? "Trackpad";
+}
 
 export const layerCount = () => LAYERS.length;
 

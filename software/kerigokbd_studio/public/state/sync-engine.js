@@ -9,8 +9,14 @@ import { diffKeymaps } from "./keymap-store.js";
 
 export class SyncEngine {
   #store;
-  #transport = new HidTransport();
+  #transport;
   #client = null;
+  /**
+   * Called right after a device opens, before anything is read from it:
+   * `async ({vendorId, productId}) => boolean`, e.g. to switch the store to
+   * that keyboard's layout; false cancels the connection.
+   */
+  onDeviceOpened = null;
   /**
    * Called on connect when the editor already shows a keymap (from a
    * previously connected device) that differs from the newly connected
@@ -19,8 +25,9 @@ export class SyncEngine {
    */
   onKeymapMismatch = null;
 
-  constructor(store) {
+  constructor(store, { usbFilters }) {
     this.#store = store;
+    this.#transport = new HidTransport(usbFilters);
     this.#transport.addEventListener("disconnect", () => {
       this.#client = null;
       this.#store.setConnectionState("disconnected");
@@ -56,10 +63,15 @@ export class SyncEngine {
   }
 
   async #afterOpen() {
+    const { productId, vendorId } = this.#transport.device;
+    if (this.onDeviceOpened && !(await this.onDeviceOpened({ vendorId, productId }))) {
+      await this.#transport.close();
+      this.#store.setConnectionState("disconnected");
+      return;
+    }
     this.#client = createViaClient((request) => this.#transport.exchange(request));
     const protocolVersion = await this.#client.getProtocolVersion();
     const deviceLayerCount = await this.#client.getLayerCount();
-    const { productId, vendorId } = this.#transport.device;
     this.#store.setProtocolInfo(protocolVersion, deviceLayerCount, { productId, vendorId });
     const editorKeymap = this.#store.editorKeymap();
     const deviceKeymap = await this.#readAllLayers();

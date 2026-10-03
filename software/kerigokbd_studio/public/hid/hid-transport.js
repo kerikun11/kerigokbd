@@ -5,14 +5,6 @@
 
 import { RAW_REPORT_SIZE } from "./via-protocol.js";
 
-// KERIgoKBD's USB VID/PIDs (software/qmk/keyboards/kerigokbd/*/info.json
-// or keyboard.json).
-export const KERIGOKBD_USB_FILTERS = [
-  { vendorId: 0x1209, productId: 0xe501 }, // KERIgoKBD v1
-  { vendorId: 0x1209, productId: 0xe502 }, // KERIgoKBD v2
-  { vendorId: 0x4653, productId: 0x0004 }, // KERIgoKBD Corne V4
-  { vendorId: 0x5957, productId: 0x0400 }, // KERIgoKBD Keyball44
-];
 // QMK's raw HID usage page/id (tmk_core/protocol/usb_descriptor.h), shared
 // by VIA and this editor -- both talk to the same RAW_ENABLE interface.
 const VIA_USAGE_PAGE = 0xff60;
@@ -28,6 +20,13 @@ export class HidUnsupportedError extends Error {
 export class HidTransport extends EventTarget {
   #device = null;
   #pending = null;
+  #filters;
+
+  /** @param {{vendorId: number, productId: number}[]} filters the keyboards to offer / reconnect to. */
+  constructor(filters) {
+    super();
+    this.#filters = filters;
+  }
 
   static isSupported() {
     return typeof navigator !== "undefined" && "hid" in navigator;
@@ -45,7 +44,7 @@ export class HidTransport extends EventTarget {
   async requestAndOpen() {
     if (!HidTransport.isSupported()) throw new HidUnsupportedError();
     const [device] = await navigator.hid.requestDevice({
-      filters: KERIGOKBD_USB_FILTERS.map((filter) => ({ ...filter, usagePage: VIA_USAGE_PAGE, usage: VIA_USAGE })),
+      filters: this.#filters.map((filter) => ({ ...filter, usagePage: VIA_USAGE_PAGE, usage: VIA_USAGE })),
     });
     if (!device) throw new Error("No device was selected.");
     await this.#open(device);
@@ -56,7 +55,7 @@ export class HidTransport extends EventTarget {
     if (!HidTransport.isSupported()) throw new HidUnsupportedError();
     const devices = await navigator.hid.getDevices();
     const device = devices.find(
-      (candidate) => KERIGOKBD_USB_FILTERS.some(
+      (candidate) => this.#filters.some(
         (filter) => candidate.vendorId === filter.vendorId && candidate.productId === filter.productId,
       )
         && candidate.collections.some((collection) => collection.usagePage === VIA_USAGE_PAGE && collection.usage === VIA_USAGE),

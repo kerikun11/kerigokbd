@@ -16,6 +16,15 @@ const LAYOUTS = {
 export const availableKeyboards = () =>
   Object.values(LAYOUTS).map(({ id, keyboard }) => ({ id, keyboard }));
 
+/** The WebHID device filters matching every supported keyboard. */
+export const usbDeviceFilters = () => Object.values(LAYOUTS).map(({ usb }) => ({ ...usb }));
+
+/** The keyboard whose USB VID/PID a connected device reports, or null for none. */
+export function keyboardIdForUsbDevice({ vendorId, productId }) {
+  const layout = Object.values(LAYOUTS).find(({ usb }) => usb.vendorId === vendorId && usb.productId === productId);
+  return layout?.id ?? null;
+}
+
 export function loadLayout(keyboardId) {
   const layout = LAYOUTS[keyboardId];
   if (!layout) throw new Error(`Unknown keyboard: ${keyboardId}`);

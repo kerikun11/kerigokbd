@@ -1,6 +1,7 @@
 import { keyPosition, layoutExtent } from "./layout-geometry.js";
 import { describeCheatSheetKey } from "../keycodes/cheat-sheet-labels.js";
 import { iconForLabel, compoundIconsForLabel } from "../keycodes/cheat-sheet-icons.js";
+import { layerDisplayName } from "../keycodes/keycode-registry.js";
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 // Matches index.html's <symbol> viewBoxes: the mouse/wheel body icons are
@@ -96,12 +97,13 @@ function createTrackpadElement(trackpad, { originX, originY, unitX, unitY }, { s
 
   element.append(label);
   // The click icon and Hold both describe the Trackpad layer, so they follow
-  // its show/hide toggle; the "Trackpad" name itself always stays.
+  // its show/hide toggle; the "Trackpad" name itself always stays. Only a
+  // trackpad left-clicks on tap -- a trackball has no click of its own.
   if (showTrackpadLayer) {
-    element.append(main);
+    if (trackpad.tapClick) element.append(main);
     const hold = document.createElement("div");
     hold.className = "cheat-trackpad-hold";
-    hold.textContent = "Trackpad"; // the KGL_AM layer's name, on every device
+    hold.textContent = layerDisplayName("KGL_AM");
     element.append(hold);
   }
   return element;

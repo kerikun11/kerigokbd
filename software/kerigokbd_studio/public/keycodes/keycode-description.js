@@ -9,7 +9,7 @@
 // their parts.
 
 import { decode } from "./keycode-codec.js";
-import { canonicalEntryForValue } from "./keycode-registry.js";
+import { canonicalEntryForValue, layerDisplayName } from "./keycode-registry.js";
 import { layerName } from "./keycode-format.js";
 
 const char = (text, name) => `「${text}」(${name})`;
@@ -187,14 +187,14 @@ const DESCRIPTIONS = {
   KG_WCAD: "タップでCtrl+Alt+Delete、長押しで左Win",
   KG_ATAB: "タップでAlt+Tab(ウィンドウ切り替え)、長押しで左Alt",
   KG_SCRL: "押している間、トラックパッド/トラックボールの移動をスクロールにする",
-  KG_MSL: "マウスカーソルを左へ(Trackpadレイヤーに入らない)",
-  KG_MSD: "マウスカーソルを下へ(Trackpadレイヤーに入らない)",
-  KG_MSU: "マウスカーソルを上へ(Trackpadレイヤーに入らない)",
-  KG_MSR: "マウスカーソルを右へ(Trackpadレイヤーに入らない)",
-  KG_MWLL: "ホイールを左へ(Trackpadレイヤーに入らない)",
-  KG_MWLD: "ホイールを下へ(Trackpadレイヤーに入らない)",
-  KG_MWLU: "ホイールを上へ(Trackpadレイヤーに入らない)",
-  KG_MWLR: "ホイールを右へ(Trackpadレイヤーに入らない)",
+  KG_MSL: "マウスカーソルを左へ(${AM}レイヤーに入らない)",
+  KG_MSD: "マウスカーソルを下へ(${AM}レイヤーに入らない)",
+  KG_MSU: "マウスカーソルを上へ(${AM}レイヤーに入らない)",
+  KG_MSR: "マウスカーソルを右へ(${AM}レイヤーに入らない)",
+  KG_MWLL: "ホイールを左へ(${AM}レイヤーに入らない)",
+  KG_MWLD: "ホイールを下へ(${AM}レイヤーに入らない)",
+  KG_MWLU: "ホイールを上へ(${AM}レイヤーに入らない)",
+  KG_MWLR: "ホイールを右へ(${AM}レイヤーに入らない)",
 };
 
 const MOD_NAMES = { ctrl: "Ctrl", shift: "Shift", alt: "Alt", gui: "Win" };
@@ -207,7 +207,8 @@ function modsDescription(mods) {
 function basicDescription(value) {
   const entry = canonicalEntryForValue(value);
   if (!entry) return null;
-  if (DESCRIPTIONS[entry.symbol]) return DESCRIPTIONS[entry.symbol];
+  // "${AM}": the KGL_AM layer's name for the selected keyboard (Trackpad / Trackball).
+  if (DESCRIPTIONS[entry.symbol]) return DESCRIPTIONS[entry.symbol].replace("${AM}", layerDisplayName("KGL_AM"));
   const fn = /^KC_F(\d+)$/.exec(entry.symbol);
   if (fn) return `ファンクションキーF${fn[1]}`;
   const digit = /^KC_P(\d)$/.exec(entry.symbol);

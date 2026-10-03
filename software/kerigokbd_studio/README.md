@@ -6,12 +6,13 @@
 ## 主な機能
 
 - **キーボード切り替え**
-  - 設定の「デバイス」にある「キーボード」でv1・v2・Corne V4・Keyball44を切り替え。物理キー配置・トラックパッド有無・Trackpadレイヤー有無も合わせて切り替わる
+  - 設定の「デバイス」にある「キーボード」でv1・v2・Corne V4・Keyball44を切り替え。物理キー配置・トラックパッド有無・Trackpadレイヤー有無も合わせて切り替わる。オートマウスレイヤー(`KGL_AM`)はポインティングデバイスに合わせてv2ではTrackpad、Keyball44ではTrackballと表示する(`build_layout.py`の`label`)
+  - 実機に接続すると(ページ読み込み時の自動再接続を含む)、USBのVID/PID(`info.json`/`keyboard.json`の`usb`)から機種を判定して自動で切り替える。未書き込みの変更があるときは破棄してよいか確認する
 - **早見表 / 編集画面の切り替え**
   - 設定ペイン右上の「表示 | 編集」で、全レイヤー重ね合わせの早見表(デフォルト表示)と、実機の値を書き換える編集画面を切り替える。接続前はGitHub最新版(mainの`default/keymap.c`、`defaults-*.js`)、接続後は実機の現在の値を表示
   - 設定ペインはモードに合わせて切り替わる。「デバイス」(キーボード選択・接続状態・接続/切断の切り替えボタン・再読込)は共通で、表示モードでは「表示するレイヤー」「書き出し」(PNG)、編集モードでは「書き出し・初期化」(keymap.c・GitHub最新版に更新・初期状態にリセット)を表示する
 - **レイヤー別のキーマップ表示**
-  - Main/Num/Fn/Extra/Trackpad(v2・Keyball44のみ)の割り当てを1枚の早見表に色分け表示。長押し時の割り当て(Hold)は下端に表示
+  - Main/Num/Fn/Extra/Trackpad(v2)・Trackball(Keyball44)の割り当てを1枚の早見表に色分け表示。長押し時の割り当て(Hold)は下端に表示
 - **レイヤー表示のON/OFF切り替え**
   - 表示モードの設定「表示するレイヤー」のトグルでNum・Fn・Extra・Trackpadレイヤを個別に表示/非表示にできる。オフにしたレイヤーは凡例と、そのレイヤーを指す長押しラベル(Trackpadはトラックパッド上のアイコンも)からも消える
 - **操作アイコン表示**
@@ -67,7 +68,7 @@ VIAのdynamic keymap機能は既定では4レイヤーまでしか公開しな�
   - `app.js`: 画面全体の状態管理・イベント配線
   - `hid/`: WebHID接続(`hid-transport.js`)とVIAプロトコルのエンコード/デコード(`via-protocol.js`)
   - `keycodes/`: 数値キーコードのビット合成式(`keycode-values.js`)、デコード/エンコード(`keycode-codec.js`)、Anyの式パーサ(`keycode-parse.js`)、表示用ラベル(`keycode-format.js`)、対応表(`keycode-registry.js`)、早見表用の複数レイヤー重ね合わせラベル(`cheat-sheet-labels.js`)とマウス操作アイコンの対応表(`cheat-sheet-icons.js`)
-  - `layout/`: 生成済み物理配置・デフォルトキーマップの読み込み
+  - `layout/`: 生成済み物理配置・デフォルトキーマップの読み込み、USB VID/PIDからの機種判定とWebHIDのデバイスフィルタ
   - `state/`: 状態管理(`keymap-store.js`)、実機同期(`sync-engine.js`)、全レイヤー上書き(`keymap-update.js`)、キーコードピッカーの長押し/同時押し状態の導出(`picker-wrap.js`)
   - `render/`: DOM描画(キーボード表示・早見表と表示レイヤー連動の凡例(`cheat-sheet-panel.js`)・早見表/編集の切り替えボタン・レイヤー表示トグル・PNGボタン・レイヤータブ・キーコードピッカー・未書き込み変更バー・接続バー・ツールバー)
   - `export/`: 実機の現在のキーマップをC言語の`keymaps[][]`ソースへ変換(`c-source-writer.js`)、DOM要素のPNG化(`png-export.js`)と早見表のPNG用カード組み立て(`cheat-sheet-png.js`)

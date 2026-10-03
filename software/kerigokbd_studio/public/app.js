@@ -1,4 +1,4 @@
-import { availableKeyboards, loadLayout } from "./layout/layout-loader.js";
+import { availableKeyboards, loadLayout, usbDeviceFilters, keyboardIdForUsbDevice } from "./layout/layout-loader.js";
 import { loadDefaults } from "./layout/defaults-loader.js";
 import { KeymapStore } from "./state/keymap-store.js";
 import { SyncEngine } from "./state/sync-engine.js";
@@ -18,6 +18,7 @@ import { renderCheatSheetPng } from "./export/cheat-sheet-png.js";
 import { withHoldLayer, withMods, NO_MODS } from "./keycodes/keycode-codec.js";
 import { momentaryLayer } from "./keycodes/keycode-values.js";
 import { keycodeSummary, layerName } from "./keycodes/keycode-format.js";
+import { setPointingLayerName } from "./keycodes/keycode-registry.js";
 import { NO_HOLD, pickerWrapOf, isSettingUpHold } from "./state/picker-wrap.js";
 
 const requiredElement = (selector) => {
@@ -46,6 +47,9 @@ const elements = {
   cheatLegendFuncItem: requiredElement("#cheat-legend-func-item"),
   cheatLegendExtraItem: requiredElement("#cheat-legend-extra-item"),
   cheatLegendMouseItem: requiredElement("#cheat-legend-mouse-item"),
+  cheatLegendMouseName: requiredElement("#cheat-legend-mouse-name"),
+  cheatLegendMouseText: requiredElement("#cheat-legend-mouse-text"),
+  iconLegendTrackpadTitle: requiredElement("#legend-group-trackpad-title"),
   iconLegendMouseGroup: requiredElement("#legend-group-mouse"),
   iconLegendTrackpadGroup: requiredElement("#legend-group-trackpad"),
   cheatGuideNums: requiredElement("#cheat-guide-nums"),
@@ -63,7 +67,7 @@ const elements = {
 };
 
 const store = new KeymapStore();
-const syncEngine = new SyncEngine(store);
+const syncEngine = new SyncEngine(store, { usbFilters: usbDeviceFilters() });
 let pickerCategory = "letters_numbers";
 let deviceBusy = false;
 let viewMode = "cheatSheet"; // "cheatSheet" (default landing) | "edit"
@@ -97,7 +101,10 @@ function populateKeyboardSelect() {
 
 function selectKeyboard(keyboardId) {
   swapSource = null;
-  store.setLayout(keyboardId, loadLayout(keyboardId), loadDefaults(keyboardId));
+  elements.keyboardSelect.value = keyboardId;
+  const layout = loadLayout(keyboardId);
+  setPointingLayerName(layout.trackpad?.label);
+  store.setLayout(keyboardId, layout, loadDefaults(keyboardId));
 }
 
 async function changeKeyboard() {
@@ -140,6 +147,19 @@ function confirmDiscardDrafts(actionLabel) {
     danger: true,
   });
 }
+
+/**
+ * A connected device -- including the one reopened automatically on page
+ * load -- switches the editor to its own keyboard (matched by USB VID/PID),
+ * asking first if that would discard staged edits.
+ */
+syncEngine.onDeviceOpened = async (usb) => {
+  const keyboardId = keyboardIdForUsbDevice(usb);
+  if (!keyboardId || keyboardId === store.keyboardId) return true;
+  if (store.drafts.size && !(await confirmDiscardDrafts("キーボードを切り替え"))) return false;
+  selectKeyboard(keyboardId);
+  return true;
+};
 
 /**
  * Connecting a device whose keymap differs from what the editor shows (e.g.

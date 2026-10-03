@@ -36,7 +36,10 @@ KEYBOARD_CONFIGS = {
         "layerCount": 7,
         "trackpad": {
             **TRACKPAD_GEOMETRY,
-            "label": "Trackpad",
+            "label": "Trackpad",  # also names its KGL_AM layer
+            "labelJa": "トラックパッド",
+            "activeText": "接触中",
+            "tapClick": True,  # tapping the pad left-clicks (kerigokbd_v2.c)
             "replaces": [list(matrix) for matrix in TRACKPAD_REPLACED_MATRIXES],
         },
     },
@@ -46,6 +49,9 @@ KEYBOARD_CONFIGS = {
         "trackpad": {
             **TRACKBALL_GEOMETRY,
             "label": "Trackball",
+            "labelJa": "トラックボール",
+            "activeText": "操作中",
+            "tapClick": False,
             "replaces": [list(matrix) for matrix in TRACKBALL_REPLACED_MATRIXES],
         },
     },
@@ -193,6 +199,9 @@ def build_layout(keyboard_id: str) -> dict[str, object]:
         "matrixRows": matrix_rows,
         "matrixCols": matrix_cols,
         "layerCount": config["layerCount"],
+        # Identifies a connected device as this keyboard (WebHID filters,
+        # and selecting this layout when it connects).
+        "usb": {"vendorId": int(info["usb"]["vid"], 16), "productId": int(info["usb"]["pid"], 16)},
         "trackpad": config["trackpad"],
         "keys": keys,
     }
