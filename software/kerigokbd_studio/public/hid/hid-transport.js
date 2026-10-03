@@ -5,10 +5,13 @@
 
 import { RAW_REPORT_SIZE } from "./via-protocol.js";
 
-// KERIgoKBD's USB VID/PIDs (software/qmk/keyboards/kerigokbd/*/info.json).
+// KERIgoKBD's USB VID/PIDs (software/qmk/keyboards/kerigokbd/*/info.json
+// or keyboard.json).
 export const KERIGOKBD_USB_FILTERS = [
   { vendorId: 0x1209, productId: 0xe501 }, // KERIgoKBD v1
   { vendorId: 0x1209, productId: 0xe502 }, // KERIgoKBD v2
+  { vendorId: 0x4653, productId: 0x0004 }, // KERIgoKBD Corne V4
+  { vendorId: 0x5957, productId: 0x0400 }, // Keyball44 RP2040
 ];
 // QMK's raw HID usage page/id (tmk_core/protocol/usb_descriptor.h), shared
 // by VIA and this editor -- both talk to the same RAW_ENABLE interface.

@@ -1,9 +1,13 @@
 import { DEFAULTS as KERIGOKBD_V1_DEFAULTS } from "../generated/defaults-kerigokbd_v1.js";
 import { DEFAULTS as KERIGOKBD_V2_DEFAULTS } from "../generated/defaults-kerigokbd_v2.js";
+import { DEFAULTS as KERIGOKBD_CORNE_V4_DEFAULTS } from "../generated/defaults-kerigokbd_corne_v4.js";
+import { DEFAULTS as KEYBALL44RP_DEFAULTS } from "../generated/defaults-keyball44rp.js";
 
 const DEFAULTS_BY_KEYBOARD = {
   kerigokbd_v2: KERIGOKBD_V2_DEFAULTS,
   kerigokbd_v1: KERIGOKBD_V1_DEFAULTS,
+  kerigokbd_corne_v4: KERIGOKBD_CORNE_V4_DEFAULTS,
+  keyball44rp: KEYBALL44RP_DEFAULTS,
 };
 
 /**

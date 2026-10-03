@@ -31,7 +31,7 @@ import { keyPosition, layoutExtent } from "./layout-geometry.js";
  * called with the key's index into layout.keys.
  */
 export function renderKeyboardView(container, { layout, keycodes, selectedKeyIndex, swapSourceIndex = null, isPending, isChangedFromLatest, isDraft }, onSelectKey) {
-  const { columns, rows } = layoutExtent(layout);
+  const { originX, originY, columns, rows } = layoutExtent(layout);
   const unitX = 100 / columns;
   const unitY = 100 / rows;
   container.style.aspectRatio = `${columns} / ${rows}`;
@@ -42,8 +42,8 @@ export function renderKeyboardView(container, { layout, keycodes, selectedKeyInd
     const button = document.createElement("button");
     button.type = "button";
     button.className = "editor-key";
-    button.style.left = `${position.x * unitX}%`;
-    button.style.top = `${position.y * unitY}%`;
+    button.style.left = `${(position.x - originX) * unitX}%`;
+    button.style.top = `${(position.y - originY) * unitY}%`;
     button.style.width = `${key.width * unitX - 0.6}%`;
     button.style.height = `${key.height * unitY - 0.8}%`;
     if (key.rotation) {

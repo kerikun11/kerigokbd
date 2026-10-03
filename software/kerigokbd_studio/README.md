@@ -1,17 +1,17 @@
 # KERIgoKBD Studio
 
-- KERIgoKBD v1/v2の各レイヤーのキーマップを一枚の早見表として表示しつつ、実機に接続した状態でリアルタイムに編集できるWebアプリ(WebHID + QMK VIAプロトコル)。
+- KERIgoKBD v1/v2・KERIgoKBD Corne V4・Keyball44 RP2040の各レイヤーのキーマップを一枚の早見表として表示しつつ、実機に接続した状態でリアルタイムに編集できるWebアプリ(WebHID + QMK VIAプロトコル)。
 - GitHub Pagesで公開中: <https://www.kerislab.jp/kerigokbd/>
 
 ## 主な機能
 
 - **キーボード切り替え**
-  - 設定の「デバイス」にある「キーボード」でv1・v2を切り替え。物理キー配置・トラックパッド有無・Trackpadレイヤー有無も合わせて切り替わる
+  - 設定の「デバイス」にある「キーボード」でv1・v2・Corne V4・Keyball44を切り替え。物理キー配置・トラックパッド有無・Trackpadレイヤー有無も合わせて切り替わる
 - **早見表 / 編集画面の切り替え**
   - 設定ペイン右上の「表示 | 編集」で、全レイヤー重ね合わせの早見表(デフォルト表示)と、実機の値を書き換える編集画面を切り替える。接続前はGitHub最新版(mainの`default/keymap.c`、`defaults-*.js`)、接続後は実機の現在の値を表示
   - 設定ペインはモードに合わせて切り替わる。「デバイス」(キーボード選択・接続状態・接続/切断の切り替えボタン・再読込)は共通で、表示モードでは「表示するレイヤー」「書き出し」(PNG)、編集モードでは「書き出し・初期化」(keymap.c・GitHub最新版に更新・初期状態にリセット)を表示する
 - **レイヤー別のキーマップ表示**
-  - Main/Num/Fn/Extra/Trackpad(v2のみ)の割り当てを1枚の早見表に色分け表示。長押し時の割り当て(Hold)は下端に表示
+  - Main/Num/Fn/Extra/Trackpad(v2・Keyball44のみ)の割り当てを1枚の早見表に色分け表示。長押し時の割り当て(Hold)は下端に表示
 - **レイヤー表示のON/OFF切り替え**
   - 表示モードの設定「表示するレイヤー」のトグルでNum・Fn・Extra・Trackpadレイヤを個別に表示/非表示にできる。オフにしたレイヤーは凡例と、そのレイヤーを指す長押しラベル(Trackpadはトラックパッド上のアイコンも)からも消える
 - **操作アイコン表示**
@@ -50,14 +50,14 @@
 - **ブラウザ**: WebHIDに対応したChromium系ブラウザ(Chrome / Edge)。Firefox / Safariは非対応。
 - **ファームウェア**: `via`キーマップ(`VIA_ENABLE = yes`)を書き込んだ実機。`default`キーマップにはRAW HIDが無いため接続できない。
 
-VIAのdynamic keymap機能は既定では4レイヤーまでしか公開しない(`quantum/dynamic_keymap.h`の`DYNAMIC_KEYMAP_LAYER_COUNT`既定値)が、KERIgoKBDの`info.json`側で`dynamic_keymap.layer_count`(v2は7、v1は6)を既に指定済みで、QMKのビルド時に`DYNAMIC_KEYMAP_LAYER_COUNT`へ自動変換される(`data/mappings/info_config.hjson`参照)。追加のファームウェア変更は不要。
+VIAのdynamic keymap機能は既定では4レイヤーまでしか公開しない(`quantum/dynamic_keymap.h`の`DYNAMIC_KEYMAP_LAYER_COUNT`既定値)が、KERIgoKBDの`info.json`側で`dynamic_keymap.layer_count`(v2・Keyball44は7、v1・Corne V4は6)を既に指定済みで、QMKのビルド時に`DYNAMIC_KEYMAP_LAYER_COUNT`へ自動変換される(`data/mappings/info_config.hjson`参照)。追加のファームウェア変更は不要。
 
 ## 構成
 
 ### Webアプリソースコード
 
 - `scripts/`
-  - `build_layout.py`: QMK側の`info.json`・`via.json`から物理配置(座標・matrix)を抽出し`public/generated/layout-*.js`を生成
+  - `build_layout.py`: QMK側の`info.json`(Corne V4・Keyball44は`keyboard.json`)・`via.json`から物理配置(座標・matrix)を抽出し`public/generated/layout-*.js`を生成
   - `build_keycodes.py`: QMK本体の正規キーコード定義(`data/constants/keycodes/*.hjson`)と`keymap_japanese.h`・`kerigokbd.h`からキーコード対応表を生成し`public/generated/keycodes.js`を生成
   - `build_defaults.py`: 各機種の`default/keymap.c`をレイヤーごとに数値キーコードへ解決し`public/generated/defaults-*.js`を生成(GitHub最新版との差分表示・早見表の接続前表示・レイアウトバージョン表示・最新版レイアウトへの更新に使用)。レイアウトバージョンは`keymap.c`のGitコミット履歴から`vYYYY.MM.DDa`形式で算出(フルクローンが必要)
 - `public/`
@@ -81,9 +81,9 @@ VIAのdynamic keymap機能は既定では4レイヤーまでしか公開しな�
 
 - `../qmk/keyboards/kerigokbd/`
   - `kerigokbd.h`: レイヤー・キーコードの`#define`定義
-  - `kerigokbd_v{1,2}/info.json`: キー数・マトリクス配置・レイヤー数(`dynamic_keymap.layer_count`)
-  - `kerigokbd_v{1,2}/keymaps/default/keymap.c`: 各レイヤーのデフォルトキー割り当て。Gitコミット履歴からLayoutバージョンも算出
-  - `kerigokbd_v{1,2}/keymaps/via/via.json`: KLE互換の物理キー配置(座標・サイズ)
+  - `kerigokbd_v{1,2}/info.json`・`{kerigokbd_corne_v4,keyball44rp}/keyboard.json`: キー数・マトリクス配置・レイヤー数(`dynamic_keymap.layer_count`)
+  - `{kerigokbd_v1,kerigokbd_v2,kerigokbd_corne_v4,keyball44rp}/keymaps/default/keymap.c`: 各レイヤーのデフォルトキー割り当て(`[KGL_MAIN]`のほか`[0]`のような番号指定も可)。Gitコミット履歴からLayoutバージョンも算出
+  - `{kerigokbd_v1,kerigokbd_v2,kerigokbd_corne_v4,keyball44rp}/keymaps/via/via.json`: KLE互換の物理キー配置(座標・サイズ)。VIAのレイアウトオプション(Keyball44のボール位置)は機種ごとに`build_layout.py`で選択肢を指定(Keyball44は右ボール)
 
 ## 生成
 
@@ -116,5 +116,5 @@ node --test tests/*.test.js
 - LT・MT・修飾キー同時押しで包めるのは基本キー(`0x04`〜`0xFF`)のみで、Shift付きの記号(日本語配列の一部など)・マウス/RGB/KERIgoKBD固有キーは選べない(QMKの`LT()`の仕様)。LTで指定できるレイヤーは0〜15。
 - 「keymap.cへ書き出し」は実機の現在値から生成するため、未書き込みの変更は含まれない。
 - 「keymap.cへ書き出し」機能は、モッドの組み合わせを`LCS()`のような専用マクロではなく`C(S(...))`のようなネストで出力する(生成されるキーコード値は同一だが、表記が手書きの`keymap.c`と異なる場合がある)。Winキーは`LWIN_T()`・`RWIN()`のようにWIN表記で出力する。
-- トラックパッドが占有する2つのマトリクス位置(v2)も、他のキーと同様に通常のキーとして表示・編集できる(物理的にはスイッチが無い位置のため、実用上の意味はない)。
+- トラックパッド(v2)・トラックボール(Keyball44)が占有する2つのマトリクス位置も、他のキーと同様に通常のキーとして表示・編集できる(物理的にはスイッチが無い位置のため、実用上の意味はない)。
 - 「PNGをコピー」はクリップボード書き込みAPI(`navigator.clipboard.write` + `ClipboardItem`)に対応したブラウザ・オリジン(HTTPS/localhost等のセキュアコンテキスト)でのみ動作する。未対応の場合はエラーメッセージを表示するので、「PNGをダウンロード」を使うこと。

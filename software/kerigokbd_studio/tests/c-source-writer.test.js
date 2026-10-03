@@ -137,3 +137,14 @@ test("a long token widens only its own column, not every column of the keymap", 
     "};",
   ].join("\n"));
 });
+
+test("LAYOUT_split_3x6_3_ex2 (kerigokbd_corne_v4) is laid out as 7/7/6/3 keys per hand, like its keymap.c", () => {
+  const source = formatKeymapCSource({ layers: [Array(46).fill(0x0004)], layoutMacroName: "LAYOUT_split_3x6_3_ex2" });
+  const rows = source.split("\n").slice(2, -2);
+  assert.equal(rows.length, 4);
+  assert.equal(rows[0], `    ${Array(7).fill("KC_A   ,").join(" ")} /**/ ${Array(7).fill("KC_A   ,").join(" ")}`);
+  // The shorter third row leaves its missing column next to the gap ...
+  assert.match(rows[2], /KC_A   ,          \/\*\*\/          KC_A   ,/);
+  // ... and the thumb row sits against it.
+  assert.match(rows[3], /^ {40}KC_A   , KC_A   , KC_A   , \/\*\*\/ KC_A   , KC_A   , KC_A$/);
+});

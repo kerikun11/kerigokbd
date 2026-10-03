@@ -1,9 +1,13 @@
 import { LAYOUT as KERIGOKBD_V1 } from "../generated/layout-kerigokbd_v1.js";
 import { LAYOUT as KERIGOKBD_V2 } from "../generated/layout-kerigokbd_v2.js";
+import { LAYOUT as KERIGOKBD_CORNE_V4 } from "../generated/layout-kerigokbd_corne_v4.js";
+import { LAYOUT as KEYBALL44RP } from "../generated/layout-keyball44rp.js";
 
 const LAYOUTS = {
   kerigokbd_v2: KERIGOKBD_V2,
   kerigokbd_v1: KERIGOKBD_V1,
+  kerigokbd_corne_v4: KERIGOKBD_CORNE_V4,
+  keyball44rp: KEYBALL44RP,
 };
 
 // Object key order determines both the <select> option order and its

@@ -19,13 +19,33 @@ export function keyPosition(key) {
   return rotatePoint(key.x, key.y, key.rotationX, key.rotationY, key.rotation);
 }
 
+/**
+ * The tight bounding box of every key (all four corners, after rotation)
+ * and the trackpad, in key units: `originX`/`originY` is its top-left, to
+ * subtract from each position, so a layout whose VIA JSON starts away
+ * from (0, 0) (kerigokbd_corne_v4's starts at (0.5, 1)) isn't drawn with
+ * that empty margin.
+ */
 export function layoutExtent(layout) {
-  let maxX = 0;
-  let maxY = 0;
+  let minX = Infinity;
+  let minY = Infinity;
+  let maxX = -Infinity;
+  let maxY = -Infinity;
+  const include = ({ x, y }) => {
+    minX = Math.min(minX, x);
+    minY = Math.min(minY, y);
+    maxX = Math.max(maxX, x);
+    maxY = Math.max(maxY, y);
+  };
   for (const key of layout.keys) {
-    const position = keyPosition(key);
-    maxX = Math.max(maxX, position.x + key.width);
-    maxY = Math.max(maxY, position.y + key.height);
+    for (const [dx, dy] of [[0, 0], [key.width, 0], [0, key.height], [key.width, key.height]]) {
+      include(rotatePoint(key.x + dx, key.y + dy, key.rotationX, key.rotationY, key.rotation));
+    }
   }
-  return { columns: maxX, rows: maxY };
+  const { trackpad } = layout;
+  if (trackpad) {
+    include({ x: trackpad.x, y: trackpad.y });
+    include({ x: trackpad.x + trackpad.width, y: trackpad.y + trackpad.height });
+  }
+  return { originX: minX, originY: minY, columns: maxX - minX, rows: maxY - minY };
 }

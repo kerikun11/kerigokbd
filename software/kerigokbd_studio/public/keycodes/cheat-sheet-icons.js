@@ -5,8 +5,18 @@
 // caller.
 
 const CLICK_ICONS = { BTN1: "mouse-left", BTN2: "mouse-right", BTN3: "mouse-middle" };
-const POINTER_ARROWS = { MSL: "⬅", MSD: "⬇", MSU: "⬆", MSR: "➡" };
-const WHEEL_ARROWS = { MWLL: "⬅", MWLD: "⬇", MWLU: "⬆", MWLR: "➡" };
+// kerigokbd's own KG_MS*/KG_MWL* and QMK's standard MS_* mouse keys (used
+// by kerigokbd_corne_v4's keymap.c) get the same icons. The bare "LEFT" /
+// "DOWN" / "UP" can only be MS_*: the cheat sheet prints KC_LEFT etc. as
+// arrow characters, never as these suffixes.
+const POINTER_ARROWS = {
+  MSL: "⬅", MSD: "⬇", MSU: "⬆", MSR: "➡",
+  LEFT: "⬅", DOWN: "⬇", UP: "⬆", RGHT: "➡",
+};
+const WHEEL_ARROWS = {
+  MWLL: "⬅", MWLD: "⬇", MWLU: "⬆", MWLR: "➡",
+  WHLL: "⬅", WHLD: "⬇", WHLU: "⬆", WHLR: "➡",
+};
 // A mod-tap's own hold badge (KG_LALT = LALT_T(...), KG_L4 = LWIN_T(...))
 // is never iconified -- keycode-format.js's modLabelStyle: "word" already
 // renders it as plain "Alt"/"Win"/etc, so there's no glyph here to map.

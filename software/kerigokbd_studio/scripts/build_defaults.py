@@ -50,26 +50,31 @@ def layout_version(keymap_path: Path) -> str:
     return f"v{latest:%Y.%m.%d}{suffix}"
 
 
-def parse_keymap_layers(source: str) -> dict[str, list[str]]:
+def parse_keymap_layers(source: str, layer_names: list[str]) -> dict[str, list[str]]:
     """Same shape as build_keycodes' generic C-macro-args parsing, applied
-    to `[LAYER] = LAYOUT_xxx(...)` declarations in default/keymap.c."""
+    to `[LAYER] = LAYOUT_xxx(...)` declarations in default/keymap.c. LAYER
+    is a KGL_* name, or a plain index (kerigokbd_corne_v4's `[0]`), which
+    is mapped to the KGL_* name at that position."""
     clean_source = keycodes.strip_line_comments(re.sub(r"/\*.*?\*/", "", source, flags=re.S))
-    declaration = re.compile(r"\[(KGL_[A-Z0-9_]+)\]\s*=\s*(LAYOUT_[A-Za-z0-9_]+)\s*\(")
+    declaration = re.compile(r"\[(KGL_[A-Z0-9_]+|\d+)\]\s*=\s*(LAYOUT_[A-Za-z0-9_]+)\s*\(")
     layers: dict[str, list[str]] = {}
     for match in declaration.finditer(clean_source):
         opening = match.end() - 1
         closing = keycodes.matching_parenthesis(clean_source, opening)
-        layers[match.group(1)] = keycodes.split_arguments(clean_source[opening + 1:closing])
+        layer = match.group(1)
+        if layer.isdigit():
+            layer = layer_names[int(layer)]
+        layers[layer] = keycodes.split_arguments(clean_source[opening + 1:closing])
     return layers
 
 
 def build_keyboard_defaults(keyboard_id: str, resolver: "keycodes.Resolver", layer_names: list[str]) -> dict[str, object]:
     keymap_path = KEYBOARD_ROOT / keyboard_id / "keymaps/default/keymap.c"
-    parsed = parse_keymap_layers(keymap_path.read_text(encoding="utf-8"))
+    parsed = parse_keymap_layers(keymap_path.read_text(encoding="utf-8"), layer_names)
     layers = []
     for layer_name in layer_names:
         if layer_name not in parsed:
-            break  # kerigokbd_v1's keymap.c doesn't define KGL_AM
+            break  # only kerigokbd_v2's keymap.c defines KGL_AM
         layers.append([resolver.resolve_keycode(expression) for expression in parsed[layer_name]])
     return {"id": keyboard_id, "layers": layers, "layoutVersion": layout_version(keymap_path)}
 
@@ -94,7 +99,7 @@ def build_resolver():
 
 def main() -> None:
     resolver, layer_names = build_resolver()
-    for keyboard_id in ("kerigokbd_v1", "kerigokbd_v2"):
+    for keyboard_id in ("kerigokbd_v1", "kerigokbd_v2", "kerigokbd_corne_v4", "keyball44rp"):
         defaults = build_keyboard_defaults(keyboard_id, resolver, layer_names)
         output_path = OUTPUT_DIR / f"defaults-{keyboard_id}.js"
         output_path.parent.mkdir(parents=True, exist_ok=True)

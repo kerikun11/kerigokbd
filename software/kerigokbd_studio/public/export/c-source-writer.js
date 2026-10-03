@@ -101,14 +101,24 @@ export function formatKeycodeToken(value) {
 
 const BASE_INDENT = 4;
 
+// Row shapes for layout macros not named LAYOUT_split_A_B_...:
+// kerigokbd_corne_v4's 3x6 + 3 thumbs + 2 extra keys per hand, printed
+// like its keymap.c with the extra keys ending the top two rows, and
+// keyball44rp's 3x6 + 5 thumbs per hand.
+const SPLIT_ROW_COUNTS_BY_NAME = {
+  LAYOUT_split_3x6_3_ex2: [7, 7, 6, 3],
+  LAYOUT_universal: [6, 6, 6, 5],
+};
+
 /**
  * Parses "LAYOUT_split_6_7_7_4" into [6, 7, 7, 4] -- the number of keys per
  * hand on each printed row, which is also exactly the row/column shape
  * kerigokbd's own hand-written keymap.c aligns to (see kerigokbd_v2's
- * default/keymap.c). Returns null for any macro name that doesn't follow
- * this convention, so callers can fall back to an unstructured render.
+ * default/keymap.c). Returns null for any other macro name not listed in
+ * SPLIT_ROW_COUNTS_BY_NAME, so callers can fall back to an unstructured render.
  */
 function parseSplitRowCounts(layoutMacroName) {
+  if (SPLIT_ROW_COUNTS_BY_NAME[layoutMacroName]) return SPLIT_ROW_COUNTS_BY_NAME[layoutMacroName];
   const match = /^LAYOUT_split_(\d+(?:_\d+)*)$/.exec(layoutMacroName);
   return match ? match[1].split("_").map(Number) : null;
 }

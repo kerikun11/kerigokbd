@@ -79,11 +79,11 @@ function appendOverlay(cell, className, text, { extraClass, sizeByLength = true 
  * (VIA has no trackpad-specific settings), so this is cheat-sheet-only; the
  * edit view still shows both matrix positions as ordinary keys.
  */
-function createTrackpadElement(trackpad, unitX, unitY, { showTrackpadLayer }) {
+function createTrackpadElement(trackpad, { originX, originY, unitX, unitY }, { showTrackpadLayer }) {
   const element = document.createElement("div");
   element.className = "cheat-trackpad";
-  element.style.left = `${trackpad.x * unitX}%`;
-  element.style.top = `${trackpad.y * unitY}%`;
+  element.style.left = `${(trackpad.x - originX) * unitX}%`;
+  element.style.top = `${(trackpad.y - originY) * unitY}%`;
   element.style.width = `${trackpad.width * unitX}%`;
 
   const main = document.createElement("div");
@@ -92,7 +92,7 @@ function createTrackpadElement(trackpad, unitX, unitY, { showTrackpadLayer }) {
 
   const label = document.createElement("div");
   label.className = "cheat-trackpad-label";
-  label.textContent = "Trackpad";
+  label.textContent = trackpad.label ?? "Trackpad"; // the device: Trackpad / Trackball
 
   element.append(label);
   // The click icon and Hold both describe the Trackpad layer, so they follow
@@ -101,7 +101,7 @@ function createTrackpadElement(trackpad, unitX, unitY, { showTrackpadLayer }) {
     element.append(main);
     const hold = document.createElement("div");
     hold.className = "cheat-trackpad-hold";
-    hold.textContent = "Trackpad";
+    hold.textContent = "Trackpad"; // the KGL_AM layer's name, on every device
     element.append(hold);
   }
   return element;
@@ -119,7 +119,7 @@ function createTrackpadElement(trackpad, unitX, unitY, { showTrackpadLayer }) {
  * undefined) also drops the Hold labels that name it.
  */
 export function renderCheatSheet(container, { layout, main, nums, func, extra, mouse }) {
-  const { columns, rows } = layoutExtent(layout);
+  const { originX, originY, columns, rows } = layoutExtent(layout);
   const unitX = 100 / columns;
   const unitY = 100 / rows;
   container.style.aspectRatio = `${columns} / ${rows}`;
@@ -135,8 +135,8 @@ export function renderCheatSheet(container, { layout, main, nums, func, extra, m
     const position = keyPosition(key);
     const cell = document.createElement("div");
     cell.className = "cheat-key";
-    cell.style.left = `${position.x * unitX}%`;
-    cell.style.top = `${position.y * unitY}%`;
+    cell.style.left = `${(position.x - originX) * unitX}%`;
+    cell.style.top = `${(position.y - originY) * unitY}%`;
     cell.style.width = `${key.width * unitX - 0.6}%`;
     cell.style.height = `${key.height * unitY - 0.8}%`;
     if (key.rotation) {
@@ -170,7 +170,7 @@ export function renderCheatSheet(container, { layout, main, nums, func, extra, m
     fragment.append(cell);
   });
 
-  if (layout.trackpad) fragment.append(createTrackpadElement(layout.trackpad, unitX, unitY, { showTrackpadLayer: Boolean(mouse) }));
+  if (layout.trackpad) fragment.append(createTrackpadElement(layout.trackpad, { originX, originY, unitX, unitY }, { showTrackpadLayer: Boolean(mouse) }));
 
   container.replaceChildren(fragment);
 }
