@@ -32,7 +32,6 @@ enum keyfunc_category {
     KFC_MOUSE_BTN1,      //< Mouse Button Left
     KFC_MOUSE_BTN2,      //< Mouse Button Right
     KFC_MOUSE_BTN_OTHER, //< Mouse Button 3/4/5
-    KFC_ZOOM,            //< KG_POINTING_ZOOM
     KFC_MEDIA,           //< Audio, PrintScreen
     KFC_BOOTLOADER,      //< QK_BOOT
     KFC_SLEEP,           //< System Sleep

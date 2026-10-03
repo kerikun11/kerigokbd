@@ -56,7 +56,6 @@ static const rgb_t keyfunc_palette[KFC_COUNT] = {
     [KFC_MOUSE_BTN1]      = KF_SOFT_RED, //
     [KFC_MOUSE_BTN2]      = KF_BLUE,     //
     [KFC_MOUSE_BTN_OTHER] = KF_GREEN,    //
-    [KFC_ZOOM]            = KF_CYAN,     //
     [KFC_MEDIA]           = KF_BLUE,     //
     [KFC_BOOTLOADER]      = KF_RED,      //
     [KFC_SLEEP]           = KF_RED,      //
@@ -170,8 +169,6 @@ static uint8_t keyfunc_category(uint16_t keycode) {
         case KG_MSL ... KG_MWLR:
         case KG_POINTING_SCROLL:
             return KFC_MOUSE_MOVE;
-        case KG_POINTING_ZOOM:
-            return KFC_ZOOM;
         /* Audio */
         case KC_MUTE ... KC_VOLD:
         /* PrintScreen */

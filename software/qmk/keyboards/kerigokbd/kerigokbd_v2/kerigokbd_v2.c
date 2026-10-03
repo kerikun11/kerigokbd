@@ -20,13 +20,12 @@ void keyboard_pre_init_kb(void) {
 // - Cirque Pinnacleの絶対座標を前回値との差分に変換し、通常時はポインタ移動として送信する。
 // - 通常ポインタ移動には低速時の細かい操作と高速時の移動量を両立する加速をかける。
 // - KG_POINTING_SCROLLを押している間は、タッチパッドの移動をスクロール入力に変換する。
-// - KG_POINTING_ZOOMを押している間は、タッチパッドの縦移動をCtrl+ホイールのズーム入力に変換する。
 // - 1回/2回/3回タップは、それぞれ同じ回数のBTN1クリックとして送信する。
 // - ダブルタップして2回目のタッチを保持した場合は、ダブルクリックを送らずにBTN1ドラッグ状態にする。
 // - タップ/複数タップ/ドラッグ候補の判定中は、意図しないカーソル移動を送信しない。
 // - 直前タップなしのホールド/移動は、BTN1を押さず通常のカーソル移動として扱う。
-// - スクロール/ズームモード中は、タップ/クリック/ドラッグ判定よりモード変換を優先する。
-// - 指を置いたままスクロール/ズームモードへ入り、そのままモードを抜けた場合は、
+// - スクロールモード中は、タップ/クリック/ドラッグ判定よりスクロール変換を優先する。
+// - 指を置いたままスクロールモードへ入り、そのままモードを抜けた場合は、
 //   同じタッチをタップ/ドラッグ候補へ戻さず、BTN1なしの通常カーソル移動として再開する。
 // - 左右分離構成では、トラックパッド側とUSB接続側が異なってもAutoMouseLayer保持を同期する。
 // - AutoMouseLayer以外へ移動したら、モード、加算器、タップ/クリック状態、split同期状態を解除する。
@@ -34,13 +33,10 @@ void keyboard_pre_init_kb(void) {
 // Specification:
 // - Cirqueデータが無効なときは、TRACKPAD_RELEASE_TERM以上データ途切れが続いたら離した扱いにする。
 // - 通常移動: raw_speedをEMAで平滑化し、POINTER_SCALE_MIN + POINTER_ACCEL * sqrt(smooth_speed)で加速する。
-// - 通常移動のx/yは小数加算器で丸め誤差を保持し、スクロール/ズーム加算器は通常移動中にリセットする。
+// - 通常移動のx/yは小数加算器で丸め誤差を保持し、スクロール加算器は通常移動中にリセットする。
 // - スクロールモード中: x/yをh/vへ変換し、BTN1と判定中のタップ/クリック/ドラッグ状態を破棄し続ける。
 // - スクロールモード脱出: scroll_accumをリセットする。指が置かれている場合は、そのタッチを
 //   移動済みとして扱い、タップ/複数タップ/ドラッグ候補にはしない。AutoMouseLayer保持は継続する。
-// - ズームモード突入: Ctrl weak modを押下し、zoom_accumをリセットする。
-// - ズームモード中: yをvへ変換してCtrl+ホイールとして送信し、h/x/yとBTN1を0にする。
-// - ズームモード脱出: Ctrl weak modを解除し、zoom_accumをリセットする。
 // - タップ成立: タッチ開始から離すまでの時間がTRACKPAD_TAP_TERM以下、かつ移動量が
 //   TRACKPAD_TAP_MOVE以下なら1タップとして保留する。この時点ではBTN1を送信しない。
 // - タップ確定: 保留タップがあり、指が離れていて、最後のタップ成立からTRACKPAD_TAP_TERMを
@@ -68,7 +64,6 @@ void pointing_device_init_kb(void) {
 bool is_mouse_record_kb(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
         case KG_POINTING_SCROLL:
-        case KG_POINTING_ZOOM:
             return true;
     }
     return is_mouse_record_user(keycode, record);
@@ -83,7 +78,6 @@ bool is_mouse_record_kb(uint16_t keycode, keyrecord_t *record) {
 // Scroll: step += raw * scroll_scale / SCROLL_DIVISOR
 #    define SCROLL_DIVISOR 32.0f //< スクロール感度 (大きいほど遅い)
 #    define SCROLL_ACCEL 0.05f   //< スクロール加速係数
-#    define ZOOM_DIVISOR SCROLL_DIVISOR
 
 #    define TRACKPAD_TAP_TERM 100
 #    define TRACKPAD_CLICK_TERM 20
@@ -113,10 +107,8 @@ typedef struct {
 } trackpad_state_t;
 
 static bool             scroll_mode  = false;
-static bool             zoom_mode    = false;
 static float            move_accum_x = 0, move_accum_y = 0;
 static float            scroll_accum_x = 0, scroll_accum_y = 0;
-static float            zoom_accum_y                      = 0;
 static float            smooth_speed                      = 0.0f;
 static bool             trackpad_auto_mouse_report_active = false;
 static trackpad_state_t trackpad                          = {0};
@@ -154,7 +146,6 @@ static void           apply_trackpad_buttons_(report_mouse_t *r);
 static void           mark_trackpad_auto_mouse_(report_mouse_t *r);
 static report_mouse_t finish_trackpad_report_(report_mouse_t r);
 static void           update_auto_mouse_from_trackpad_report_(report_mouse_t *r);
-static void           set_zoom_mode_(bool active);
 
 #    if defined(POINTING_DEVICE_DRIVER_custom) && defined(POINTING_DEVICE_DRIVER_cirque_pinnacle_i2c)
 bool pointing_device_driver_init(void) {
@@ -432,20 +423,10 @@ static void apply_scroll_(report_mouse_t *r) {
     move_accum_x = move_accum_y = smooth_speed = 0.0f;
 }
 
-static void apply_zoom_(report_mouse_t *r) {
-    float raw_speed  = (float)(abs(r->x) + abs(r->y));
-    float zoom_scale = 1.0f + SCROLL_ACCEL * raw_speed;
-    r->h             = 0;
-    r->v             = accum_(&zoom_accum_y, (float)r->y * zoom_scale / ZOOM_DIVISOR);
-    r->x = r->y  = 0;
-    move_accum_x = move_accum_y = smooth_speed = 0.0f;
-}
-
 static void apply_pointer_(report_mouse_t *r) {
     float raw_speed = (float)(abs(r->x) + abs(r->y));
     if (r->x == 0 && r->y == 0 && smooth_speed == 0.0f) {
         scroll_accum_x = scroll_accum_y = 0.0f;
-        zoom_accum_y                    = 0.0f;
         return;
     }
     smooth_speed += SPEED_SMOOTH_ALPHA * (raw_speed - smooth_speed);
@@ -453,18 +434,12 @@ static void apply_pointer_(report_mouse_t *r) {
     r->x           = accum_(&move_accum_x, (float)r->x * scale);
     r->y           = accum_(&move_accum_y, (float)r->y * scale);
     scroll_accum_x = scroll_accum_y = 0.0f;
-    zoom_accum_y                    = 0.0f;
 }
 
 report_mouse_t pointing_device_task_kb(report_mouse_t r) {
     update_auto_mouse_from_trackpad_report_(&r);
 
-    if (zoom_mode) {
-        apply_zoom_(&r);
-        r.buttons &= ~MOUSE_BTN1;
-        cancel_trackpad_gestures_();
-        update_trackpad_auto_mouse_();
-    } else if (scroll_mode) {
+    if (scroll_mode) {
         apply_scroll_(&r);
         r.buttons &= ~MOUSE_BTN1;
         cancel_trackpad_gestures_();
@@ -487,38 +462,20 @@ static void update_auto_mouse_from_trackpad_report_(report_mouse_t *r) {
     trackpad_auto_mouse_report_active = active;
 }
 
-static void set_zoom_mode_(bool active) {
-    if (zoom_mode == active) return;
-    zoom_mode    = active;
-    zoom_accum_y = 0.0f;
-    if (active) {
-        add_weak_mods(MOD_BIT(KC_LCTL));
-    } else {
-        del_weak_mods(MOD_BIT(KC_LCTL));
-    }
-    send_keyboard_report();
-}
-
 bool process_record_kerigokbd(uint16_t keycode, keyrecord_t *record) {
     if (keycode == KG_POINTING_SCROLL) {
         scroll_mode = record->event.pressed;
         cancel_trackpad_gestures_();
         if (!scroll_mode) scroll_accum_x = scroll_accum_y = 0;
     }
-    if (keycode == KG_POINTING_ZOOM) {
-        set_zoom_mode_(record->event.pressed);
-        cancel_trackpad_gestures_();
-    }
     return true;
 }
 
 layer_state_t layer_state_set_kb(layer_state_t state) {
     if (get_highest_layer(state) != AUTO_MOUSE_DEFAULT_LAYER) {
-        scroll_mode = false;
-        set_zoom_mode_(false);
-        move_accum_x = move_accum_y = 0;
+        scroll_mode    = false;
+        move_accum_x   = move_accum_y   = 0;
         scroll_accum_x = scroll_accum_y = 0;
-        zoom_accum_y                    = 0;
         smooth_speed                    = 0.0f;
         report_mouse_t r                = {0};
         update_auto_mouse_from_trackpad_report_(&r);

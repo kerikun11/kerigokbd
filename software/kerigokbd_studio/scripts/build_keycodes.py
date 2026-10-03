@@ -482,7 +482,7 @@ def collect_group_entries(
 KERIGOKBD_CUSTOM_LABELS = {
     "KG_WCAD": "Win/CAD",
     "KG_ATAB": "Alt/Alt+Tab",
-    "KG_SCRL": "Scroll", "KG_ZOOM": "Zoom",
+    "KG_SCRL": "Scroll",
     "KG_MSL": "M⬅", "KG_MSD": "M⬇", "KG_MSU": "M⬆", "KG_MSR": "M➡",
     "KG_MWLL": "W⬅", "KG_MWLD": "W⬇", "KG_MWLU": "W⬆", "KG_MWLR": "W➡",
 }

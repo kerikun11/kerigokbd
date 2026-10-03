@@ -45,7 +45,7 @@ export function renderCheatSheetPanel(elements, { store, visibility, visible }, 
   }
   // Mouse click/move keycodes (MS_BTN*, KG_MSL/D/U/R, KG_MWLL/D/U/R) live on
   // the Fn layer on every keyboard, trackpad or not -- only the Trackpad
-  // group's scroll/zoom modes are specific to the trackpad-only Auto Mouse
+  // group's scroll mode is specific to the trackpad-only Auto Mouse
   // layer, so that's the sole group gated on the trackpad.
   elements.iconLegendMouseGroup.hidden = false;
   elements.iconLegendTrackpadGroup.hidden = !hasTrackpad;

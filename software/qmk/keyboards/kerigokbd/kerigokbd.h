@@ -50,7 +50,6 @@ enum kerigokbd_keycodes {
     KG_LALT_T_LALT_TAB = QK_KB_1,
     // Pointing Device Keycodes
     KG_POINTING_SCROLL = QK_KB_10,
-    KG_POINTING_ZOOM   = QK_KB_11,
     // Mouse keycodes that do not enter AutoMouseLayer.
     KG_MOUSE_LEFT        = QK_KB_12,
     KG_MOUSE_DOWN        = QK_KB_13,
@@ -65,7 +64,6 @@ enum kerigokbd_keycodes {
     KG_WCAD = KG_LWIN_T_LCTL_LALT_DEL,
     KG_ATAB = KG_LALT_T_LALT_TAB,
     KG_SCRL = KG_POINTING_SCROLL,
-    KG_ZOOM = KG_POINTING_ZOOM,
     KG_MSL  = KG_MOUSE_LEFT,
     KG_MSD  = KG_MOUSE_DOWN,
     KG_MSU  = KG_MOUSE_UP,

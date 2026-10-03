@@ -20,9 +20,8 @@ test("scroll wheel movement (KG_MWLL/MWLD/MWLU/MWLR) maps to the wheel icon plus
   assert.deepEqual(iconForLabel("MWLR"), { icon: "wheel", arrow: "➡" });
 });
 
-test("Scroll/Zoom mode are icon-only, no arrow", () => {
+test("Scroll mode is icon-only, no arrow", () => {
   assert.deepEqual(iconForLabel("SCRL"), { icon: "scroll", arrow: null });
-  assert.deepEqual(iconForLabel("ZOOM"), { icon: "zoom", arrow: null });
   assert.equal(iconForLabel("BSPC"), null);
   assert.equal(iconForLabel("Backspace"), null);
 });

@@ -187,7 +187,6 @@ const DESCRIPTIONS = {
   KG_WCAD: "タップでCtrl+Alt+Delete、長押しで左Win",
   KG_ATAB: "タップでAlt+Tab(ウィンドウ切り替え)、長押しで左Alt",
   KG_SCRL: "押している間、トラックパッド/トラックボールの移動をスクロールにする",
-  KG_ZOOM: "押している間、トラックパッド/トラックボールの縦移動をズーム(Ctrl+ホイール)にする",
   KG_MSL: "マウスカーソルを左へ(Trackpadレイヤーに入らない)",
   KG_MSD: "マウスカーソルを下へ(Trackpadレイヤーに入らない)",
   KG_MSU: "マウスカーソルを上へ(Trackpadレイヤーに入らない)",

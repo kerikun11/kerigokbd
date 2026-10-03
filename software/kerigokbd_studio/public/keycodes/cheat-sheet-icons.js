@@ -22,7 +22,7 @@ const WHEEL_ARROWS = {
 // renders it as plain "Alt"/"Win"/etc, so there's no glyph here to map.
 // Alt, Backspace, and Delete are always plain text.
 const ICON_ONLY = {
-  SCRL: "scroll", ZOOM: "zoom",
+  SCRL: "scroll",
   VOLU: "volume-up", VOLD: "volume-down",
 };
 // The Left/Down/Up/Right d-pad keys (keycode-format.js's symbolStyle:

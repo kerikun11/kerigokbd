@@ -4,10 +4,10 @@ import { iconForLabel, compoundIconsForLabel } from "../keycodes/cheat-sheet-ico
 
 const SVG_NS = "http://www.w3.org/2000/svg";
 // Matches index.html's <symbol> viewBoxes: the mouse/wheel body icons are
-// drawn on a 16x16 grid, the rest (scroll/zoom/delete/
+// drawn on a 16x16 grid, the rest (scroll/delete/
 // windows/numpad) on 24x24.
-const LARGE_VIEW_BOX_ICONS = new Set(["scroll", "zoom", "delete", "windows", "numpad", "volume-up", "volume-down"]);
-const EMPHASIZED_ICONS = new Set(["scroll", "zoom", "volume-up", "volume-down"]);
+const LARGE_VIEW_BOX_ICONS = new Set(["scroll", "delete", "windows", "numpad", "volume-up", "volume-down"]);
+const EMPHASIZED_ICONS = new Set(["scroll", "volume-up", "volume-down"]);
 
 function createIcon(name) {
   const svg = document.createElementNS(SVG_NS, "svg");

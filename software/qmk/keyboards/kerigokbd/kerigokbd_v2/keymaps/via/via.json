@@ -66,9 +66,9 @@
             "shortName": "Scroll"
         },
         {
-            "name": "Zoom",
-            "title": "Pointing device zoom mode (KERIgoKBD v2)",
-            "shortName": "Zoom"
+            "name": "Reserved 11",
+            "title": "Reserved custom keycode",
+            "shortName": "—"
         },
         {
             "name": "Mouse Left",
