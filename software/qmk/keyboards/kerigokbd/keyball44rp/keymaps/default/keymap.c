@@ -23,7 +23,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     _______, KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  , /**/ KG_MWLL, KG_MWLD, KG_MWLU, KG_MWLR, MS_BTN2, _______,
     _______, JP_LPRN, JP_LCBR, JP_RCBR, JP_LBRC, JP_RBRC, /**/ KC_LEFT, KC_DOWN, KC_UP  , KC_RGHT, JP_RPRN, _______,
     KC_LSFT, KC_F6  , KC_F7  , KC_F8  , KC_F9  , KC_F10 , /**/ KG_MSL , KG_MSD , KG_MSU , KG_MSR , MS_BTN1, _______,
-    KC_F11 , KC_F12 , _______, JP_MHEN, JP_HENK, /**/ _______, _______, XXXXXXX, XXXXXXX, MS_BTN3
+    KC_F11 , KC_F12 , JP_HENK, _______, _______, /**/ _______, _______, XXXXXXX, XXXXXXX, MS_BTN3
   ),
   [KGL_EXT] = LAYOUT_universal( /* Extra Layer */
     JP_ZKHK, KC_F1  , KC_F2  , KC_F3  , KC_F4  , KC_F5  , /**/ KC_P7  , KC_P8  , KC_P9  , KC_PMNS, KC_NUM , _______,

@@ -20,11 +20,11 @@ enum kerigokbd_layers {
 
 /* Thumb Keys */
 #define KG_LWIN KG_WCAD
-#define KG_LALT KG_ATAB
+#define KG_LALT LALT_T(JP_MHEN)
 #define KG_NUM MO(KGL_NUM)
 #define KG_ESC LT(KGL_EXT, KC_ESC)
 
-#define KG_SPC KC_SPC // LSFT_T(KC_SPC)
+#define KG_SPC KC_SPC
 #define KG_FUN MO(KGL_FUN)
 #define KG_RWIN KC_RWIN
 #define KG_RALT KC_RALT
